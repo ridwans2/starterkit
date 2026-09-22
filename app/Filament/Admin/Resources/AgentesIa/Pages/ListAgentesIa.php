@@ -28,7 +28,7 @@ class ListAgentesIa extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make()->label('Novo agente'),
+            CreateAction::make()->label(__('New AI agent')),
 
             ImportAction::make()
                 ->importer(AgenteIaImporter::class)
