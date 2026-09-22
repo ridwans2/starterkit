@@ -340,13 +340,13 @@ class ConfiguracoesDoKit extends SettingsPage
                             'smtp'  => 'SMTP',
                         ],
                         app(static::getSettings())->mail_mailer,
-                        'configurado no .env',
+                        __('configured in .env'),
                     ))
                     ->required()
                     ->live(),
 
                 TextInput::make('mail_from_address')
-                    ->label('Remetente')
+                    ->label(__('Sender'))
                     ->email()
                     ->maxLength(255),
 
@@ -355,12 +355,12 @@ class ConfiguracoesDoKit extends SettingsPage
                     ->maxLength(255),
 
                 TextInput::make('mail_host')
-                    ->label('Servidor')
+                    ->label(__('Server'))
                     ->maxLength(255)
                     ->visible($smtp),
 
                 TextInput::make('mail_port')
-                    ->label('Porta')
+                    ->label(__('Port'))
                     ->numeric()
                     ->integer()
                     ->minValue(1)
@@ -368,11 +368,11 @@ class ConfiguracoesDoKit extends SettingsPage
                     ->visible($smtp),
 
                 Select::make('mail_scheme')
-                    ->label('Criptografia')
+                    ->label(__('Encryption'))
                     ->options(fn (): array => $this->comValorConfigurado(
                         ['tls' => 'TLS', 'ssl' => 'SSL'],
                         app(static::getSettings())->mail_scheme,
-                        'configurado no .env',
+                        __('configured in .env'),
                     ))
                     ->placeholder(__('None'))
                     ->visible($smtp),
@@ -432,7 +432,7 @@ class ConfiguracoesDoKit extends SettingsPage
 
     private function abaTabelas(): Tab
     {
-        return Tab::make('Tabelas')
+        return Tab::make(__('Tables'))
             ->icon('heroicon-o-table-cells')
             ->schema([
                 TextInput::make('paginacao_padrao')
@@ -452,7 +452,7 @@ class ConfiguracoesDoKit extends SettingsPage
                     ->required(),
 
                 Toggle::make('tabela_listrada')
-                    ->label('Linhas listradas')
+                    ->label(__('Striped rows'))
                     ->helperText(__('The only visual density control Filament 5 offers — there is no table density API in this version.')),
 
                 Toggle::make('persistir_filtros')
@@ -512,7 +512,7 @@ class ConfiguracoesDoKit extends SettingsPage
                  * exigência alcança TODO usuário do /app, não só quem se cadastrar depois.
                  */
                 Toggle::make('registro_verificar_email')
-                    ->label('Exigir e-mail validado no /app')
+                    ->label(__('Require validated e-mail in /app'))
                     ->helperText(__('On, anyone who has not confirmed their e-mail is taken to the confirmation screen when they enter /app — and that applies to EVERY user of the panel, not only new ones. In a base that already has people in it, first check who was created from the users screen (the README has the command). Anyone arriving by invitation is never affected: the token already proved they own the address.')),
             ]);
     }
@@ -550,11 +550,11 @@ class ConfiguracoesDoKit extends SettingsPage
                     ->columnSpanFull()
                     ->schema([
                         Toggle::make('login_unificado')
-                            ->label('Unificar o login em /login')
+                            ->label(__('Unify login at /login'))
                             ->helperText(__('When off: each panel has its own login screen (Filament default). When on: the three screens lead to /login; anyone with access to more than one panel chooses which to open after signing in, anyone with only one goes straight in. Takes effect immediately, no deploy.'))
                             ->columnSpanFull(),
                     ]),
-                Section::make('Login social')
+                Section::make(__('Social login'))
                     ->description(__('One collapsed block per provider. The icon in the header tells whether the button is enabled; open it to see the credentials.'))
                     ->columnSpanFull()
                     ->schema([
@@ -642,7 +642,7 @@ class ConfiguracoesDoKit extends SettingsPage
                     ->visible(fn (Get $get): bool => $ligado($get) && app()->isLocal()),
 
                 Select::make('login_anti_robo_provedor')
-                    ->label('Provedor')
+                    ->label(__('Provider'))
                     ->options(array_reduce(ProvedorAntiRobo::cases(), function (array $carry, ProvedorAntiRobo $provedor): array {
                         $carry[$provedor->value] = $provedor->getLabel();
 
@@ -714,7 +714,7 @@ class ConfiguracoesDoKit extends SettingsPage
         $habilitado = $provedor->propriedadeDeSettings('habilitado');
         $ligado     = fn (Get $get): bool => (bool) $get($habilitado);
 
-        return Section::make("Entrar com {$provedor->rotulo()}")
+        return Section::make(__('Sign in with :provider', ['provider' => $provedor->rotulo()]))
             ->description($this->ondeCriarOApp($provedor))
             // Fechada ao abrir a tela; o status vive no cabeçalho, então não precisa abrir para
             // saber. O interruptor é `live()`, e o ícone acompanha na hora.
@@ -732,14 +732,14 @@ class ConfiguracoesDoKit extends SettingsPage
                     ->label('Client ID')
                     // O caminho é o que vive em `config/services.php`, relativo de propósito —
                     // cadastre-o ABSOLUTO no console do provedor.
-                    ->helperText("A URI de redirecionamento a cadastrar no provedor é o seu domínio + /auth/{$provedor->value}/callback")
+                    ->helperText(__('The redirect URI to register with the provider is your domain + /auth/:provider/callback', ['provider' => $provedor->value]))
                     ->maxLength(255)
                     ->visible($ligado),
 
                 TextInput::make($provedor->propriedadeDeSettings('client_secret'))
                     ->label('Client Secret')
                     ->helperText(__('Stored encrypted. Leave blank to keep the current secret — it is not shown here, nor in the page source.'))
-                    ->placeholder(fn (): string => filled($this->segredoGuardadoDe($provedor)) ? __('Already configured — leave blank to keep the current value') : 'Nenhum segredo configurado')
+                    ->placeholder(fn (): string => filled($this->segredoGuardadoDe($provedor)) ? __('Already configured — leave blank to keep the current value') : __('No secret configured'))
                     ->password()
                     ->revealable()
                     ->dehydrated(fn (?string $state): bool => filled($state))
@@ -818,7 +818,7 @@ class ConfiguracoesDoKit extends SettingsPage
                  * sem tocar nesta tela.
                  */
                 Select::make('densidade_do_layout')
-                    ->label('Densidade do layout')
+                    ->label(__('Layout density'))
                     ->helperText(__('Tightens the statistic cards, tables, sidebar menu and buttons of all three panels at once. "Comfortable" is the Filament default and changes nothing.'))
                     ->options(DensidadeDoLayout::opcoes())
                     ->selectablePlaceholder(false)
@@ -867,7 +867,7 @@ class ConfiguracoesDoKit extends SettingsPage
                     ->maxLength(255),
 
                 TextInput::make('rotulo_das_organizacoes')
-                    ->label('E no plural')
+                    ->label(__('And in the plural'))
                     ->required()
                     ->maxLength(255),
             ]);

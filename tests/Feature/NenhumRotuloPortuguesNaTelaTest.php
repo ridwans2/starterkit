@@ -280,7 +280,7 @@ it('não mostra uma única frase portuguesa em nenhuma tela do painel', function
     $frasesJaConhecidas = [
         '/'                                => ['Multi-organização', 'Agentes de IA', 'Backups', 'Convite', 'Convites', 'E-mail', 'Nome', 'Organização', 'Organizações', 'Papéis', 'Permissões', 'Projeto', 'Trilhas', 'Usuário', 'Usuários', 'Versão'],
         'admin/agentes-ia/create'          => ['Modelo', 'Sistema', 'Versão'],
-        'admin/configuracoes-da-aplicacao' => ['Convite', 'E-mail', 'Nome', 'Pacote', 'Quando', 'Senha', 'Sistema', 'Usuário', 'Usuários', 'Versão', 'Execução', 'Multi-organização', 'Versão do kit', 'Versão do sistema'],
+        'admin/configuracoes-da-aplicacao' => ['E-mail'],
         'admin/convites/create'            => ['Convite', 'E-mail', 'Organização', 'Papel'],
         'admin/meu-perfil'                 => ['E-mail', 'Senha'],
         'admin/shield/roles/create'        => ['Aceitar convite', 'Agentes de IA', 'Convite', 'Convites', 'Convites por situação', 'Organização', 'Papel', 'Permissões', 'Projeto', 'Projetos', 'Recusar convite', 'Situação', 'Usuário', 'Usuários', 'Usuários e acesso',
@@ -353,7 +353,7 @@ it('não mostra uma única frase portuguesa em nenhuma tela do painel', function
      */
     $prosaJaConhecida = [
         '/'                                => ['organização', 'organizações', 'padrão', 'âmbar'],
-        'admin/configuracoes-da-aplicacao' => ['autenticação', 'botão', 'confirmação', 'das', 'dos', 'e-mail', 'entrar', 'formulário', 'nome', 'painéis', 'recuperação', 'senha', 'é', 'ícone'],
+        'admin/configuracoes-da-aplicacao' => ['e-mail'],
         'admin/convites/create'            => [],
         'admin/meu-perfil'                 => ['autenticação', 'definir', 'dá', 'e-mail', 'está', 'não', 'para', 'por', 'página', 'quem', 'senha', 'sessão', 'só', 'tem', 'um', 'uma', 'você'],
         'admin/shield/roles/create'        => ['aceitar', 'convite', 'convites', 'dinâmico', 'organização', 'papeis', 'recusar', 'usuario'],
