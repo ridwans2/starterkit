@@ -51,7 +51,7 @@ class FilasTaxaDeSucesso extends ApexChartWidget
         [$concluidos, $falhados] = $this->terminados();
 
         if (($concluidos + $falhados) === 0) {
-            return 'Nenhum job terminou ainda';
+            return __('No job has finished yet');
         }
 
         return $concluidos.' de '.($concluidos + $falhados).' jobs terminaram sem exceção';

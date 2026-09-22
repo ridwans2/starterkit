@@ -38,11 +38,20 @@ class AiRunResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'IA';
 
-    protected static ?string $navigationLabel = 'Execuções de IA';
+    public static function getNavigationLabel(): string
+    {
+        return __('AI runs');
+    }
 
-    protected static ?string $modelLabel = 'Execução de IA';
+    public static function getModelLabel(): string
+    {
+        return __('AI run');
+    }
 
-    protected static ?string $pluralModelLabel = 'Execuções de IA';
+    public static function getPluralModelLabel(): string
+    {
+        return __('AI runs');
+    }
 
     protected static ?string $slug = 'execucoes-ia';
 

@@ -33,9 +33,15 @@ class AgenteIaResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCpuChip;
 
-    protected static ?string $modelLabel = 'Agente de IA';
+    public static function getModelLabel(): string
+    {
+        return __('AI agent');
+    }
 
-    protected static ?string $pluralModelLabel = 'Agentes de IA';
+    public static function getPluralModelLabel(): string
+    {
+        return __('AI agents');
+    }
 
     protected static string|UnitEnum|null $navigationGroup = 'IA';
 

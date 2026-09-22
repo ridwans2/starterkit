@@ -2,6 +2,13 @@
 
 namespace App\Providers;
 
+use Filament\Actions\Action;
+use Filament\QueryBuilder\Constraints\Constraint;
+use Filament\Schemas\Components\Component;
+use Filament\Tables\Columns\Column;
+use Filament\Tables\Columns\ColumnGroup;
+use Filament\Tables\Columns\Summarizers\Summarizer;
+use Filament\Tables\Filters\BaseFilter;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -29,6 +36,29 @@ use Illuminate\Support\ServiceProvider;
  */
 class LocalizacaoProvider extends ServiceProvider
 {
+    /**
+     * Kelas dasar cujas subclasses passam a pedir tradução sozinhas.
+     *
+     * `ComponentManager::configure()` resolve um registro contra
+     * `[...array_reverse(class_parents($component)), $componentClass]`, então uma
+     * entrada por base vale para toda a árvore de subclasses — inclusive as que o
+     * Filament e os plugins de terceiro publicam e que não podemos editar.
+     *
+     * É isto que faz o literal do código ser o inglês: o overlay moram em
+     * `lang/pt_BR.json` / `lang/id.json`, não em ~300 call sites de `__()`.
+     *
+     * @var list<class-string>
+     */
+    private const BASES_COM_LABEL = [
+        Component::class,
+        Column::class,
+        ColumnGroup::class,
+        BaseFilter::class,
+        Summarizer::class,
+        Action::class,
+        Constraint::class,
+    ];
+
     public function register(): void
     {
         if ($this->app->runningUnitTests()) {
@@ -56,11 +86,38 @@ class LocalizacaoProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Roda também em teste: a suíte do kit afirma sobre o texto português
+        // RENDERIZADO, e é o overlay que devolve esse texto. Sem o gancho aqui, o
+        // pino de locale abaixo não tem o que traduzir.
+        $this->terjemahkanLabelDasar();
+
         // Em teste, o app mede o kit — não a escolha deste projeto. Ver o docblock
         // da classe: ~90 arquivos de `tests/Kit` e `tests/Tenancy` afirmam sobre o
         // texto português renderizado, e pertencem ao upstream.
         if ($this->app->runningUnitTests()) {
             $this->app->setLocale((string) config('localization.suite', 'pt_BR'));
+        }
+    }
+
+    /**
+     * Liga `translateLabel()` em toda superfície de rótulo do Filament.
+     *
+     * O `method_exists()` não é cerimônia: `Filament\Schemas\Components\Component`
+     * usa o `HasLabel` em cada subclasse concreta, não na base (medido em 5.8.2 —
+     * `Section` declara o próprio `translateLabel`, `Column` declara na base). Um
+     * componente sem rótulo simplesmente passa, e um componente que o upstream
+     * publicar amanhã já vem coberto pela configuração da base dele.
+     */
+    private function terjemahkanLabelDasar(): void
+    {
+        foreach (self::BASES_COM_LABEL as $classeBase) {
+            $classeBase::configureUsing(static function (object $komponen): object {
+                if (! method_exists($komponen, 'translateLabel')) {
+                    return $komponen;
+                }
+
+                return $komponen->translateLabel();
+            });
         }
     }
 }

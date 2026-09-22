@@ -244,7 +244,7 @@ class RoleResource extends Resource
                     ->searchable()
                     ->visible(fn (): bool => static::shield()->isCentralApp() && Utils::isTenancyEnabled()),
                 TextColumn::make('users_count')
-                    ->label('Usuários')
+                    ->label(__('Users'))
                     ->badge()
                     ->color(fn (?int $state): string => ($state ?? 0) === 0 ? 'gray' : 'primary')
                     /*
@@ -433,7 +433,7 @@ class RoleResource extends Resource
             ->modalHeading(fn (Model $record): string => 'Usuários com o papel '.Papeis::rotulo((string) $record->getAttribute('name')))
             ->modalDescription('Somente leitura. O vínculo se altera no cadastro do usuário.')
             ->modalSubmitAction(false)
-            ->modalCancelActionLabel('Fechar')
+            ->modalCancelActionLabel(__('Close'))
             /*
              * O log vive no hook de MONTAGEM, e nao em `->action()`.
              *

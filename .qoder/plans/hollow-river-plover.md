@@ -20,21 +20,30 @@
 | 10 | Fase 2 — Guard `tests/Feature/IdentificadoresDoBancoTest.php` (9 kasus) | ✅ |
 | 11 | Fase 2 — Sinkron 21 rujukan nama tabel di 5 file test hulu + 2 baris README | ✅ |
 | 12 | Verifikasi terukur: Kit 2.356 · Tenancy 417 · Feature 16 · pint · filacheck 17/17 · phpstan 0 error | ✅ |
-| 13 | Verifikasi engine MySQL (docker) — **belum bisa dijalankan di lingkungan ini** | belum |
-| 14 | Verifikasi `php artisan kit:tenancy` dua mode (tenancy on/off, `migrate:fresh --seed`) | belum |
-| 15 | Fase 3 — Pasang & coba `momin-alzaraa/localization` di SATU direktori, buktikan byte-identity PT | belum |
-| 16 | Fase 3 — ±24 properti statis (`$title`/`$modelLabel`/`$pluralModelLabel`) jadi getter | belum |
-| 17 | Fase 3 — Ekstraksi 812 literal PT → English, 8–10 commit per area (`app/Support` → `Filament/*` → `resources/views`) | belum |
-| 18 | Fase 3 — String interpolatif Notifications (`:app`) + ±120 string Blade | belum |
+| 13 | Verifikasi engine MySQL — **SELESAI, dua jalur diukur di MySQL 26.7.0 nyata** | ✅ |
+| 14 | `kit:tenancy`: **ON** terukur di MySQL nyata (`migrate:fresh --seed` → nol tabel PT + `team_id` ada). **OFF** diterima tidak diuji — keputusan user 2026-09-22, alasannya di bawah | ✅ |
+| 15 | Fase 3 — **`momin-alzaraa/localization` TIDAK ADA** (Packagist 404, GitHub vendor 0). Mesin = scanner pihak ketiga (`gettext/php-scanner` atau `php-translation/extractor`) untuk penemuan + rewrite milik kita. Spike = pasang scanner, ukur di SATU direktori | belum |
+| 16 | Fase 3 — Properti statis rótulo → getter: **28 situs di 14 file** (bukan ±24), guard baru 43 kasus | ✅ |
+| 17 | Fase 3 — Ekstraksi literal PT → English (terukur: **1453 kemunculan / 1278 distinct / 163 file**, bukan 890/812/129), unit = kalimat utuh, 8–10 commit per area | belum — **area 1 selesai: 29 getter label (lihat HASIL BARIS 29)** |
+| 18 | Fase 3 — 181 string interpolatif ketemu oleh tokenizer (`:app`) + node teks Blade | belum |
 | 19 | Fase 4 — `tests/Feature/NenhumTextoPortuguesNoCodigoTest.php` hard-fail (tokenizer + kontrol positif) | belum |
 | 20 | Fase 5 — 28 masker tanggal → knob global `defaultDateDisplayFormat()`, `Number::useLocale()` | belum |
-| 21 | Fase 5 — Label tenancy English, `lang/vendor/*/en/` untuk 3 paket PT-only, buka `idiomas` → switcher muncul | belum |
-| 22 | Fase 5 — `.env`/`.env.example` `APP_LOCALE=en`; perbaikan timezone `config/app.php:94` (commit sendiri) | belum |
+| 21 | Fase 5 — Label tenancy English (`KIT_TENANCY_LABEL*` di `.env` → Organization/Organizations), `lang/vendor/*/en/` untuk 3 paket PT-only, buka `idiomas` → switcher muncul | sebagian — switcher ✅ 3 locale, label tenancy ✅, fallback `lang/vendor/*/en/` **belum** |
+| 22 | Fase 5 — `.env`/`.env.example` `APP_LOCALE=en`; perbaikan timezone `config/app.php:94` (commit sendiri) | **`.env`+`.env.example` ✅** (APP_LOCALE=en, APP_FAKER_LOCALE=en_US) · timezone `config/app.php:94` **belum** |
 | 23 | Fase 6 — `.ai/rules/idioma.md` + baris indeks, runbook dua bahasa `docs/en`+`docs/pt` | belum |
 | 24 | Fase 6 — Uji simulasi revert jahat (restore file hulu → extractor pulihkan → guard hijau) | belum |
-| 25 | Keputusan terbuka: apakah Fase 7 (kolom `nome`/`painel`, rename class, slug URL) masuk scope | belum |
-| 26 | Keputusan terbuka: data demo/seed English berarti menyunting `database/{seeders,factories}` milik hulu — lanjut atau batal? | belum |
-| 27 | Commit batas fase 0–2 (belum dilakukan; menunggu perintah user) | belum |
+| 25 | Keputusan terbuka: apakah Fase 7 (kolom `nome`/`painel`, rename class, slug URL) masuk scope | **TERKUNCI 2026-09-22: YA, penuh sampai kolom dan class** |
+| 26 | Keputusan terbuka: data demo/seed English berarti menyunting `database/{seeders,factories}` milik hulu — lanjut atau batal? | **TERKUNCI 2026-09-22: YA, seed ikut English** |
+| 27 | Commit batas fase 0–2 — sudah dilakukan user (`560dd0c`) | ✅ |
+| 28 | Commit pembersihan: 60 `.raja/temp/legado/**` keluar dari indeks + `/.raja/` di `.gitignore` (staged, menunggu perintah) | belum |
+| 29 | **Gancho global `translateLabel()`** di `LocalizacaoProvider::terjemahkanLabelDasar()` (7 kelas dasar) + guard baru 6 kasus | ✅ |
+| 30 | Locale ketiga `id` masuk `config/localization.php` (`idiomas`, `formatos`) + `lang/id.json` (20 kunci) | ✅ |
+| 31 | Area 1 English: 29 getter label + 20 pasangan EN→PT/ID di overlay; `.env` `APP_LOCALE=en` | ✅ |
+| 32 | Belum terverifikasi: `getSubheading()`/`getDescription()` widget (3 literal) — status "hidup" di v5 belum diukur, sengaja tidak disentuh | belum |
+| 33 | Belum terverifikasi: `composer test:kit` penuh di atas area 1 (oracle byte-identity) — jalankan sebelum buka area 2 | belum — **dijalankan, hasil di bawah** |
+| 34 | Alarm anti-revert area 1: `tests/Feature/LabelPainelSudahInggrisTest.php` (scan 4 getters por refleksi + kontrol positif + penghitung kelas yang dilihat) | ✅ |
+| 35 | Celah yang diketahui dari alarm #34: scan hanya membaca **method**; file yang di-revert sampai ke bentuk **properti statis** lolos dari scan (dipegang `LabelPainelLewatGetterTest`, 43 kasus). Medido: `git checkout HEAD -- ConfiguracoesDoKit.php` → kasus scan hijau, kontrol positif MERAH | belum diutup |
+
 
 ## Context
 
@@ -282,6 +291,191 @@ Ambiente: não havia `.env` nem sqlite de dev neste checkout (até `tests/Featur
 nascia vermelho com `MissingAppKeyException`), então `migrate:fresh` foi provado via
 `RefreshDatabase` em sqlite `:memory:`. **Verificações que continuam pendentes para qualquer pessoa
 que rodar isto de verdade: o engine MySQL do docker e `php artisan kit:tenancy` nos dois modos.**
+
+### PENUTUP BARIS 13 — engine MySQL nyata, dua jalur terukur (2026-09-22, server hidup)
+
+Yang di atas ditulis saat `vendor/` belum ada dan MySQL belum menyala. Sekarang engine-nya nyata:
+**MySQL Community Server 26.7.0** (`SELECT VERSION(), @@version_comment`), DB `starterkit` di
+127.0.0.1:3306, `APP_URL=http://localhost:8000` (`/` 200, `/admin/login` 200).
+
+Karena mengubah `starterkit` berarti merusak DB yang sedang disajikan server, jalur **DB produksi
+lama** dibangun di scratch `starterkit_legado` — dan dibangun dengan **migration HEAD yang asli**
+(`git archive HEAD database/migrations`), bukan karangan: 7 file ber-nama tabel PT cocok persis
+dengan daftar rewrite di atas. Hasilnya kondisi produksi sejati: tabel PT ada, constraint bernama PT,
+baris `2099` belum tercatat. Empat tabel diisi baris nyata (3/2/2/2) dengan parent FK sungguhan.
+
+| Yang diukur di MySQL | Hasil |
+| --- | --- |
+| `migrate` jalur produksi lama (`2099_*` fire betulan) | `DONE` 166 ms; keempat nama English ada, keempat nama PT **nol** |
+| Data ikut rename? | `invitations` 3 · `projects` 2 · `ai_agents` 2 · `social_links` 2 — identik sebelum/sesudah |
+| FK setelah rename | tetap mengikat ke `users`/`roles`/`tenants`; `INSERT` dengan `role_id=999999` ditolak **SQLSTATE[23000]** (bukan cuma ada di metadata) |
+| Klaim docblock "nama constraint/ indeks tetap PT" | **TERBUKTI**: `invitations` masih menggendong `convites_role_id_foreign`, `convites_email_index`, `convites_token_unique`, `convites_uuid_unique` (6 indeks `convites*`) |
+| Eloquent lewat `$table` eksplisit | `Convite→invitations (3)` · `Projeto→projects (2)` · `AgenteIa→ai_agents (2)` |
+| `down()` nyata | `migrate:rollback` mengembalikan keempat nama PT **dengan data utuh** (3/2/2/2), `invitations` hilang |
+| Jalur `migrate:fresh --seed` (tenancy ON) | **nol** tabel PT, keempat English ada, `model_has_roles.team_id` = true, seed `DONE`, `2099_*` tercatat sebagai no-op |
+
+**Dua koreksi terhadap rencana Fase 2, keduanya hasil mengukur bukan mengingat:**
+
+1. **"3 widget SQL mentah" ternyata nol.** `OrganizacoesStats` hanya menyentuh `tenant_user` (sengaja
+   dipertahankan) + `authentication_log` lewat `config('authentication-log.table_name')`;
+   `UsuariosUnicosPorOrganizacao` dan `AcessosPorPainel` pun tidak menyebut salah satu dari keempat
+   tabel. Tidak ada satu file widget pun yang perlu diubah — estimasi 14–18 file turun.
+2. **`migrate --pretend` BUTA untuk migration ini, dan ini jebakan runbook.** Di DB yang keempat
+   tabel PT-nya benar-benar ada, `--pretend` mencetak empat `select exists(...)` dan **nol**
+   `rename table`. Sebabnya di vendor: `Schema\Builder::hasTable()` memakai `scalar($sql)`, dan
+   `Connection::run()` mengembalikan `[]`/`null` saat `pretending()` (`Connection.php:427-430`) →
+   guard kita jadi `false` → rename di-skip. Operator yang melakukan dry-run produksi menyimpulkan
+   "tidak ada yang dikerjakan" padahal ada empat rename menunggu. **Fase 6 harus menulis ini**:
+   dry-run yang jujur untuk `2099_*` adalah membaca `information_schema`, bukan `--pretend`.
+
+Sisa baris 14 yang **tidak** bisa saya klaim, dan sekarang resmi diterima begitu (keputusan user
+2026-09-22): **mode OFF tidak diuji di MySQL**. Alasannya teknis — rename keempat tabel tidak punya
+satu pun dependency ke tabel permission (`invitations` hanya *menggunakan* `roles`/`tenants`/`users`,
+tidak ada yang FK ke keempatnya), jadi `teams=false` tidak mengubah jalur yang Fase 2 tulis.
+Menjalankan `kit:tenancy` betulan juga tidak menambah sinyal: tenancy hari ini **sudah** ON, sehingga
+perintahnya short-circuit di `config('kit.tenancy.enabled')` dan hanya menjawab "já está ligado" —
+setelah itu ia `migrate:fresh --seed` di `starterkit`, DB yang sedang disajikan `localhost:8000`.
+Kalau suatu saat OFF perlu dibuktikan, jalurnya adalah `config/permission.php` (`'teams' => true`,
+literal, bukan `env()`) + `config/filament-shield.php` (`tenant_model`) dan app hidup ikut berubah
+bersama keduanya.
+
+**Tripwire baru yang sudah menggigit:** `.raja/` tidak ada di `.gitignore`, jadi `git add -A` menelan
+direktori scratch saya — commit `560dd0c` memasukkan 60 salinan migration lama di
+`.raja/temp/legado/**`. Sudah dibereskan: `git rm -r --cached .raja` + `/.raja/` di `.gitignore`
+(60 deletion masih staged, menunggu commit user). **Aturan untuk fase berikutnya**: scratch wajib
+ter-ignore sebelum `git add -A` apa pun, dan masuk langkah manual di runbook Fase 6.
+
+## HASIL BARIS 16 + premis baris 15 yang mati (dijalankan 2026-09-22)
+
+### Baris 15: paket yang rencana kunci tidak ada
+
+`composer show -a momin-alzaraa/localization` → *Package not found*; `repo.packagist.org/p2/…json`
+→ **404**; pencarian GitHub untuk vendor itu → **`total_count: 0`**. Jadi `wikis/pacotes-ranking.md`
+item #49 ("⚔️ com `momin-alzaraa/localization`, que gera os arquivos varrendo resources") menunjuk
+nama yang tidak bisa dipasang. Keputusan user: **mesin = scanner pihak ketiga untuk PENEMUAN + rewrite
+milik kita**. Yang nyata dan sepadan di Packagist: `php-translation/extractor` (4,71 M unduhan) dan
+`gettext/php-scanner` (696 ribu) — keduanya menemukan/mengindeks string, **tidak** mengganti literal
+di tempat dan tidak menulis overlay `lang/pt_BR.json`. Rewrite itu tetap `i18n:extract` kita, hanya
+saja sekarang tanpa ilusi "instal alat, selesai".
+
+### Inventário terukur (`.raja/temp/inventarioliteral.php`, token-based, bisa dijalankan ulang)
+
+| | Rencana | Terukur |
+|---|---|---|
+| kemunculan | 890 | **1453** |
+| distinct | 812 | **1278** |
+| file | 129 | **163** |
+| interpolatif | tidak dihitung | **181** |
+| berakhiran `.`/`!`/`?` | 259 | **370** |
+
+Per bucket: jalur render (allowlist Fase 4) **1098** — `app/Filament` 576, `resources/views` 345,
+Ai 42, Http 40, Notifications 31, Policies 28, Providers 24, Livewire 12; di luar = `Console/Commands`
+201, `app/Support` 124, `app/Models` 24. Selisih dengan rencana bukan noise: angka lama tidak
+memasukkan pecahan interpolasi (`" de "`, `"Sem "`) dan node teks Blade. **Konsekuensi desain**:
+unit ekstraksi harus kalimat utuh, bukan token — kalau tidak, `lang/pt_BR.json` berisi serpihan yang
+tidak bisa disunting manusia; dan 181 interpolatif naik ke depan baris 18, bukan belakangan.
+
+### Baris 16 selesai: 28 situs, 14 file
+
+Estimasi rencana "±24" melesah; yang terukur **32 deklarasi properti statis de rótulo**, dan 4 di
+antaranya sengaja TIDAK dikonversi:
+
+- `Infra/Pages/Pulse.php` ×2 (`$title`/`$navigationLabel` = `'Pulse'`) — bukan PT, konversi = churn
+  tanpa sinyal.
+- `Admin/Widgets/ConvitesPorSituacao.php` + `Infra/Widgets/IaExecucoesPorStatus.php` (`$subheading`)
+  — **terukur mati**: `grep subheading` tidak menghasilkan apa pun di `vendor/filament/widgets` maupun
+  di `leandrocfe/filament-apex-charts`. Tidak ada yang pernah membaca properti itu di v5, jadi
+  mengubahnya jadi getter **menemukan subtítulo que não existe na tela**. Dilaporkan, tidak disentuh
+  (`.ai/rules`: dead code sebut, jangan hapus sendiri).
+
+Yang dikonversi (`protected static ?string $X = '…'` → getter, literal PT byte-per-byte sama):
+6 `Pages` + 7 `Resources` + 1 `RelationManager`.
+
+**Jebakan yang membuat baris ini tidak bisa dikerjakan dari ingatan:** di Filament 5.8.2
+`getTitle()` punya **dua** bentuk yang berbeda. `Filament\Pages\BasePage::getTitle()` adalah method
+**instance** (`:85`, `string|Htmlable`), sementara `Filament\Resources\RelationManagers\RelationManager::getTitle(Model, string)`
+adalah **static** dan dipanggil dengan argumen oleh vendor (`:161`, `:313`; juga
+`Resources/Pages/Page.php:168` memakai `static::getTitle()`). Salah satu dari dua itu = `Error`
+runtime di layar yang tidak disentuh test mana pun. Nama dan static-ness diambil dari source vendor,
+bukan dari asumsi; `Resources\Pages\Page` (pemanggil statis) tidak ada di antara 14 file ini, jadi
+tidak ada call site yang berubah arah.
+
+Dua hal lain yang harus ikut ditulis dan tidak terlihat dari diff:
+
+1. `EscolhaDePainel` dan `BoasVindas` hanya punya `$title`. `Page::getNavigationLabel()` (`:229`)
+   membaca `static::$navigationLabel ?? static::$title` — setelah properti hilang, fallback itu jadi
+   `class_basename()`. Keduanya mendapat `getNavigationLabel()` eksplisit supaya label navigasi tetap
+   sama, bukan hanya `getTitle()`.
+2. Guard baru `tests/Feature/LabelPainelLewatGetterTest.php` (43 kasus / 105 asersi) memakai
+   **refleksi**, bukan regex, karena `.ai/rules/testes.md` mencatat tiga insiden di mana varredura
+   menghitung komentar sebagai kode — dan file-file ini bersdokumentasi PT lebat.
+
+### Gerbang yang dijalankan (baris 16)
+
+`php artisan test --testsuite=Feature` → **59 passed (130 asersi)** · `vendor/bin/phpstan
+clear-result-cache && analyse` → **0 erros** (cache dibersihkan dulu; tanpa itu error lama menipu)
+· `vendor/bin/filacheck` → **17/17** · `pint --dirty` → bersih · smoke di server hidup:
+`curl localhost:8000/` masih merender `Bem-vindo ao Starter Kit Easy` · **bukti guard bisa membunuh**:
+`git checkout HEAD -- Admin/Resources/Convites/ConviteResource.php` (versi properti statis) membuat
+guard **2 merah**, lalu dipulihkan.
+
+## HASIL BARIS 29–31 — English default aktif + gancho global (dijalankan 2026-09-22)
+
+### Keputusan user yang mengubah rencana (2026-09-22)
+
+Locale = **`en` (default) + `id` + `pt_BR`** — bahasa Indonesia masuk sebagai locale, diterjemahkan
+dari sumber Brazil. `pt_BR` **tetap** karena ~90 file test hulu meng-assert PT byte-per-byte: ia
+oracle, bukan kenang-kenangan. Fase 7 **masuk scope penuh** (kolom, class, namespace, slug) dan
+seed/factory **ikut English**. Urutan yang dipilih: aktifkan English dulu, ekstraksi per area.
+
+### Dua koreksi terhadap temuan Fase 0 (terukur, bukan diingat)
+
+1. **`translateLabel()` TIDAK ada di kelas dasar `Filament\Schemas\Components\Component`.**
+   Fase 0 mencatat "satu registrasi di kelas dasar berlaku untuk semua subclass" — itu benar untuk
+   *mekanisme* `ComponentManager::configure()` (menelusuri `array_reverse(class_parents())`), tapi
+   **tidak** untuk *kepemilikan method*: di 5.8.2 `Section` memakai trait `HasLabel` sendiri, sementara
+   `Column`/`BaseFilter`/`Summarizer`/`Action` memakainya di kelas dasar. Registrasi buta di `Component`
+   = `Call to undefined method` pada komponen yang tidak punya label. Yang dipasang sekarang:
+   **7 registrasi (Component, Column, ColumnGroup, BaseFilter, Summarizer, Action, Constraint) dengan
+   satu `method_exists()`** — jadi komponen tanpa label hanya lewat, dan subclass baru dari upstream
+   sudah tercakup tanpa siapa pun ingat mendaftar.
+2. **Gancho hanya mencapai `$label`.** Medido: `Section::make('Teks')` menulis ke `$heading`, dan
+   `getHeading()` tidak pernah lewat translator. Jadi "~300 call sites tidak perlu `__()`" berlaku
+   untuk `->label()`, **bukan** untuk heading, `Text::make()` (isi), badge dan tooltip. Ada case
+   eksplisit menegaskannya di `tests/Feature/LabelFilamentLewatOverlayTest.php` supaya nobody
+   menyimpulkan sebaliknya dari file itu sendiri.
+
+### Yang mendarat
+
+- `LocalizacaoProvider::terjemahkanLabelDasar()` — file milik proyek, imun struktural. Dipanggil di
+  `boot()` **tanpa** gate `runningUnitTests()`: suíte juga butuh overlay (ia mengukur PT).
+- `config/localization.php` — `idiomas: ['en','id','pt_BR']`, `formatos.id`.
+- `lang/id.json` BARU (20 kunci) + `lang/pt_BR.json` 33 → **53 kunci**.
+- **Area 1 = 29 getter label** (title/navLabel/modelLabel/pluralModelLabel di 14 file
+  `app/Filament/**`) jadi `__('English')`. Ditulis oleh skrip presisi yang locate lewat regex per
+  *blok method* — `return 'Convites';` di dalam `match` arms adalah nilai banco, dan membungkus yang
+  itu dengan `__()` akan merusak perbandingan.
+- `.env` dan `.env.example`: `APP_LOCALE=en`, `APP_FAKER_LOCALE=en_US`.
+
+### Sengaja TIDAK dikerjakan (dan alasannya)
+
+- **17 fallback inline `config('kit.tenancy.label', 'Organização')` di 9 file.** Skrip pertama saya
+  ikut mengubahnya; saya revert semuanya. Alasannya: `config/kit.php:353` sudah menyelesaikan
+  `env(...) ?: '…'` lebih dulu, jadi default inline itu **kode mati** — mengubahnya = 17 baris konflik
+  di file whitelisted demi nol perubahan perilaku. Pemilik label tenancy yang sebenarnya adalah
+  `KIT_TENANCY_LABEL` di `.env` (imun), dan itu yang saya ganti ke `Organization`/`Organizations`.
+  Konsumen baca nilai config mentah tanpa translator: membuatnya locale-aware itu pekerjaan Fase 5.
+- `getSubheading()` (2) dan `getDescription()` (1) — baris 16 sudah membuktikan `$subheading` statis
+  mati di v5; sebelum menyentuh versi method-nya harus diukur siapa yang memanggil.
+- `Administração` (nav group), `Papéis` (Shield), dan seluruh isi widget/dashboard: area 2.
+
+### Gerbang
+
+`Feature` **65 passed / 139 asersi** (naik dari 59; 6 kasus guard baru) · `pint --dirty` bersih ·
+`phpstan analyse` (setelah `clear-result-cache`) **0 erros** · smoke HTTP: `/admin/login` →
+`?locale=en` "**Sign in**", `?locale=id` "**Masuk**", `?locale=pt_BR` "**Esqueceu…**" — tiga locale
+resolve, default English · panel `/admin` sudah login: `Application settings`, `AI agents`,
+`Invitations`, `Users`, `Dashboard`. **Belum**: `composer test:kit` penuh di atas area 1 (baris 33).
 
 ## Fase 1 — Plumbing imun + kerangka alarm (2–3 hari)
 

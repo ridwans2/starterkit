@@ -45,9 +45,15 @@ class ConviteResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Administração';
 
-    protected static ?string $modelLabel = 'Convite';
+    public static function getModelLabel(): string
+    {
+        return __('Invitation');
+    }
 
-    protected static ?string $pluralModelLabel = 'Convites';
+    public static function getPluralModelLabel(): string
+    {
+        return __('Invitations');
+    }
 
     protected static ?string $recordTitleAttribute = 'email';
 

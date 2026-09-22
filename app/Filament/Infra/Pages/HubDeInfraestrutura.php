@@ -79,9 +79,15 @@ class HubDeInfraestrutura extends CardsPage
 
     protected static ?string $searchPlaceholder = 'Buscar destino...';
 
-    protected static ?string $title = 'Central de infraestrutura';
+    public function getTitle(): string
+    {
+        return __('Infrastructure hub');
+    }
 
-    protected static ?string $navigationLabel = 'Central de infraestrutura';
+    public static function getNavigationLabel(): string
+    {
+        return __('Infrastructure hub');
+    }
 
     /**
      * A classe que dá escopo ao `resources/css/filament/cards.css`.

@@ -29,12 +29,12 @@ class UltimosUsuariosCadastrados extends RecentItemsWidget
 
     public function getHeading(): ?string
     {
-        return 'Últimos usuários cadastrados';
+        return __('Recently registered users');
     }
 
     public function getEmptyStateHeading(): string
     {
-        return 'Nenhum usuário cadastrado';
+        return __('No users registered');
     }
 
     public function getEmptyStateIcon(): string
@@ -83,7 +83,7 @@ class UltimosUsuariosCadastrados extends RecentItemsWidget
      */
     public function viewAllAction(): Action
     {
-        return parent::viewAllAction()->label('Ver todos');
+        return parent::viewAllAction()->label(__('View all'));
     }
 
     /**

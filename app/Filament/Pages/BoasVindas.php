@@ -81,7 +81,15 @@ class BoasVindas extends CardsPage
 
     protected static string $layout = 'filament-panels::components.layout.simple';
 
-    protected static ?string $title = 'Bem-vindo ao Starter Kit Easy';
+    public function getTitle(): string
+    {
+        return __('Welcome to Starter Kit Easy');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Welcome to Starter Kit Easy');
+    }
 
     /**
      * Três colunas no `lg` — escolha de layout, não restrição: desde o `filament-cards` 1.1.0 a

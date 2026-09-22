@@ -39,20 +39,20 @@ trait FichaDeUsuario
             ->columns(2)
             ->schema([
                 TextEntry::make('name')->label('Nome'),
-                TextEntry::make('email')->label('E-mail')->copyable(),
+                TextEntry::make('email')->label(__('Email'))->copyable(),
                 TextEntry::make('situacao')
-                    ->label('Situação')
+                    ->label(__('Status'))
                     ->badge()
                     ->state(fn (User $record): string => $record->rotuloDaSituacao())
                     ->color(fn (User $record): string => $record->corDaSituacao()),
                 TextEntry::make('origem')
-                    ->label('Origem')
+                    ->label(__('Source'))
                     ->state(fn (User $record): string => $record->rotuloDaOrigem()),
                 TextEntry::make('email_verified_at')
                     ->label('E-mail confirmado em')
                     ->dateTime('d/m/Y H:i')
                     ->placeholder('Não confirmado'),
-                TextEntry::make('created_at')->label('Cadastrado em')->dateTime('d/m/Y H:i'),
+                TextEntry::make('created_at')->label(__('Registered at'))->dateTime('d/m/Y H:i'),
                 TextEntry::make('updated_at')->label('Atualizado em')->dateTime('d/m/Y H:i'),
                 /*
                  * NAO ha entrada `deleted_at` aqui, e a ausencia e deliberada — a primeira versao

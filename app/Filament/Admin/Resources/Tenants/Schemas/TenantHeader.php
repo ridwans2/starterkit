@@ -63,7 +63,7 @@ class TenantHeader
                         ->fieldIcon(Heroicon::OutlinedLink)
                         ->copyable(),
                     MetadataEntry::make('usuarios')
-                        ->label('Usuários')
+                        ->label(__('Users'))
                         ->fieldIcon(Heroicon::OutlinedUserGroup)
                         ->state(fn (Tenant $record): int => $record->users()->count()),
                     MetadataEntry::make('created_at')

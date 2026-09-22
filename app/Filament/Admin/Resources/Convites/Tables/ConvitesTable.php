@@ -26,7 +26,7 @@ class ConvitesTable
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
-                TextColumn::make('email')->label('E-mail')->searchable()->sortable(),
+                TextColumn::make('email')->label(__('Email'))->searchable()->sortable(),
 
                 TextColumn::make('papel.name')->label('Papel')->badge()
                     ->formatStateUsing(fn (?string $state): string => Papeis::rotulo($state)),
@@ -40,7 +40,7 @@ class ConvitesTable
                 // como elas divergiram (a do /app mostrava `aceito_em` com placeholder
                 // "Pendente", que mentiria para um convite recusado).
                 TextColumn::make('situacao')
-                    ->label('Situação')
+                    ->label(__('Status'))
                     ->badge()
                     ->color(fn (Convite $record): string => match ($record->situacao()) {
                         'Aceito'   => 'success',
@@ -50,7 +50,7 @@ class ConvitesTable
                     })
                     ->state(fn (Convite $record): string => $record->situacao()),
 
-                TextColumn::make('expira_em')->label('Expira em')->dateTime('d/m/Y H:i')->sortable(),
+                TextColumn::make('expira_em')->label(__('Expires at'))->dateTime('d/m/Y H:i')->sortable(),
 
                 TextColumn::make('convidadoPor.name')
                     ->label('Convidado por')
@@ -109,7 +109,7 @@ class ConvitesTable
                         ],
                     )),
             ])
-            ->emptyStateHeading('Nenhum convite enviado')
+            ->emptyStateHeading(__('No invitations sent'))
             ->emptyStateDescription('Convide alguém para que ela crie a própria senha e nasça com o papel certo.');
     }
 }

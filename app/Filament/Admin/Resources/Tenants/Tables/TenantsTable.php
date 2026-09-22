@@ -74,11 +74,11 @@ class TenantsTable
                     ->iconPosition(IconPosition::After),
                 IconColumn::make('ativo')->label('Ativo')->boolean(),
                 TextColumn::make('users_count')
-                    ->label('Usuários')
+                    ->label(__('Users'))
                     ->counts('users')
                     ->badge()
                     ->color('gray'),
-                TextColumn::make('created_at')->label('Criado em')->dateTime('d/m/Y H:i')
+                TextColumn::make('created_at')->label(__('Created at'))->dateTime('d/m/Y H:i')
                     ->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([

@@ -36,9 +36,15 @@ class HubDeAdministracao extends CardsPage
 
     protected static ?string $searchPlaceholder = 'Buscar destino...';
 
-    protected static ?string $title = 'Hub de administração';
+    public function getTitle(): string
+    {
+        return __('Administration hub');
+    }
 
-    protected static ?string $navigationLabel = 'Hub de administração';
+    public static function getNavigationLabel(): string
+    {
+        return __('Administration hub');
+    }
 
     /**
      * A classe que dá escopo ao `resources/css/filament/cards.css`.

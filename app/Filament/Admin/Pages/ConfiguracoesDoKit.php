@@ -81,9 +81,15 @@ class ConfiguracoesDoKit extends SettingsPage
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-cog-6-tooth';
 
-    protected static ?string $title = 'Configurações da aplicação';
+    public function getTitle(): string
+    {
+        return __('Application settings');
+    }
 
-    protected static ?string $navigationLabel = 'Configurações da aplicação';
+    public static function getNavigationLabel(): string
+    {
+        return __('Application settings');
+    }
 
     /**
      * Sem isto o Filament deriva o slug do NOME DA CLASSE
@@ -368,7 +374,7 @@ class ConfiguracoesDoKit extends SettingsPage
                     ->visible($smtp),
 
                 TextInput::make('mail_username')
-                    ->label('Usuário')
+                    ->label(__('User'))
                     ->maxLength(255)
                     ->visible($smtp),
 

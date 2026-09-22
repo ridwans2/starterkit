@@ -18,7 +18,7 @@ use App\Providers\LocalizacaoProvider;
 use BezhanSalleh\LanguageSwitch\LanguageSwitch;
 
 it('declara inglês como idioma padrão e português como segundo idioma', function (): void {
-    expect(config('localization.idiomas'))->toBe(['en', 'pt_BR'])
+    expect(config('localization.idiomas'))->toBe(['en', 'id', 'pt_BR'])
         ->and(config('localization.suite'))->toBe('pt_BR');
 });
 
@@ -47,7 +47,7 @@ it('mostra o seletor de idioma quando o projeto aplica a sua lista', function ()
 
     (new LocalizacaoProvider($this->app))->aplicar();
 
-    expect(config('kit.idiomas'))->toBe(['en', 'pt_BR'])
+    expect(config('kit.idiomas'))->toBe(['en', 'id', 'pt_BR'])
         ->and(LanguageSwitch::make()->isVisibleInsidePanels())->toBeTrue();
 });
 

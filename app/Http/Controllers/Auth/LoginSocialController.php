@@ -464,7 +464,7 @@ final class LoginSocialController extends Controller
         );
 
         Notification::make()
-            ->title('Cadastro recebido')
+            ->title(__('Registration received'))
             ->body('Sua conta foi criada e aguarda aprovação de quem administra o sistema. Você poderá entrar assim que ela for liberada.')
             ->success()
             ->persistent()

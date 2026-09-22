@@ -16,6 +16,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -57,11 +58,20 @@ class UsersRelationManager extends RelationManager
 {
     protected static string $relationship = 'users';
 
-    protected static ?string $title = 'Usuários vinculados';
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return __('Linked users');
+    }
 
-    protected static ?string $modelLabel = 'Usuário';
+    protected static function getModelLabel(): ?string
+    {
+        return __('User');
+    }
 
-    protected static ?string $pluralModelLabel = 'Usuários';
+    protected static function getPluralModelLabel(): ?string
+    {
+        return __('Users');
+    }
 
     public function form(Schema $schema): Schema
     {
@@ -74,8 +84,8 @@ class UsersRelationManager extends RelationManager
             ->recordTitleAttribute('name')
             ->columns([
                 TextColumn::make('name')->label('Nome')->searchable()->sortable(),
-                TextColumn::make('email')->label('E-mail')->searchable()->sortable(),
-                TextColumn::make('roles.name')->label('Papéis')->badge()->color('gray')
+                TextColumn::make('email')->label(__('Email'))->searchable()->sortable(),
+                TextColumn::make('roles.name')->label(__('Roles'))->badge()->color('gray')
                     ->formatStateUsing(fn (?string $state): string => Papeis::rotulo($state)),
             ])
             ->headerActions([
@@ -124,7 +134,7 @@ class UsersRelationManager extends RelationManager
             ->authorize('AtribuirPapeis:Tenant')
             ->schema([
                 Select::make('roles')
-                    ->label('Papéis')
+                    ->label(__('Roles'))
                     ->multiple()
                     ->preload()
                     ->searchable()

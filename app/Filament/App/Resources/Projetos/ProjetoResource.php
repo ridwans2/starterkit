@@ -52,9 +52,15 @@ class ProjetoResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $modelLabel = 'Projeto';
+    public static function getModelLabel(): string
+    {
+        return __('Project');
+    }
 
-    protected static ?string $pluralModelLabel = 'Projetos';
+    public static function getPluralModelLabel(): string
+    {
+        return __('Projects');
+    }
 
     protected static ?string $recordTitleAttribute = 'nome';
 
@@ -210,7 +216,7 @@ class ProjetoResource extends Resource
                     ->limit(3)
                     ->simpleLightbox(),
 
-                TextColumn::make('created_at')->label('Criado em')->dateTime('d/m/Y H:i')->sortable(),
+                TextColumn::make('created_at')->label(__('Created at'))->dateTime('d/m/Y H:i')->sortable(),
             ])
             ->recordActions([
                 EditAction::make(),
@@ -225,7 +231,7 @@ class ProjetoResource extends Resource
                  */
                 DeleteAction::make(),
             ])
-            ->emptyStateHeading('Nenhum projeto aqui')
+            ->emptyStateHeading(__('No projects here'))
             ->emptyStateDescription('Cada registro pertence ao tenant selecionado no topo — troque de tenant e a lista muda.');
     }
 

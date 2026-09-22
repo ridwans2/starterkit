@@ -43,7 +43,7 @@ class AgenteIaExporter extends ExportadorDoKit
             ExportColumn::make('versao')
                 ->label('Versão'),
             ExportColumn::make('created_at')
-                ->label('Criado em'),
+                ->label(__('Created at')),
         ];
     }
 

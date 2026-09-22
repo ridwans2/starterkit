@@ -32,11 +32,11 @@ class UserExporter extends ExportadorDoKit
             ExportColumn::make('name')
                 ->label('Nome'),
             ExportColumn::make('email')
-                ->label('E-mail'),
+                ->label(__('Email')),
             ExportColumn::make('email_verified_at')
                 ->label('E-mail verificado em'),
             ExportColumn::make('created_at')
-                ->label('Criado em'),
+                ->label(__('Created at')),
         ];
     }
 

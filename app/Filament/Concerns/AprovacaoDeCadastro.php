@@ -75,7 +75,7 @@ trait AprovacaoDeCadastro
     protected static function filtroDePendentes(): Filter
     {
         return Filter::make('aprovacao_pendente')
-            ->label('Somente pendentes de aprovação')
+            ->label(__('Only pending approval'))
             ->query(self::recorteDePendentes(...));
     }
 
@@ -112,13 +112,13 @@ trait AprovacaoDeCadastro
     protected static function acaoDeAprovar(): Action
     {
         return Action::make('aprovar')
-            ->label('Aprovar')
+            ->label(__('Approve'))
             ->icon(Heroicon::OutlinedCheckBadge)
             ->color('success')
             ->authorize('update')
             ->visible(fn (User $record): bool => $record->aprovacao_pendente)
             ->requiresConfirmation()
-            ->modalHeading('Aprovar este cadastro?')
+            ->modalHeading(__('Approve this registration?'))
             ->modalDescription('A pessoa passa a acessar o painel de negócio com o perfil básico. Você pode ajustar os papéis dela depois, na edição.')
             ->successNotificationTitle('Cadastro aprovado')
             ->action(function (User $record): void {

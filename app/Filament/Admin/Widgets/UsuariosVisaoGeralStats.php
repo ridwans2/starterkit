@@ -64,7 +64,7 @@ class UsuariosVisaoGeralStats extends StatsOverviewWidget
                 ->icon('heroicon-o-users')
                 ->iconColor('primary')
                 ->accentColor('primary')
-                ->description('Contas cadastradas no sistema'),
+                ->description(__('Accounts registered in the system')),
 
             StatPlus::make('Com 2FA ativo', $comDoisFatores)
                 ->icon('heroicon-o-shield-check')
@@ -84,13 +84,13 @@ class UsuariosVisaoGeralStats extends StatsOverviewWidget
                 ->icon('heroicon-o-identification')
                 ->iconColor('gray')
                 ->accentColor('gray')
-                ->description('Perfis de acesso (Shield)'),
+                ->description(__('Access profiles (Shield)')),
 
             StatPlus::make('Permissões', Permission::query()->count())
                 ->icon('heroicon-o-key')
                 ->iconColor('gray')
                 ->accentColor('gray')
-                ->description('Ações protegidas por gate'),
+                ->description(__('Gate-protected actions')),
         ];
 
         /*

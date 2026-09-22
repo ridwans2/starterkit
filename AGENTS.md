@@ -54,13 +54,11 @@ protected $fillable = ['nama', 'harga', 'deskripsi', 'status'];
 
 ## CREDENTIAL & URL ADMIN
 ```
-url admin : https://raja.nes/admin
+base url : http://localhost:8000/
+url admin :  /admin
 email : penyair@gmail.com
 password : sheila
-
-url rajakos : https://raja.nes/rajakos/login
-email : penyair@gmail.com
-password : sheila
+ 
 ```
 
 

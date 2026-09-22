@@ -46,7 +46,7 @@ class ProgressoOnboarding extends GoalProgressWidget
 
     public function getEmptyStateHeading(): string
     {
-        return 'Nenhuma jornada iniciada';
+        return __('No onboarding started');
     }
 
     public function getEmptyStateIcon(): string

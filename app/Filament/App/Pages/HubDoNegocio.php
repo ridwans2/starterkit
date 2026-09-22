@@ -45,9 +45,15 @@ class HubDoNegocio extends CardsPage
     /** @var int|string|array<string, int|string> */
     protected static int|string|array $columns = 3;
 
-    protected static ?string $title = 'Início';
+    public function getTitle(): string
+    {
+        return __('Home');
+    }
 
-    protected static ?string $navigationLabel = 'Início';
+    public static function getNavigationLabel(): string
+    {
+        return __('Home');
+    }
 
     /**
      * A classe que dá escopo ao `resources/css/filament/cards.css`.

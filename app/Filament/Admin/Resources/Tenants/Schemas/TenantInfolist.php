@@ -70,7 +70,7 @@ class TenantInfolist
                             ->icon(Heroicon::OutlinedArrowTopRightOnSquare)
                             ->iconPosition(IconPosition::After),
                         TextEntry::make('ativo')
-                            ->label('Situação')
+                            ->label(__('Status'))
                             ->badge()
                             ->state(fn (Tenant $record): string => $record->ativo ? 'Ativa' : 'Inativa')
                             ->color(fn (Tenant $record): string => $record->ativo ? 'success' : 'danger'),

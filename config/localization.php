@@ -40,7 +40,7 @@ return [
     | no boot. Fora do contexto de teste, é a única dona do valor.
     */
 
-    'idiomas' => ['en', 'pt_BR'],
+    'idiomas' => ['en', 'id', 'pt_BR'],
 
     /*
     |--------------------------------------------------------------------------
@@ -83,6 +83,11 @@ return [
 
     'formatos' => [
         'en' => [
+            'data'      => 'Y-m-d',
+            'data_hora' => 'Y-m-d H:i',
+            'hora'      => 'H:i',
+        ],
+        'id' => [
             'data'      => 'Y-m-d',
             'data_hora' => 'Y-m-d H:i',
             'hora'      => 'H:i',

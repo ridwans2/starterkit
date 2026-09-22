@@ -48,9 +48,15 @@ class UserResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-users';
 
-    protected static ?string $modelLabel = 'Usuário';
+    public static function getModelLabel(): string
+    {
+        return __('User');
+    }
 
-    protected static ?string $pluralModelLabel = 'Usuários';
+    public static function getPluralModelLabel(): string
+    {
+        return __('Users');
+    }
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -62,7 +68,7 @@ class UserResource extends Resource
                 ->required()
                 ->maxLength(255),
             TextInput::make('email')
-                ->label('E-mail')
+                ->label(__('Email'))
                 ->email()
                 ->required()
                 ->unique(),
@@ -74,7 +80,7 @@ class UserResource extends Resource
                 ->dehydrated(fn (?string $state): bool => filled($state))
                 ->maxLength(255),
             Select::make('roles')
-                ->label('Papéis')
+                ->label(__('Roles'))
                 // Recorte de UX do teto de escalada: quem não é master_global não vê o
                 // master_global, nem papel de painel fora do alcance dele. A trava que vale
                 // é em gravarPapeis(). O `$record` entra no recorte para que o papel que a
@@ -191,19 +197,19 @@ class UserResource extends Resource
                     ->circular()
                     ->simpleLightbox(),
                 TextColumn::make('name')->label('Nome')->searchable()->sortable(),
-                TextColumn::make('email')->label('E-mail')->searchable()->sortable(),
-                TextColumn::make('roles.name')->label('Papéis')->badge()
+                TextColumn::make('email')->label(__('Email'))->searchable()->sortable(),
+                TextColumn::make('roles.name')->label(__('Roles'))->badge()
                     ->formatStateUsing(fn (?string $state): string => Papeis::rotulo($state)),
                 // Por qual porta a conta entrou: provedor social, convite, registro aberto ou
                 // interno. Exibição, nunca autorização — ver `User::rotuloDaOrigem()`.
                 TextColumn::make('origem')
-                    ->label('Origem')
+                    ->label(__('Source'))
                     ->badge()
                     ->state(fn (User $record): string => $record->rotuloDaOrigem())
                     ->color(fn (User $record): string => ($record->origem ?? User::ORIGEM_INTERNO) === User::ORIGEM_INTERNO ? 'gray' : 'info')
                     ->sortable()
                     ->toggleable(),
-                TextColumn::make('created_at')->label('Criado em')->dateTime('d/m/Y H:i')->sortable(),
+                TextColumn::make('created_at')->label(__('Created at'))->dateTime('d/m/Y H:i')->sortable(),
                 self::colunaDeSituacao(),
             ])
             ->filters([

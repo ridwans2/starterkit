@@ -30,17 +30,17 @@ class UsuariosPorPapel extends BreakdownWidget
 
     public function getHeading(): ?string
     {
-        return 'Usuários por papel';
+        return __('Users by role');
     }
 
     public function getHeadingDescription(): ?string
     {
-        return 'Um usuário pode acumular mais de um papel';
+        return __('A user can hold more than one role');
     }
 
     public function getEmptyStateHeading(): string
     {
-        return 'Nenhum papel cadastrado';
+        return __('No roles registered');
     }
 
     /**

@@ -39,19 +39,19 @@ class AgentesIaStats extends StatsOverviewWidget
                 ->icon('heroicon-o-cpu-chip')
                 ->iconColor('primary')
                 ->accentColor('primary')
-                ->description('Catálogo completo, ativos e inativos'),
+                ->description(__('Full catalog, active and inactive')),
 
             StatPlus::make('Ativos', $ativos)
                 ->icon('heroicon-o-bolt')
                 ->iconColor('success')
                 ->accentColor('success')
-                ->description('Disponíveis para execução'),
+                ->description(__('Available for execution')),
 
             StatPlus::make('Inativos', $total - $ativos)
                 ->icon('heroicon-o-pause-circle')
                 ->iconColor('gray')
                 ->accentColor('gray')
-                ->description('Desligados pela flag `ativo`'),
+                ->description(__('Turned off by the active flag')),
         ];
     }
 }

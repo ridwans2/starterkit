@@ -60,15 +60,15 @@ trait CabecalhoDeUsuario
             ])
             ->metadata([
                 MetadataEntry::make('email')
-                    ->label('E-mail')
+                    ->label(__('Email'))
                     ->fieldIcon(Heroicon::OutlinedEnvelope)
                     ->copyable(),
                 MetadataEntry::make('origem')
-                    ->label('Origem')
+                    ->label(__('Source'))
                     ->fieldIcon(Heroicon::OutlinedArrowRightEndOnRectangle)
                     ->state(fn (User $record): string => $record->rotuloDaOrigem()),
                 MetadataEntry::make('created_at')
-                    ->label('Cadastrado em')
+                    ->label(__('Registered at'))
                     ->fieldIcon(Heroicon::OutlinedCalendar)
                     ->dateTime('d/m/Y'),
             ]);

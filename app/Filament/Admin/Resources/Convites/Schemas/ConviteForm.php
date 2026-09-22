@@ -31,7 +31,7 @@ class ConviteForm
                     ->columns(2)
                     ->components([
                         TextInput::make('email')
-                            ->label('E-mail')
+                            ->label(__('Email'))
                             ->email()
                             ->required()
                             ->maxLength(255)

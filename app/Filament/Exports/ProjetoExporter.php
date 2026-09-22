@@ -32,9 +32,9 @@ class ProjetoExporter extends ExportadorDoKit
             ExportColumn::make('nome')
                 ->label('Nome'),
             ExportColumn::make('tenant.nome')
-                ->label('Organização'),
+                ->label(__('Organization')),
             ExportColumn::make('created_at')
-                ->label('Criado em'),
+                ->label(__('Created at')),
             ExportColumn::make('updated_at')
                 ->label('Atualizado em'),
         ];

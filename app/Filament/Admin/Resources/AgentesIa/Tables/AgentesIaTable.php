@@ -35,7 +35,7 @@ class AgentesIaTable
             ->recordActions([
                 EditAction::make(),
             ])
-            ->emptyStateHeading('Nenhum agente cadastrado')
+            ->emptyStateHeading(__('No agents registered'))
             ->emptyStateDescription('Rode os seeders do kit (AssistenteSeeder, GuardaPromptSeeder) ou cadastre um agente.');
     }
 }

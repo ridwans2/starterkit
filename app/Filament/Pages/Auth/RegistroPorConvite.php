@@ -238,7 +238,7 @@ class RegistroPorConvite extends Register
         session()->regenerateToken();
 
         Notification::make()
-            ->title('Cadastro recebido')
+            ->title(__('Registration received'))
             ->body('Sua conta foi criada e aguarda aprovação de quem administra o sistema. Você poderá entrar assim que ela for liberada.')
             ->success()
             ->persistent()
@@ -373,7 +373,7 @@ class RegistroPorConvite extends Register
     public function getHeading(): string|Htmlable|null
     {
         if ($this->convite instanceof Convite) {
-            return 'Aceitar convite';
+            return __('Accept invitation');
         }
 
         /*
@@ -456,7 +456,7 @@ class RegistroPorConvite extends Register
         }
 
         Notification::make()
-            ->title('Convite inválido ou expirado')
+            ->title(__('Invalid or expired invitation'))
             ->body('Peça um convite novo a quem administra o sistema. Se você já tem conta, entre por aqui.')
             ->danger()
             ->persistent()

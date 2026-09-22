@@ -29,13 +29,13 @@ class ConviteExporter extends ExportadorDoKit
     {
         return [
             ExportColumn::make('email')
-                ->label('E-mail'),
+                ->label(__('Email')),
             ExportColumn::make('tenant.nome')
-                ->label('Organização'),
+                ->label(__('Organization')),
             ExportColumn::make('convidadoPor.name')
                 ->label('Convidado por'),
             ExportColumn::make('expira_em')
-                ->label('Expira em'),
+                ->label(__('Expires at')),
             ExportColumn::make('enviado_em')
                 ->label('Enviado em'),
             ExportColumn::make('aceito_em')

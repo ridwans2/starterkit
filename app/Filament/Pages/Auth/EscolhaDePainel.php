@@ -40,7 +40,15 @@ class EscolhaDePainel extends CardsPage
     /** Sem sidebar nem topbar: a pessoa ainda não está em painel nenhum. */
     protected static string $layout = 'filament-panels::components.layout.simple';
 
-    protected static ?string $title = 'Em qual painel você quer entrar?';
+    public function getTitle(): string
+    {
+        return __('Which panel do you want to sign in to?');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Which panel do you want to sign in to?');
+    }
 
     /**
      * Três por linha, como na boas-vindas: `resources/css/filament/cards.css` cobre até

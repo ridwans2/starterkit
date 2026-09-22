@@ -30,17 +30,17 @@ class AgentesIaPorProvider extends SegmentBarWidget
 
     public function getHeading(): ?string
     {
-        return 'Agentes por provedor';
+        return __('Agents by provider');
     }
 
     public function getHeadingDescription(): ?string
     {
-        return 'Concentração do catálogo por fornecedor de LLM';
+        return __('Catalog concentration by LLM provider');
     }
 
     public function getEmptyStateHeading(): string
     {
-        return 'Nenhum agente cadastrado';
+        return __('No agents registered');
     }
 
     public function getEmptyStateIcon(): string

@@ -51,9 +51,15 @@ class ConviteResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Administração';
 
-    protected static ?string $modelLabel = 'Convite';
+    public static function getModelLabel(): string
+    {
+        return __('Invitation');
+    }
 
-    protected static ?string $pluralModelLabel = 'Convites';
+    public static function getPluralModelLabel(): string
+    {
+        return __('Invitations');
+    }
 
     protected static ?string $recordTitleAttribute = 'email';
 
@@ -99,7 +105,7 @@ class ConviteResource extends Resource
     {
         return $schema->components([
             TextInput::make('email')
-                ->label('E-mail')
+                ->label(__('Email'))
                 ->email()
                 ->required()
                 ->maxLength(255)
@@ -146,10 +152,10 @@ class ConviteResource extends Resource
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
-                TextColumn::make('email')->label('E-mail')->searchable()->sortable(),
+                TextColumn::make('email')->label(__('Email'))->searchable()->sortable(),
                 TextColumn::make('papel.name')->label('Papel')->badge()
                     ->formatStateUsing(fn (?string $state): string => Papeis::rotulo($state)),
-                TextColumn::make('expira_em')->label('Expira em')->dateTime('d/m/Y H:i')->sortable(),
+                TextColumn::make('expira_em')->label(__('Expires at'))->dateTime('d/m/Y H:i')->sortable(),
                 /*
                  * Situação DERIVADA pelo model, e não `aceito_em` com placeholder
                  * "Pendente": aquele placeholder mentia para convite recusado — mostrava
@@ -157,7 +163,7 @@ class ConviteResource extends Resource
                  * já disse não.
                  */
                 TextColumn::make('situacao')
-                    ->label('Situação')
+                    ->label(__('Status'))
                     ->badge()
                     ->color(fn (Convite $record): string => match ($record->situacao()) {
                         'Aceito'   => 'success',
@@ -167,7 +173,7 @@ class ConviteResource extends Resource
                     })
                     ->state(fn (Convite $record): string => $record->situacao()),
             ])
-            ->emptyStateHeading('Nenhum convite enviado')
+            ->emptyStateHeading(__('No invitations sent'))
             ->emptyStateDescription('Convide alguém para que ela crie a própria senha e nasça dentro desta organização.');
     }
 

@@ -42,3 +42,7 @@ Thumbs.db
 /.claude/setup-worktree.sh
 /.playwright-mcp/
 .solomd/
+
+# Scratch de fase (migrations copiados por `git archive HEAD` para simular banco de
+# produção antigo, ver plano English-first): rastro de verificação, nunca do projeto.
+/.raja/

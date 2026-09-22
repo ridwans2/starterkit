@@ -46,7 +46,7 @@ class AiRunExporter extends ExportadorDoKit
             ExportColumn::make('duration_ms')
                 ->label('Duração (ms)'),
             ExportColumn::make('started_at')
-                ->label('Início'),
+                ->label(__('Home')),
             ExportColumn::make('finished_at')
                 ->label('Fim'),
         ];

@@ -36,7 +36,7 @@ trait SituacaoDaConta
     protected static function colunaDeSituacao(): TextColumn
     {
         return TextColumn::make('situacao')
-            ->label('Situação')
+            ->label(__('Status'))
             ->badge()
             ->state(fn (User $record): string => $record->rotuloDaSituacao())
             ->color(fn (User $record): string => $record->corDaSituacao());

@@ -79,7 +79,7 @@ class ConvitesRecebidos extends Page implements HasTable
 
     public function getTitle(): string|Htmlable
     {
-        return 'Convites recebidos';
+        return __('Received invitations');
     }
 
     public function table(Table $table): Table
@@ -94,7 +94,7 @@ class ConvitesRecebidos extends Page implements HasTable
                 TextColumn::make('papel.name')->label('Papel')->badge()
                     ->formatStateUsing(fn (?string $state): string => Papeis::rotulo($state)),
                 TextColumn::make('convidadoPor.name')->label('Convidado por')->placeholder('—'),
-                TextColumn::make('expira_em')->label('Expira em')->dateTime('d/m/Y H:i')->sortable(),
+                TextColumn::make('expira_em')->label(__('Expires at'))->dateTime('d/m/Y H:i')->sortable(),
             ])
             ->recordActions([
                 Action::make('aceitar')
@@ -115,7 +115,7 @@ class ConvitesRecebidos extends Page implements HasTable
                     // Entrar numa organização é ato explícito — a confirmação é a razão de
                     // o aceite pós-login não ser automático.
                     ->requiresConfirmation()
-                    ->modalHeading('Aceitar convite')
+                    ->modalHeading(__('Accept invitation'))
                     // `Papeis::rotulo()` aqui também, e não só na coluna acima: a chave crua
                     // (`panel_user`) aparecia na confirmação do aceite — na MESMA tela em que a
                     // coluna já mostrava "Painel App". Escapou da varredura original porque o
@@ -138,14 +138,14 @@ class ConvitesRecebidos extends Page implements HasTable
                     // de `recusar()`.
                     ->authorize('Recusar:Convite')
                     ->requiresConfirmation()
-                    ->modalHeading('Recusar convite')
+                    ->modalHeading(__('Decline invitation'))
                     ->modalDescription('A recusa fica registrada e este convite deixa de valer. Quem convidou pode enviar outro.')
                     ->action(function (Convite $record): void {
                         $record->recusar($this->usuario());
                     })
                     ->successNotificationTitle('Convite recusado'),
             ])
-            ->emptyStateHeading('Nenhum convite pendente')
+            ->emptyStateHeading(__('No pending invitations'))
             ->emptyStateDescription('Quando alguém convidar você para uma '
                 .mb_strtolower((string) config('kit.tenancy.label', 'Organização')).', o convite aparece aqui.');
     }
@@ -160,7 +160,7 @@ class ConvitesRecebidos extends Page implements HasTable
     public static function itemDeMenu(): Action
     {
         return Action::make('convitesRecebidos')
-            ->label('Convites recebidos')
+            ->label(__('Received invitations'))
             ->icon(Heroicon::OutlinedEnvelopeOpen)
             ->url(fn (): string => static::getUrl())
             // `?: null` porque badge zero é ruído — e `visible()` esconde o item inteiro
