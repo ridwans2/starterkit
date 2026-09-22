@@ -39,7 +39,7 @@ jobs:
     # só no `run` do build, os dois enxergavam raiz enquanto o HTML tinha o prefixo — foi o que
     # derrubou o primeiro deploy, com centenas de falsos positivos.
     env:
-      DOCS_BASE: /filament-starter-kit-easy
+      DOCS_BASE: /starterkit
 
     steps:
       - uses: actions/checkout@v4

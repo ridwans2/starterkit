@@ -49,7 +49,7 @@ class KitInstall extends Command
     protected $description = 'Instala o starter-kit: banco, migrations, seeders, permissões e assets';
 
     /** Endereço do kit, para o convite da estrela. */
-    private const REPOSITORIO = 'https://github.com/gsferro/filament-starter-kit-easy';
+    private const REPOSITORIO = 'https://github.com/ridwans2/starterkit';
 
     /** @var list<string> */
     protected array $avisos = [];

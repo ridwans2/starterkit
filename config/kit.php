@@ -20,7 +20,7 @@ return [
     | contra a árvore de trabalho, que é mais ruidosa.
     */
 
-    'version' => '0.38.0',
+    'version' => '0.39.0',
 
     /*
     |--------------------------------------------------------------------------
@@ -31,7 +31,7 @@ return [
     | tudo ao final — o projeto não fica com remote nem tags de terceiros.
     */
 
-    'repository' => env('KIT_REPOSITORY') ?: 'https://github.com/gsferro/filament-starter-kit-easy.git',
+    'repository' => env('KIT_REPOSITORY') ?: 'https://github.com/ridwans2/starterkit.git',
 
     /*
     |--------------------------------------------------------------------------

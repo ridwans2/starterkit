@@ -5,6 +5,45 @@ versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+## [0.39.0] - 2026-09-23
+
+Primeira saída deste fork. O número continua a sequência do upstream (`0.38.0`) para que o
+`kit:update` de uma instalação antiga encontre a origem sem embaçar, mas a identidade do pacote já
+é outra.
+
+### Mudado
+
+- **Identidade do pacote.** `composer.json` passa a `ridwans2/filament-starterkit`, com `homepage`
+  e `support` apontando para `https://github.com/ridwans2/starterkit`. O autor original continua
+  listado, e `LICENSE` mantém o aviso de copyright dele — a licença MIT exige.
+- **`kit:update` agora pergunta ao fork, por padrão.** `config/kit.php:repository` passou a
+  `https://github.com/ridwans2/starterkit.git`, então todo projeto que nascer daqui recebe as
+  atualizações deste repositório — inclusive o texto em inglês, que o upstream ainda escreve em
+  português. Para puxar do upstream original numa atualização pontual, defina
+  `KIT_REPOSITORY=https://github.com/gsferro/filament-starter-kit-easy.git` antes de rodar o comando
+  (a chave já existia, é só a ordem de precedência).
+- **`kit:install` aponta a estrela para o fork.** O endereço impresso no resumo da instalação e o
+  que o navegador abre são os do fork.
+- **Base do site de documentação** segue o nome do repositório (`DOCS_BASE: /starterkit`), como o
+  `release.yml` e o CT-16 da suíte do kit exigem: o prefixo tem de bater com `basename(homepage)` e
+  não pode ser o slug do pacote.
+
+### Corrigido
+
+- **Três painéis: a máscara de data e o locale de número seguiam o idioma da tela.** O default global
+  vivia preso a `d/m/Y H:i` — um painel em inglês mostrando `22/09/2026 18:43`. Sai de
+  `config/localization.php`, lido por `App\Support\Formatos`, aplicado uma única vez em
+  `ConfiguraFilamentGlobal::configuraTable()`.
+- **Rótulos em português que sobreviviam ao seletor de idioma.** `App\Support\Formatos` entrou na
+  tela de configurações do kit (16 rótulos: `Tabelas`, `Remetente`, `Servidor`, `Porta`,
+  `Criptografia`, `Linhas listradas`, `Densidade do layout`, `E no plural`, `Provedor`,
+  `Login social`, `Unificar o login em /login`, `Exigir e-mail validado no /app`, os quatro blocos
+  `Entrar com …`, a URI de redirecionamento e `configurado no .env`) e no botão de criação de agente
+  de IA. As chaves são o literal inglês; `lang/pt_BR.json` e `lang/id.json` é que traduzem a partir
+  dele.
+
+[0.39.0]: https://github.com/ridwans2/starterkit/compare/v0.38.0...v0.39.0
+
 ## [0.38.0] - 2026-09-22
 
 ### Corrigido
