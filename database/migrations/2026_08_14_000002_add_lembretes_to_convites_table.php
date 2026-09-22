@@ -15,7 +15,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('convites', function (Blueprint $table): void {
+        Schema::table('invitations', function (Blueprint $table): void {
             /*
              * O SEGUNDO token do convite, hasheado como o primeiro. Um lembrete gera um
              * token novo e grava o hash aqui, SEM tocar em `token`: o link original
@@ -40,7 +40,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('convites', function (Blueprint $table): void {
+        Schema::table('invitations', function (Blueprint $table): void {
             $table->dropColumn(['token_lembrete', 'enviado_em', 'lembretes_enviados']);
         });
     }

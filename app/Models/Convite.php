@@ -61,6 +61,14 @@ class Convite extends Model implements Auditable
     use TemUuid;
 
     /**
+     * Explícito de propósito: sem esta linha o nome vem da convenção sobre o nome da
+     * classe (`Convite` → `convites`), e a tabela do banco é `invitations` desde
+     * `2099_01_01_000001_rename_tabelas_pt_para_english.php`. É também o que mantém o
+     * rename vivo quando o `kit:update` devolve este arquivo na versão do upstream.
+     */
+    protected $table = 'invitations';
+
+    /**
      * `uuid` e `token` ficam FORA: o trait cuida do uuid, e o token é segredo.
      *
      * Não é estilo, é segurança: `AuditsFillables::getAuditInclude()` devolve o

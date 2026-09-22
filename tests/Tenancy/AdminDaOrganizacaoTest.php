@@ -340,8 +340,8 @@ it('carimba a organizacao no convite ignorando o formulario', function (): void 
         ->call('create')
         ->assertHasNoFormErrors();
 
-    $this->assertDatabaseHas('convites', ['email' => 'novo@example.com', 'tenant_id' => $acme->id]);
-    $this->assertDatabaseMissing('convites', ['tenant_id' => $globex->id]);
+    $this->assertDatabaseHas('invitations', ['email' => 'novo@example.com', 'tenant_id' => $acme->id]);
+    $this->assertDatabaseMissing('invitations', ['tenant_id' => $globex->id]);
 
     // O outro lado, a leitura: da Globex esse convite não existe.
     Filament::setTenant($globex, isQuiet: true);
@@ -365,7 +365,7 @@ it('recusa papel de outro painel no convite', function (): void {
         ->call('create')
         ->assertHasFormErrors(['role_id']);
 
-    $this->assertDatabaseMissing('convites', ['email' => 'escalada@example.com']);
+    $this->assertDatabaseMissing('invitations', ['email' => 'escalada@example.com']);
 });
 
 /*

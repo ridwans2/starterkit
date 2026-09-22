@@ -15,13 +15,17 @@ return new class extends PulseMigration
             return;
         }
 
+        // MySQL 26+ recusa `md5()` em coluna gerada (SQLSTATE[HY000] 3763), então o hash das três
+        // tabelas sai de `sha2`, truncado aos mesmos 16 bytes de `unhex(md5())`. O Pulse só usa a
+        // coluna para agrupar e casar no upsert (`requiresManualKeyHash()` é do SQLite), então a
+        // troca é inócua — mas é divergência local do arquivo publicado: confira ao atualizar o kit.
         Schema::create('pulse_values', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('timestamp');
             $table->string('type');
             $table->mediumText('key');
             match ($this->driver()) {
-                'mariadb', 'mysql' => $table->char('key_hash', 16)->charset('binary')->virtualAs('unhex(md5(`key`))'),
+                'mariadb', 'mysql' => $table->char('key_hash', 16)->charset('binary')->virtualAs('unhex(left(sha2(`key`, 256), 32))'),
                 'pgsql'            => $table->uuid('key_hash')->storedAs('md5("key")::uuid'),
                 'sqlite'           => $table->string('key_hash'),
             };
@@ -38,7 +42,7 @@ return new class extends PulseMigration
             $table->string('type');
             $table->mediumText('key');
             match ($this->driver()) {
-                'mariadb', 'mysql' => $table->char('key_hash', 16)->charset('binary')->virtualAs('unhex(md5(`key`))'),
+                'mariadb', 'mysql' => $table->char('key_hash', 16)->charset('binary')->virtualAs('unhex(left(sha2(`key`, 256), 32))'),
                 'pgsql'            => $table->uuid('key_hash')->storedAs('md5("key")::uuid'),
                 'sqlite'           => $table->string('key_hash'),
             };
@@ -57,7 +61,7 @@ return new class extends PulseMigration
             $table->string('type');
             $table->mediumText('key');
             match ($this->driver()) {
-                'mariadb', 'mysql' => $table->char('key_hash', 16)->charset('binary')->virtualAs('unhex(md5(`key`))'),
+                'mariadb', 'mysql' => $table->char('key_hash', 16)->charset('binary')->virtualAs('unhex(left(sha2(`key`, 256), 32))'),
                 'pgsql'            => $table->uuid('key_hash')->storedAs('md5("key")::uuid'),
                 'sqlite'           => $table->string('key_hash'),
             };

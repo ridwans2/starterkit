@@ -123,7 +123,7 @@ it('cria convite pela tela e dispara a notificacao', function (): void {
         ->call('create')
         ->assertHasNoFormErrors();
 
-    $this->assertDatabaseHas('convites', ['email' => 'novo@example.com', 'aceito_em' => null]);
+    $this->assertDatabaseHas('invitations', ['email' => 'novo@example.com', 'aceito_em' => null]);
 
     Notification::assertSentOnDemand(
         ConviteDeAcesso::class,
@@ -285,7 +285,7 @@ it('revoga o convite e o link deixa de valer', function (): void {
     Livewire::test(ListConvites::class)
         ->callAction(TestAction::make('delete')->table($convite));
 
-    $this->assertDatabaseMissing('convites', ['id' => $convite->id]);
+    $this->assertDatabaseMissing('invitations', ['id' => $convite->id]);
 
     expect(Convite::valido($token))->toBeNull();
 

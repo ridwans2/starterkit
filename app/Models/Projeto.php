@@ -40,6 +40,13 @@ class Projeto extends Model implements Auditable, HasMedia
     use ModeloCacheavel;
 
     /**
+     * Ver `App\Models\Convite`: o nome da tabela não vem mais da convenção sobre o
+     * nome da classe, e a linha explícita é o que impede o `kit:update` de desfazer o
+     * rename (`2099_01_01_000001_rename_tabelas_pt_para_english.php`) em silêncio.
+     */
+    protected $table = 'projects';
+
+    /**
      * Sem esta trait a Lixeira lista VAZIO: a tela lê `recycle_bin_items`, e quem grava a linha
      * ali é o evento `deleted` dela (`vendor/promethys/revive/src/Concerns/Recyclable.php:29-45`).
      * Este model ficou só com `SoftDeletes` da 0.17.0 até a feature de status do usuário, e a

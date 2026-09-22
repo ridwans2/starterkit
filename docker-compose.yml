@@ -18,7 +18,7 @@
 # PISO: `COMPOSE_PROJECT_NAME` no .env vence, e é ele que o `kit:install` grava.
 # Nenhum serviço declara `container_name:` de propósito — fixo, ele IGNORA o nome do
 # projeto; sem ele o Compose nomeia `<projeto>-<serviço>-<índice>` sozinho.
-name: starter-kit
+name: raja-starter-kit
 
 services:
   # ---------------------------------------------------------------------------

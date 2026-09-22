@@ -5,6 +5,7 @@ use App\Filament\Admin\Resources\Convites\ConviteResource;
 use App\Filament\Admin\Resources\Tenants\TenantResource;
 use App\Filament\Admin\Resources\Users\UserResource;
 use App\Filament\Pages\DashboardClassico;
+use App\Models\Tenant;
 use BezhanSalleh\FilamentShield\Resources\Roles\RoleResource;
 use Filament\Pages\Dashboard;
 use Filament\Widgets\AccountWidget;
@@ -63,7 +64,7 @@ return [
     |
     */
 
-    'tenant_model' => null,
+    'tenant_model' => Tenant::class,
 
     /*
     |--------------------------------------------------------------------------

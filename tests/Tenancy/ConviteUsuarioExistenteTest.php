@@ -82,7 +82,7 @@ it('cria convite para e-mail que ja tem conta', function (): void {
         ->call('create')
         ->assertHasNoFormErrors();
 
-    $this->assertDatabaseHas('convites', ['email' => 'ja@example.test', 'tenant_id' => $acme->id]);
+    $this->assertDatabaseHas('invitations', ['email' => 'ja@example.test', 'tenant_id' => $acme->id]);
 
     Notification::assertSentOnDemand(ConviteDeAcesso::class);
 });
@@ -119,8 +119,8 @@ it('deixa o admin da organizacao convidar quem ja tem conta', function (): void 
         ->call('create')
         ->assertHasNoFormErrors();
 
-    $this->assertDatabaseHas('convites', ['email' => 'carla@example.test', 'tenant_id' => $acme->id]);
-    $this->assertDatabaseMissing('convites', ['tenant_id' => $globex->id]);
+    $this->assertDatabaseHas('invitations', ['email' => 'carla@example.test', 'tenant_id' => $acme->id]);
+    $this->assertDatabaseMissing('invitations', ['tenant_id' => $globex->id]);
 });
 
 /*

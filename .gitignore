@@ -41,3 +41,4 @@ Thumbs.db
 /.claude/requisitos/
 /.claude/setup-worktree.sh
 /.playwright-mcp/
+.solomd/

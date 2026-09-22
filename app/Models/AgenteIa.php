@@ -36,7 +36,7 @@ class AgenteIa extends Model implements Auditable
     use AuditsFillables;
     use TemUuid;
 
-    protected $table = 'agentes_ia';
+    protected $table = 'ai_agents';
 
     /** `uuid` fica fora do fillable de propósito (convenção do trait TemUuid). */
     protected $fillable = [

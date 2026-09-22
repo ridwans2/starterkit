@@ -13,7 +13,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('agentes_ia', function (Blueprint $table) {
+        Schema::create('ai_agents', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
             $table->string('slug')->unique();
@@ -34,6 +34,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('agentes_ia');
+        Schema::dropIfExists('ai_agents');
     }
 };

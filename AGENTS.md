@@ -1,3 +1,156 @@
+# AGENTS.md — Project Raja
+
+***
+
+> ## 🔴 ATURAN MUTLAK — BAHASA PERCAKAPAN
+>
+> **SELALU gunakan Bahasa Indonesia untuk SEMUA respons, penjelasan, dan percakapan.**
+>
+> Aturan ini berlaku **tanpa pengecualian**, bahkan jika:
+>
+> * Pesan dikirim dalam bahasa Inggris
+>
+> * Prompt ditulis dalam bahasa lain
+>
+> * Konten yang dianalisis berbahasa asing
+>
+> * Instruksi diberikan dalam bahasa apapun
+>
+> **Satu-satunya pengecualian:** istilah teknis yang tidak ada padanannya (nama framework, nama method bawaan library, error message) — tetap ditulis asli, tetapi penjelasannya tetap Bahasa Indonesia.
+>
+> ❌ `"Here is the implementation..."` → tidak boleh
+> ✅ `"Berikut implementasinya..."` → wajib
+>
+> **Ini bukan preferensi. Ini adalah aturan keras project.**
+
+## ATURAN MUTLAK STRUKTUR DIRECTORY PROJECT
+1. JANGAN PERNAH MEMBUAT , MENAMBAHKAN FILES , DIRECTORY BARU  DI ROOT PROJECT TANPA IZIN USER, KHUSUS NYA FILE TESTING, OUTPUT TESTING 
+2. JIKA MEMANG HARUS ATAU DI PERLUKAN UNTUK MEMBUAT DIR DAN FILES TESTING, GUNAKAN DIR INI : .raja/  ,  .raja/temp   , .raja/testing 
+***
+ 
+
+### Penamaan (Bahasa Indonesia)
+
+```php
+// Fungsi/method
+public function ambilProdukAktif(Kategori $kategori): Collection
+public function simpanKonfigurasi(string $kunci, mixed $nilai): void
+public function prosesDataPembayaran(array $data): bool
+
+// Fillable & variabel
+protected $fillable = ['nama', 'harga', 'deskripsi', 'status'];
+
+// Pengecualian: method bawaan framework tetap aslinya
+// boot(), register(), handle(), render(), dll.
+```
+
+### Interaksi User
+- SAAT MENAWARKAN PILIHAN ke user, SELALU gunakan tool `question`, 
+  jangan menulis pilihan sebagai teks biasa.
+
+***
+
+# Project Raja — Fakta Khusus
+
+## CREDENTIAL & URL ADMIN
+```
+url admin : https://raja.nes/admin
+email : penyair@gmail.com
+password : sheila
+
+url rajakos : https://raja.nes/rajakos/login
+email : penyair@gmail.com
+password : sheila
+```
+
+
+# Karpathy Guidelines
+
+Behavioral guidelines to reduce common LLM coding mistakes, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls.
+
+**Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
+
+## 1. Think Before Coding
+
+**Don't assume. Don't hide confusion. Surface tradeoffs.**
+
+Before implementing:
+- State your assumptions explicitly. If uncertain, ask.
+- If multiple interpretations exist, present them - don't pick silently.
+- If a simpler approach exists, say so. Push back when warranted.
+- If something is unclear, stop. Name what's confusing. Ask.
+
+## 2. Simplicity First
+
+**Minimum code that solves the problem. Nothing speculative.**
+
+- No features beyond what was asked.
+- No abstractions for single-use code.
+- No "flexibility" or "configurability" that wasn't requested.
+- No error handling for impossible scenarios.
+- If you write 200 lines and it could be 50, rewrite it.
+
+Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
+
+## 3. Surgical Changes
+
+**Touch only what you must. Clean up only your own mess.**
+
+When editing existing code:
+- Don't "improve" adjacent code, comments, or formatting.
+- Don't refactor things that aren't broken.
+- Match existing style, even if you'd do it differently.
+- If you notice unrelated dead code, mention it - don't delete it.
+
+When your changes create orphans:
+- Remove imports/variables/functions that YOUR changes made unused.
+- Don't remove pre-existing dead code unless asked.
+
+The test: Every changed line should trace directly to the user's request.
+
+## 4. Goal-Driven Execution
+
+**Define success criteria. Loop until verified.**
+
+Transform tasks into verifiable goals:
+- "Add validation" → "Write tests for invalid inputs, then make them pass"
+- "Fix the bug" → "Write a test that reproduces it, then make it pass"
+- "Refactor X" → "Ensure tests pass before and after"
+
+For multi-step tasks, state a brief plan:
+```
+1. [Step] → verify: [check]
+2. [Step] → verify: [check]
+3. [Step] → verify: [check]
+```
+
+Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
+
+ 
+## Contoh Data User (SQL)
+
+Berikut kode SQL untuk menambahkan data user baru ke tabel `users`:
+
+```sql
+-- Insert user baru: penyair
+INSERT INTO users (name, email, email_verified_at, password, created_at, updated_at) 
+VALUES (
+    'penyair', 
+    'penyair@gmail.com', 
+    '2026-09-15',  -- tanggal kemarin
+    '$2y$12$dBWX.SyD8HVExQ6ZeeoWbeN0n89sQ4ZDRBI1VRQeeUBYIK7czrh5S',  -- hash bcrypt untuk password: "sheila"
+    NOW(), 
+    NOW()
+);
+```
+
+**Catatan Penting:**
+- Password di atas adalah hash bcrypt untuk password `"sheila"`. Dalam implementasi nyata, gunakan `Hash::make('sheila')` atau `bcrypt('sheila')` untuk menghasilkan hash yang benar.
+- Contoh ini menggunakan format timestamp MySQL: `'YYYY-MM-DD'` untuk `email_verified_at`.
+- Kolom `id` akan auto-increment, sehingga tidak perlu disertakan dalam INSERT.
+
+===
+
 <laravel-boost-guidelines>
 === foundation rules ===
 
@@ -7,7 +160,7 @@ The Laravel Boost guidelines are specifically curated by Laravel maintainers for
 
 ## Foundational Context
 
-This application is a Laravel application running on PHP 8.4. You are an expert with the Laravel ecosystem. Always use the APIs that match the installed major version of each package — do not assume a version.
+This application is a Laravel application running on PHP 8.5. You are an expert with the Laravel ecosystem. Always use the APIs that match the installed major version of each package — do not assume a version.
 
 Before relying on a package's API, confirm its installed version:
 - PHP packages: run `composer show --direct` to list direct dependencies with versions, or `composer show <vendor/package>` for a single package.
@@ -115,6 +268,14 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 - Test the changed behavior and its important failure modes, but do not add tests beyond them.
 - Read the `testing-best-practices` skill before writing tests.
 
+=== folio/core rules ===
+
+# Laravel Folio
+
+- Laravel Folio is a powerful page-based router that simplifies routing in Laravel applications.
+- Routes are generated automatically by creating Blade templates in `resources/views/pages`.
+- IMPORTANT: Activate 'folio-routing' when working with Folio, pages, routes, route parameters, model binding, middleware, or `resources/views/pages`.
+
 === laravel/core rules ===
 
 # Do Things the Laravel Way
@@ -152,26 +313,31 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 - If you have modified any PHP files, you must run `vendor/bin/pint --dirty --format agent` before finalizing changes to ensure your code matches the project's expected style.
 - Do not run `vendor/bin/pint --test --format agent`, simply run `vendor/bin/pint --format agent` to fix any formatting issues.
 
-=== pest/core rules ===
+=== phpunit/core rules ===
 
-# Pest
+# PHPUnit
 
-- This project uses Pest. Create tests with `php artisan make:test --pest {name}`.
+- This project uses PHPUnit. Create tests with `php artisan make:test --phpunit {name}`.
 - Do not include the test suite directory in `{name}`. Use `SomeFeatureTest`, not `Feature/SomeFeatureTest`.
 - Read the `testing-best-practices` skill for guidance on coverage, naming, structure, dependency isolation, and review.
-- Do not delete tests or test files without approval. They are part of the application.
 
 ## Running Tests
 
 - Run the narrowest set of tests that covers the change. Pass a file path or `--filter=testName` to `php artisan test --compact`.
 - Rerun a test after each change to it.
-- Run `vendor/bin/pest` to call the test runner directly. It accepts the same file path and `--filter=testName` arguments.
-- After the feature tests pass, ask the user to run the complete suite with `php artisan test --compact`.
-
-=== laraveldaily/filacheck/core rules ===
-
-## laraveldaily/filacheck
-
-- After you have created/modified any files in `app/Filament` folder, you must run `vendor/bin/filacheck --fix`, to ensure there is no deprecated Filament code. Reported not fixed issues MUST be fixed before continuing.
+- Run `vendor/bin/phpunit` to call the test runner directly. It accepts the same file path and `--filter=testName` arguments.
 
 </laravel-boost-guidelines>
+
+<!-- OPENWIKI:START -->
+
+## OpenWiki
+
+This repository has a generated `openwiki/` evidence index. It is optional just-in-time context, not required startup reading.
+
+- Treat source code and tests as authoritative. A brief's unknowns and review items are verification gaps, not automatic requirements.
+- Prefer the narrowest quiet validation that proves the changed behavior. Preserve complete failure output.
+
+The scheduled OpenWiki GitHub Actions workflow refreshes the repository wiki. Do not hand-edit generated OpenWiki pages unless explicitly asked; prefer updating source code/docs and letting OpenWiki regenerate.
+
+<!-- OPENWIKI:END -->

@@ -21,14 +21,14 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('convites', function (Blueprint $table): void {
+        Schema::table('invitations', function (Blueprint $table): void {
             $table->timestamp('recusado_em')->nullable()->after('aceito_em');
         });
     }
 
     public function down(): void
     {
-        Schema::table('convites', function (Blueprint $table): void {
+        Schema::table('invitations', function (Blueprint $table): void {
             $table->dropColumn('recusado_em');
         });
     }

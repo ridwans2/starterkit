@@ -166,7 +166,7 @@ The other two already come complete.
 |---|---:|
 | Production packages | **58** |
 | Development packages | **19** |
-| Migrations | **60** |
+| Migrations | **61** |
 | Policies | **16** |
 | `kit:*` commands | **8** |
 
@@ -174,7 +174,7 @@ The other two already come complete.
 |---|---:|
 | Test cases (`Kit` + `Tenancy`, measured on 2026-09-08) | **2,226**, with **7,428 assertions** |
 | Screens swept in a real browser | **55** |
-| Test files | **151** in `Kit` + `Tenancy` (**177** in total) |
+| Test files | **151** in `Kit` + `Tenancy` (**179** in total) |
 | PHPStan | **level 7**, zero errors |
 | FilaCheck | **17** rules, all passing |
 

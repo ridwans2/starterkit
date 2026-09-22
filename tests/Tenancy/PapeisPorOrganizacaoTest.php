@@ -201,7 +201,7 @@ it('nao deixa quem nao e master_global convidar com master_global', function ():
         ->call('create')
         ->assertHasFormErrors(['role_id']);
 
-    $this->assertDatabaseMissing('convites', ['email' => 'novo@example.com']);
+    $this->assertDatabaseMissing('invitations', ['email' => 'novo@example.com']);
 
     // Linha de controle: o master convida com o papel dele.
     $this->actingAs(usuarioDoKit('master_global', 'master@example.com'));
@@ -211,7 +211,7 @@ it('nao deixa quem nao e master_global convidar com master_global', function ():
         ->call('create')
         ->assertHasNoFormErrors();
 
-    $this->assertDatabaseHas('convites', ['email' => 'novo@example.com', 'role_id' => $master->getKey()]);
+    $this->assertDatabaseHas('invitations', ['email' => 'novo@example.com', 'role_id' => $master->getKey()]);
 });
 
 /*
@@ -337,14 +337,14 @@ it('[CT-12] aplica a trava de painel no convite individual', function (string $p
     if ($aceita) {
         $componente->assertHasNoFormErrors();
 
-        $this->assertDatabaseHas('convites', ['email' => 'nova@example.com', 'role_id' => $registro->getKey()]);
+        $this->assertDatabaseHas('invitations', ['email' => 'nova@example.com', 'role_id' => $registro->getKey()]);
 
         return;
     }
 
     $componente->assertHasFormErrors(['role_id']);
 
-    $this->assertDatabaseMissing('convites', ['email' => 'nova@example.com']);
+    $this->assertDatabaseMissing('invitations', ['email' => 'nova@example.com']);
 })->with([
     'painel fora do alcance' => ['infra', false],
     'painel do operador'     => ['admin', true],
@@ -379,8 +379,8 @@ it('[CT-13] aplica a trava de painel no convite em massa', function (string $pap
 
     $componente->assertHasFormErrors(['role_id']);
 
-    $this->assertDatabaseMissing('convites', ['email' => 'um@example.com']);
-    $this->assertDatabaseMissing('convites', ['email' => 'dois@example.com']);
+    $this->assertDatabaseMissing('invitations', ['email' => 'um@example.com']);
+    $this->assertDatabaseMissing('invitations', ['email' => 'dois@example.com']);
 })->with([
     'painel fora do alcance' => ['infra', false],
     'painel do operador'     => ['admin', true],

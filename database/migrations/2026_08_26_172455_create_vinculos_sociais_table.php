@@ -17,7 +17,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('vinculos_sociais', function (Blueprint $table): void {
+        Schema::create('social_links', function (Blueprint $table): void {
             $table->id();
             // Apagar a conta apaga os vínculos: sem conta, o vínculo não aponta para nada.
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
@@ -35,6 +35,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('vinculos_sociais');
+        Schema::dropIfExists('social_links');
     }
 };

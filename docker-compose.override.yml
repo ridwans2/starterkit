@@ -1,0 +1,12 @@
+# Deviasi lokal: MySQL Innovation 26.
+#
+# Berkas ini sengaja BUKAN edit `docker-compose.yml`. Compose memuat
+# `docker-compose.override.yml` otomatis dan menggabungkannya per-service, jadi
+# hasilnya identik — tapi `docker-compose.yml` ada di dalam
+# `KitUpdate::CAMINHOS_DO_KIT`: mengubahnya berarti setiap `kit:update` menawarkan
+# kembali `image: mysql:8.0` dan perubahan ini hilang kalau diff-nya diterima
+# mentah-mentah. Berkas baru di sini tidak ada di pohon upstream, jadi tidak
+# pernah masuk diff itu.
+services:
+  mysql:
+    image: mysql:26

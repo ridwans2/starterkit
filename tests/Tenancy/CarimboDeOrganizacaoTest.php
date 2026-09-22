@@ -56,7 +56,7 @@ it('[CT-01] sem o painel bootado, o tenant_id pedido é o gravado', function ():
     $convite = conviteCru('sem.boot@example.com', $this->globex->getKey());
 
     expect(Event::getListeners('eloquent.creating: App\Models\Convite'))->toBeEmpty()
-        ->and(DB::table('convites')->where('id', $convite->getKey())->value('tenant_id'))
+        ->and(DB::table('invitations')->where('id', $convite->getKey())->value('tenant_id'))
         ->toBe($this->globex->getKey());
 });
 
@@ -73,7 +73,7 @@ it('[CT-03] com o painel bootado, o Filament carimba a organização corrente po
     $convite = conviteCru('com.boot@example.com', $this->globex->getKey());
 
     expect(Event::getListeners('eloquent.creating: App\Models\Convite'))->toHaveCount(1)
-        ->and(DB::table('convites')->where('id', $convite->getKey())->value('tenant_id'))
+        ->and(DB::table('invitations')->where('id', $convite->getKey())->value('tenant_id'))
         ->toBe($this->acme->getKey(), 'O Filament deixou de carimbar: revise ofertaPara() e a rule de testes.');
 });
 
@@ -87,7 +87,7 @@ it('[CT-01] ofertaPara() entrega o convite na organização pedida mesmo com o p
 
     $daGlobex = ofertaPara('convidado.globex@example.com', $this->globex);
 
-    expect(DB::table('convites')->where('id', $daGlobex->getKey())->value('tenant_id'))
+    expect(DB::table('invitations')->where('id', $daGlobex->getKey())->value('tenant_id'))
         ->toBe($this->globex->getKey())
         ->and($daGlobex->tenant_id)->toBe($this->globex->getKey());
 });
@@ -104,9 +104,9 @@ it('[CT-02] ofertaPara() não mexe no registro quando o carimbo já concorda com
 
     $daAcme = ofertaPara('convidado.acme@example.com', $this->acme);
 
-    $atualizadoEm = DB::table('convites')->where('id', $daAcme->getKey())->value('updated_at');
+    $atualizadoEm = DB::table('invitations')->where('id', $daAcme->getKey())->value('updated_at');
 
-    expect(DB::table('convites')->where('id', $daAcme->getKey())->value('tenant_id'))
+    expect(DB::table('invitations')->where('id', $daAcme->getKey())->value('tenant_id'))
         ->toBe($this->acme->getKey())
         ->and($atualizadoEm)->toBe($daAcme->created_at?->toDateTimeString());
 });
@@ -120,7 +120,7 @@ it('[CT-03] sem organização corrente o carimbo não acontece, mesmo com o pain
 
     $convite = conviteCru('sem.tenant@example.com', $this->globex->getKey());
 
-    expect(DB::table('convites')->where('id', $convite->getKey())->value('tenant_id'))
+    expect(DB::table('invitations')->where('id', $convite->getKey())->value('tenant_id'))
         ->toBe($this->globex->getKey());
 });
 
@@ -146,7 +146,7 @@ it('[CT-05] duas ofertas para o mesmo e-mail guardam cada uma a sua organizaçã
      * (`BelongsToTenant.php:143-156`), então a leitura por Eloquent devolve só a Acme e o caso
      * mediria o escopo em vez da cardinalidade da correção.
      */
-    expect(DB::table('convites')->where('email', 'mesmo@example.com')->count())->toBe(2)
+    expect(DB::table('invitations')->where('email', 'mesmo@example.com')->count())->toBe(2)
         ->and($daAcme->tenant_id)->toBe($this->acme->getKey())
         ->and($daGlobex->tenant_id)->toBe($this->globex->getKey())
         ->and($daAcme->role_id)->toBe(Role::query()->where('name', 'admin_app')->value('id'))

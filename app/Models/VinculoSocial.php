@@ -23,7 +23,7 @@ use Illuminate\Support\Carbon;
  */
 class VinculoSocial extends Model
 {
-    protected $table = 'vinculos_sociais';
+    protected $table = 'social_links';
 
     protected $fillable = [
         'user_id',

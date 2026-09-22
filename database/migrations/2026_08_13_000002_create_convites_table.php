@@ -19,7 +19,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('convites', function (Blueprint $table): void {
+        Schema::create('invitations', function (Blueprint $table): void {
             $table->id();
             $table->uuid('uuid')->unique();
 
@@ -54,6 +54,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('convites');
+        Schema::dropIfExists('invitations');
     }
 };
