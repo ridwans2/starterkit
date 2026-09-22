@@ -26,8 +26,8 @@ class ConviteForm
     {
         return $schema
             ->components([
-                Section::make('Quem, e com qual acesso')
-                    ->description('O convite vale por um link de uso único, enviado para o e-mail abaixo.')
+                Section::make(__('Who, and with which access'))
+                    ->description(__('The invitation is a single-use link, sent to the email below.'))
                     ->columns(2)
                     ->components([
                         TextInput::make('email')
@@ -44,11 +44,11 @@ class ConviteForm
                              * ACESSO: nenhuma conta nova é criada, a pessoa confirma
                              * autenticada e é vinculada à organização com este papel.
                              */
-                            ->helperText('Se o endereço já tiver conta, ninguém é cadastrado de novo: a pessoa recebe uma oferta para entrar nesta organização e escolhe aceitar ou recusar. Com MAIL_MAILER=log o e-mail só é escrito em storage/logs.')
+                            ->helperText(__('If the address already has an account, nobody is registered again: the person receives an offer to join this organization and chooses to accept or decline. With MAIL_MAILER=log the email is only written to storage/logs.'))
                             ->columnSpanFull(),
 
                         Select::make('role_id')
-                            ->label('Papel')
+                            ->label(__('Role'))
                             // Recorte de UX do teto de escalada (F-01); a trava é o `->rule()`.
                             ->relationship('papel', 'name', fn (Builder $query): Builder => AdministradorDaInstalacao::recortarConcessao($query))
                             ->required()
@@ -66,7 +66,7 @@ class ConviteForm
 
                                 return Papeis::rotulo((string) $record->getAttribute('name')).' — '.(is_string($painel) ? "/{$painel}" : 'sem painel');
                             })
-                            ->helperText('É o papel que dá acesso ao painel — quem aceitar nasce com ele.'),
+                            ->helperText(__('It is the role that grants panel access — whoever accepts starts with it.')),
 
                         Select::make('tenant_id')
                             ->label(config('kit.tenancy.label', 'Organização'))
@@ -82,7 +82,7 @@ class ConviteForm
                              */
                             ->required(fn (Get $get): bool => (bool) config('kit.tenancy.enabled')
                                 && self::painelDoPapel($get('role_id')) === 'app')
-                            ->helperText('Papel do painel de negócio precisa de uma organização: é nela que o papel será atribuído.'),
+                            ->helperText(__('The business panel role needs an organization: that is where the role will be assigned.')),
                     ]),
             ]);
     }

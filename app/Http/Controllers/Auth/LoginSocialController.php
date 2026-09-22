@@ -465,7 +465,7 @@ final class LoginSocialController extends Controller
 
         Notification::make()
             ->title(__('Registration received'))
-            ->body('Sua conta foi criada e aguarda aprovação de quem administra o sistema. Você poderá entrar assim que ela for liberada.')
+            ->body(__('Ask whoever administers the system for a new invitation. If you already have an account, sign in here.'))
             ->success()
             ->persistent()
             ->send();

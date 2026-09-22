@@ -83,19 +83,22 @@ return [
 
     'formatos' => [
         'en' => [
-            'data'      => 'Y-m-d',
-            'data_hora' => 'Y-m-d H:i',
-            'hora'      => 'H:i',
+            'data'                 => 'Y-m-d',
+            'data_hora'            => 'Y-m-d H:i',
+            'data_hora_segundos'   => 'Y-m-d H:i:s',
+            'hora'                 => 'H:i',
         ],
         'id' => [
-            'data'      => 'Y-m-d',
-            'data_hora' => 'Y-m-d H:i',
-            'hora'      => 'H:i',
+            'data'                 => 'Y-m-d',
+            'data_hora'            => 'Y-m-d H:i',
+            'data_hora_segundos'   => 'Y-m-d H:i:s',
+            'hora'                 => 'H:i',
         ],
         'pt_BR' => [
-            'data'      => 'd/m/Y',
-            'data_hora' => 'd/m/Y H:i',
-            'hora'      => 'H:i',
+            'data'                 => 'd/m/Y',
+            'data_hora'            => 'd/m/Y H:i',
+            'data_hora_segundos'   => 'd/m/Y H:i:s',
+            'hora'                 => 'H:i',
         ],
     ],
 

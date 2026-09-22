@@ -60,7 +60,7 @@ class DefinirSenhaPorEmail extends MyProfileComponent
             $this->rateLimit(2);
         } catch (TooManyRequestsException) {
             Notification::make()
-                ->title('Aguarde um instante antes de pedir outro link.')
+                ->title(__('Wait a moment before requesting another link.'))
                 ->danger()
                 ->send();
 
@@ -92,7 +92,7 @@ class DefinirSenhaPorEmail extends MyProfileComponent
             );
 
             Notification::make()
-                ->title('Não foi possível enviar o link agora.')
+                ->title(__('The link could not be sent right now.'))
                 ->body('Tente de novo em alguns minutos.')
                 ->danger()
                 ->send();

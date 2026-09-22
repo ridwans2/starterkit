@@ -49,17 +49,17 @@ class UsuariosUnicosPorOrganizacao extends BreakdownWidget
 
     public function getHeading(): ?string
     {
-        return 'Usuários únicos por organização';
+        return __('Unique users per organization');
     }
 
     public function getHeadingDescription(): ?string
     {
-        return 'Pessoas distintas que entraram nos últimos '.TenantResource::DIAS_DE_INSIGHT.' dias';
+        return __('Distinct people who signed in during the last :days days', ['days' => TenantResource::DIAS_DE_INSIGHT]);
     }
 
     public function getEmptyStateHeading(): string
     {
-        return 'Nenhum acesso registrado na janela';
+        return __('No access recorded in the window');
     }
 
     public function getEmptyStateIcon(): string

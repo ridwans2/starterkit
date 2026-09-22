@@ -273,12 +273,12 @@ class ConfiguracoesDoKit extends SettingsPage
 
     private function abaIdentidade(): Tab
     {
-        return Tab::make('Identidade')
+        return Tab::make(__('Identity'))
             ->icon('heroicon-o-paint-brush')
             ->schema([
                 TextInput::make('nome_da_aplicacao')
-                    ->label('Nome da aplicação')
-                    ->helperText('Aparece no topo dos três painéis, no título da aba e como remetente padrão.')
+                    ->label(__('Application name'))
+                    ->helperText(__('Shows at the top of the three panels, in the tab title and as the default sender.'))
                     ->required()
                     ->maxLength(255),
 
@@ -288,14 +288,14 @@ class ConfiguracoesDoKit extends SettingsPage
                  * seria o kit escolhendo pelo projeto. Vazio some com a versão do rodapé.
                  */
                 TextInput::make('versao_do_sistema')
-                    ->label('Versão do sistema')
-                    ->helperText('A versão do SEU produto, exibida no rodapé dos painéis. Em branco, o rodapé não mostra versão. APP_VERSION no .env semeia este campo na instalação; depois disso é aqui que se troca — o valor gravado vence o arquivo, inclusive quando está vazio.')
+                    ->label(__('System version'))
+                    ->helperText(__('The version of YOUR product, shown in the panel footer. When blank, the footer shows no version. APP_VERSION in the .env seeds this field at install time; after that this is where you change it — the stored value beats the file, even when it is empty.'))
                     ->placeholder('1.0.0')
                     ->maxLength(50),
 
                 Select::make('cor_primaria')
-                    ->label('Cor primária')
-                    ->helperText('A paleta do Filament. Deixe em branco para o padrão (âmbar).')
+                    ->label(__('Primary color'))
+                    ->helperText(__('The Filament palette. Leave blank for the default (amber).'))
                     // A lista fechada do kit, e não reflection sobre `Color`: aquela
                     // classe também expõe constantes que não são cor (`WCAG_AA_TEXT`)
                     // e neutros que ninguém escolhe como primária.
@@ -304,18 +304,22 @@ class ConfiguracoesDoKit extends SettingsPage
                         app(static::getSettings())->cor_primaria,
                         'fora da lista do kit',
                     ))
-                    ->placeholder('Padrão do Filament (âmbar)'),
+                    ->placeholder(__('Filament default (amber)')),
 
                 ColorPicker::make('cor_primaria_hex')
-                    ->label('Cor primária livre')
-                    ->helperText('Cor de marca em hexadecimal. VENCE a seleção acima quando preenchida. Valor inválido é ignorado.')
+                    ->label(__('Free primary color'))
+                    ->helperText(__('Brand color in hexadecimal. WINS over the selection above when filled in. An invalid value is ignored.'))
                     ->regex('/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/'),
 
-                $this->arquivo('logo', 'Logo da marca', 'Substitui o nome no topo dos painéis. Em branco, o nome é usado.'),
+                $this->arquivo('logo', __('Brand logo'), __('Replaces the name at the top of the panels. When blank, the name is used.')),
 
-                $this->arquivo('favicon', 'Favicon', 'O ícone da aba do navegador. Em branco, o do Filament.'),
+                $this->arquivo('favicon', __('Favicon'), __('The browser tab icon. When blank, the Filament one.')),
 
-                $this->arquivo('arte_do_login', 'Arte das telas de autenticação', 'A imagem ao lado do formulário de login, recuperação de senha e confirmação de e-mail. Em branco, a arte que vem no kit.'),
+                $this->arquivo(
+                    'arte_do_login',
+                    __('Login screens artwork'),
+                    __('The image beside the login, password recovery and e-mail confirmation screens. When blank, the artwork that ships with the kit.'),
+                ),
             ]);
     }
 
@@ -323,16 +327,16 @@ class ConfiguracoesDoKit extends SettingsPage
     {
         $smtp = fn (Get $get): bool => $get('mail_mailer') === 'smtp';
 
-        return Tab::make('E-mail')
+        return Tab::make(__('Email'))
             ->icon('heroicon-o-envelope')
             ->schema([
                 Select::make('mail_mailer')
-                    ->label('Transporte')
-                    ->helperText('`log` só escreve em storage/logs — convite e lembrete não chegam a ninguém. Salvar aqui vale para o próximo request; um worker de fila em execução (`queue:work`) mantém a configuração antiga em memória — rode `php artisan queue:restart` para os e-mails enfileirados saírem pelo transporte novo.')
+                    ->label(__('Transport'))
+                    ->helperText(__('`log` only writes to storage/logs — invitations and reminders reach nobody. Saving here applies to the next request; a running queue worker (`queue:work`) keeps the old configuration in memory — run `php artisan queue:restart` so queued emails leave through the new transport.'))
                     ->options(fn (): array => $this->comValorConfigurado(
                         [
-                            'log'   => 'Log (não envia — escreve em storage/logs)',
-                            'array' => 'Array (descarta — só para teste)',
+                            'log'   => __('Log (does not send — writes to storage/logs)'),
+                            'array' => __('Array (discards — testing only)'),
                             'smtp'  => 'SMTP',
                         ],
                         app(static::getSettings())->mail_mailer,
@@ -347,7 +351,7 @@ class ConfiguracoesDoKit extends SettingsPage
                     ->maxLength(255),
 
                 TextInput::make('mail_from_name')
-                    ->label('Nome do remetente')
+                    ->label(__('Sender name'))
                     ->maxLength(255),
 
                 TextInput::make('mail_host')
@@ -370,7 +374,7 @@ class ConfiguracoesDoKit extends SettingsPage
                         app(static::getSettings())->mail_scheme,
                         'configurado no .env',
                     ))
-                    ->placeholder('Nenhuma')
+                    ->placeholder(__('None'))
                     ->visible($smtp),
 
                 TextInput::make('mail_username')
@@ -415,9 +419,9 @@ class ConfiguracoesDoKit extends SettingsPage
                  * digitar, que e conferencia de digitacao, nao exposicao do que estava gravado.
                  */
                 TextInput::make('mail_password')
-                    ->label('Senha')
-                    ->helperText('Guardada cifrada. Deixe em branco para manter a senha atual — ela nao e exibida aqui, nem no codigo-fonte da pagina. A trilha de auditoria registra que ela mudou, nunca o valor.')
-                    ->placeholder(fn (): string => filled($this->senhaDeSmtpGuardada()) ? 'Ja configurada — em branco mantem' : 'Nenhuma senha configurada')
+                    ->label(__('Password'))
+                    ->helperText(__('Stored encrypted. Leave blank to keep the current password — it is not displayed here, not even in the page source. The audit trail records that it changed, never the value.'))
+                    ->placeholder(fn (): string => filled($this->senhaDeSmtpGuardada()) ? __('Already configured — blank keeps it') : __('No password configured'))
                     ->password()
                     ->revealable()
                     ->dehydrated(fn (?string $state): bool => filled($state))
@@ -432,8 +436,8 @@ class ConfiguracoesDoKit extends SettingsPage
             ->icon('heroicon-o-table-cells')
             ->schema([
                 TextInput::make('paginacao_padrao')
-                    ->label('Linhas por página')
-                    ->helperText('O default de TODA tabela dos três painéis, inclusive as dos pacotes de terceiros.')
+                    ->label(__('Rows per page'))
+                    ->helperText(__('The default of EVERY table in the three panels, including third-party packages.'))
                     ->numeric()
                     ->integer()
                     ->minValue(1)
@@ -449,15 +453,15 @@ class ConfiguracoesDoKit extends SettingsPage
 
                 Toggle::make('tabela_listrada')
                     ->label('Linhas listradas')
-                    ->helperText('O único controle de densidade visual que o Filament 5 oferece — não existe API de densidade de tabela nesta versão.'),
+                    ->helperText(__('The only visual density control Filament 5 offers — there is no table density API in this version.')),
 
                 Toggle::make('persistir_filtros')
-                    ->label('Lembrar filtro, busca e ordenação')
-                    ->helperText('O recorte do usuário sobrevive à navegação, guardado na sessão.'),
+                    ->label(__('Remember filter, search and sorting'))
+                    ->helperText(__('The user\'s selection survives navigation, kept in the session.')),
 
                 Toggle::make('colunas_redimensionaveis')
-                    ->label('Colunas arrastáveis')
-                    ->helperText('Arrastar a largura das colunas. Sem efeito se o pacote resized-column for removido.'),
+                    ->label(__('Draggable columns'))
+                    ->helperText(__('Drag to resize columns. No effect if the resized-column package is removed.')),
             ]);
     }
 
@@ -483,17 +487,17 @@ class ConfiguracoesDoKit extends SettingsPage
     {
         $aberto = fn (Get $get): bool => (bool) $get('registro_habilitado');
 
-        return Tab::make('Registro')
+        return Tab::make(__('Sign-up'))
             ->icon('heroicon-o-user-plus')
             ->schema([
                 Toggle::make('registro_habilitado')
-                    ->label('Permitir cadastro sem convite no /app')
-                    ->helperText('Desligado, o /app só aceita quem tem convite — que é o default do kit. Ligado, a tela de cadastro passa a aceitar visitante, e cada organização ainda decide se aceita o seu (em /admin/organizacoes).')
+                    ->label(__('Allow sign-up without an invitation in /app'))
+                    ->helperText(__('When off, /app only accepts people with an invitation — the kit default. When on, the registration screen also accepts visitors, and each organization still decides whether it accepts yours (in /admin/organizacoes).'))
                     ->live(),
 
                 Toggle::make('registro_aprovacao_manual')
-                    ->label('Cadastro nasce pendente de aprovação')
-                    ->helperText('Quem se cadastra não recebe papel nenhum até alguém aprovar em /admin/usuarios — e sem papel não abre painel nenhum.')
+                    ->label(__('New account starts pending approval'))
+                    ->helperText(__('Anyone who registers gets no role until somebody approves in /admin/usuarios — and without a role no panel opens.'))
                     ->visible($aberto),
 
                 /*
@@ -509,7 +513,7 @@ class ConfiguracoesDoKit extends SettingsPage
                  */
                 Toggle::make('registro_verificar_email')
                     ->label('Exigir e-mail validado no /app')
-                    ->helperText('Ligado, quem ainda não confirmou o e-mail é levado à tela de confirmação ao entrar no /app — e isso vale para TODO usuário do painel, não só para os novos. Numa base que já tem gente dentro, valide antes quem foi criado pela tela de usuários (o README traz o comando). Quem vem de convite nunca é afetado: o token já provou a posse do endereço.'),
+                    ->helperText(__('On, anyone who has not confirmed their e-mail is taken to the confirmation screen when they enter /app — and that applies to EVERY user of the panel, not only new ones. In a base that already has people in it, first check who was created from the users screen (the README has the command). Anyone arriving by invitation is never affected: the token already proved they own the address.')),
             ]);
     }
 
@@ -541,17 +545,17 @@ class ConfiguracoesDoKit extends SettingsPage
                 // Duas seções, dois assuntos: os provedores (um bloco fechado por provedor,
                 // com o ícone de status no cabeçalho) e o rodapé. Pedido do solicitante na
                 // validação real dos provedores (2026-08-26).
-                Section::make('Página única de login')
-                    ->description('Uma tela em /login para os três painéis, em vez de /admin/login, /infra/login e /app/login.')
+                Section::make(__('Single login page'))
+                    ->description(__('One screen at /login for all three panels, instead of /admin/login, /infra/login and /app/login.'))
                     ->columnSpanFull()
                     ->schema([
                         Toggle::make('login_unificado')
                             ->label('Unificar o login em /login')
-                            ->helperText('Desligado: cada painel tem a própria tela de login (padrão do Filament). Ligado: as três telas levam a /login; quem tem acesso a mais de um painel escolhe qual abrir depois de entrar, quem tem um só entra direto. Vale na hora, sem deploy.')
+                            ->helperText(__('When off: each panel has its own login screen (Filament default). When on: the three screens lead to /login; anyone with access to more than one panel chooses which to open after signing in, anyone with only one goes straight in. Takes effect immediately, no deploy.'))
                             ->columnSpanFull(),
                     ]),
                 Section::make('Login social')
-                    ->description('Um bloco por provedor, fechado. O ícone no cabeçalho diz se o botão está habilitado; abra para ver as credenciais.')
+                    ->description(__('One collapsed block per provider. The icon in the header tells whether the button is enabled; open it to see the credentials.'))
                     ->columnSpanFull()
                     ->schema([
                         /*
@@ -559,8 +563,8 @@ class ConfiguracoesDoKit extends SettingsPage
                          * viver aqui (`.ai/rules/settings.md`). ADR-03 de vinculo-de-provedor-social.
                          */
                         Toggle::make('login_vinculo_confirmar')
-                            ->label('Exigir confirmação por e-mail na primeira entrada social em uma conta que já existe')
-                            ->helperText('Desligado: a pessoa entra e recebe um aviso por e-mail ("sua conta foi acessada pelo Google pela primeira vez"). Ligado: ela recebe um link de 30 minutos e só entra depois de confirmar. Nas entradas seguintes a conta é reconhecida pela identidade no provedor, em qualquer modo.')
+                            ->label(__('Require email confirmation on the first social sign-in to an existing account'))
+                            ->helperText(__('When off: the person signs in and gets an email notice ("your account was accessed through Google for the first time"). When on: they get a 30-minute link and only gets in after confirming. On later sign-ins the account is recognized by the provider identity, in either mode.'))
                             ->columnSpanFull(),
 
                         ...$secoes,
@@ -568,8 +572,8 @@ class ConfiguracoesDoKit extends SettingsPage
 
                 $this->secaoAntiRobo(),
 
-                Section::make('Rodapé da tela de login')
-                    ->description('Aparece na base das telas de login dos três painéis.')
+                Section::make(__('Login screen footer'))
+                    ->description(__('Shows at the bottom of the login screens of all three panels.'))
                     ->columnSpanFull()
                     ->schema([
                         /*
@@ -582,7 +586,7 @@ class ConfiguracoesDoKit extends SettingsPage
                          */
                         MarkdownEditor::make('login_rodape')
                             ->hiddenLabel()
-                            ->helperText('Aceita Markdown (negrito, itálico, link). HTML cru é descartado, porque a tela de login é pública.')
+                            ->helperText(__('Accepts Markdown (bold, italic, link). Raw HTML is discarded, because the login screen is public.'))
                             ->toolbarButtons([['bold', 'italic', 'strike', 'link']])
                             ->maxLength(500)
                             ->columnSpanFull(),
@@ -608,14 +612,14 @@ class ConfiguracoesDoKit extends SettingsPage
     {
         $ligado = fn (Get $get): bool => (bool) $get('login_anti_robo_habilitado');
 
-        return Section::make('Proteção anti-robô')
-            ->description('Um desafio "não sou um robô" nas telas de login, "esqueceu a senha?" e registro dos três painéis. Desligado, as telas ficam como sempre: nenhum script externo é carregado.')
+        return Section::make(__('Anti-bot protection'))
+            ->description(__('An "I\'m not a robot" challenge on the login, "forgot password?" and registration screens of all three panels. When off, the screens stay as they always were: no external script is loaded.'))
             ->collapsible()
             ->columnSpanFull()
             ->schema([
                 Toggle::make('login_anti_robo_habilitado')
-                    ->label('Exigir o desafio anti-robô nas telas públicas')
-                    ->helperText('Ligar aqui não liga sozinho: o provedor e as DUAS chaves abaixo também precisam estar preenchidos — sem elas a proteção fica desligada, porque um desafio que não renderiza trancaria o login de todo mundo, inclusive o seu. Se o provedor cair, o envio é recusado até ele voltar ou você desligar aqui.')
+                    ->label(__('Require the anti-bot challenge on public screens'))
+                    ->helperText(__('Turning this on does not put the button live by itself: the credentials below must also be filled in. Social login AUTHENTICATES people who already have an account — creating an account depends on open registration, in the previous tab.'))
                     ->live(),
 
                 /*
@@ -633,8 +637,8 @@ class ConfiguracoesDoKit extends SettingsPage
                  * inócua.
                  */
                 Toggle::make('login_anti_robo_local')
-                    ->label('Aplicar também em ambiente local (APP_ENV=local)')
-                    ->helperText('Desligado, o desafio não aparece enquanto a aplicação roda com APP_ENV=local — chave de produção não aceita localhost, e o campo obrigatório ficaria impreenchível. Ligue só para testar com chaves que aceitam localhost.')
+                    ->label(__('Also apply in the local environment (APP_ENV=local)'))
+                    ->helperText(__('Off, the challenge does not appear while the application runs with APP_ENV=local — a production key does not accept localhost, and the required field would be impossible to fill. Turn it on only to test with keys that accept localhost.'))
                     ->visible(fn (Get $get): bool => $ligado($get) && app()->isLocal()),
 
                 Select::make('login_anti_robo_provedor')
@@ -649,10 +653,10 @@ class ConfiguracoesDoKit extends SettingsPage
 
                         if (is_string($provedor) && $provedor !== '') {
                             return ProvedorAntiRobo::tryFrom($provedor)?->ondeCriarAsChaves()
-                                ?? 'Um provedor de cada vez. O reCAPTCHA v2 é a caixa clássica; o v3 é invisível e decide por pontuação; o Turnstile não rastreia e não tem custo.';
+                                ?? __('One provider at a time. reCAPTCHA v2 is the classic box; v3 is invisible and decides by score; Turnstile does not track and costs nothing.');
                         }
 
-                        return 'Um provedor de cada vez. O reCAPTCHA v2 é a caixa clássica; o v3 é invisível e decide por pontuação; o Turnstile não rastreia e não tem custo.';
+                        return __('One provider at a time. reCAPTCHA v2 is the classic box; v3 is invisible and decides by score; Turnstile does not track and costs nothing.');
                     })
                     ->required()
                     ->native(false)
@@ -660,8 +664,8 @@ class ConfiguracoesDoKit extends SettingsPage
                     ->visible($ligado),
 
                 TextInput::make('login_anti_robo_pontuacao_minima')
-                    ->label('Pontuação mínima (reCAPTCHA v3)')
-                    ->helperText('O Google devolve uma pontuação de 0 (robô) a 1 (pessoa); abaixo deste valor o envio é recusado. 0,5 é o sugerido. Só o reCAPTCHA v3 usa isto.')
+                    ->label(__('Minimum score (reCAPTCHA v3)'))
+                    ->helperText(__('Google returns a score from 0 (robot) to 1 (person); below this value the submission is refused. 0.5 is the suggestion. Only reCAPTCHA v3 uses this.'))
                     ->numeric()
                     ->minValue(0)
                     ->maxValue(1)
@@ -671,15 +675,15 @@ class ConfiguracoesDoKit extends SettingsPage
                     ->visible(fn (Get $get): bool => $ligado($get) && ProvedorAntiRobo::tryFrom((string) $get('login_anti_robo_provedor'))?->usaPontuacao() === true),
 
                 TextInput::make('login_anti_robo_chave_do_site')
-                    ->label('Chave do site')
-                    ->helperText('A chave pública: vai para o HTML das telas.')
+                    ->label(__('Site key'))
+                    ->helperText(__('The public key: it goes into the page HTML.'))
                     ->maxLength(255)
                     ->visible($ligado),
 
                 TextInput::make('login_anti_robo_chave_secreta')
-                    ->label('Chave secreta')
-                    ->helperText('Guardada cifrada. Deixe em branco para manter a atual — ela não é exibida aqui, nem no código-fonte da página.')
-                    ->placeholder(fn (): string => filled($this->chaveSecretaAntiRoboGuardada()) ? 'Já configurada — em branco mantém' : 'Nenhuma chave configurada')
+                    ->label(__('Secret key'))
+                    ->helperText(__('Stored encrypted. Leave blank to keep the current one — it is not shown here, nor in the page source.'))
+                    ->placeholder(fn (): string => filled($this->chaveSecretaAntiRoboGuardada()) ? __('Already configured — blank keeps it') : __('No key configured'))
                     ->password()
                     ->revealable()
                     ->dehydrated(fn (?string $state): bool => filled($state))
@@ -720,8 +724,8 @@ class ConfiguracoesDoKit extends SettingsPage
             ->columnSpanFull()
             ->schema([
                 Toggle::make($habilitado)
-                    ->label("Habilitar botão do {$provedor->rotulo()}")
-                    ->helperText('Ligar aqui não põe o botão no ar sozinho: as credenciais abaixo também precisam estar preenchidas. O login social AUTENTICA quem já tem conta — criar conta depende do registro aberto, na aba anterior.')
+                    ->label(__('Enable the :provider button', ['provider' => $provedor->rotulo()]))
+                    ->helperText(__('Switching this on does not put the button live by itself: the credentials below must also be filled in. Social login AUTHENTICATES people who already have an account — creating one depends on open registration, in the previous tab.'))
                     ->live(),
 
                 TextInput::make($provedor->propriedadeDeSettings('client_id'))
@@ -734,8 +738,8 @@ class ConfiguracoesDoKit extends SettingsPage
 
                 TextInput::make($provedor->propriedadeDeSettings('client_secret'))
                     ->label('Client Secret')
-                    ->helperText('Guardado cifrado. Deixe em branco para manter o atual — ele não é exibido aqui, nem no código-fonte da página.')
-                    ->placeholder(fn (): string => filled($this->segredoGuardadoDe($provedor)) ? 'Já configurado — em branco mantém' : 'Nenhum segredo configurado')
+                    ->helperText(__('Stored encrypted. Leave blank to keep the current secret — it is not shown here, nor in the page source.'))
+                    ->placeholder(fn (): string => filled($this->segredoGuardadoDe($provedor)) ? __('Already configured — leave blank to keep the current value') : 'Nenhum segredo configurado')
                     ->password()
                     ->revealable()
                     ->dehydrated(fn (?string $state): bool => filled($state))
@@ -758,8 +762,8 @@ class ConfiguracoesDoKit extends SettingsPage
                  * Ver `wikis/specs/feat/login-social-por-painel/login-social-por-painel/`.
                  */
                 Select::make($provedor->propriedadeDeSettings('paineis'))
-                    ->label('Painéis onde este provedor vale')
-                    ->helperText('Em branco = todos os painéis. Escolha para restringir — por exemplo, o Google empresarial só no /admin.')
+                    ->label(__('Panels where this provider applies'))
+                    ->helperText(__('Blank = all panels. Choose to restrict — for example, corporate Google only in /admin.'))
                     ->multiple()
                     ->options(Paineis::opcoes())
                     ->visible($ligado),
@@ -770,10 +774,10 @@ class ConfiguracoesDoKit extends SettingsPage
     private function ondeCriarOApp(ProvedorSocial $provedor): string
     {
         return match ($provedor) {
-            ProvedorSocial::Google   => 'console.cloud.google.com → APIs e serviços → Credenciais → ID do cliente OAuth.',
-            ProvedorSocial::Github   => 'github.com/settings/developers → OAuth Apps → New OAuth App. O kit pede o escopo user:email, e é ele que permite confirmar que o e-mail está verificado.',
-            ProvedorSocial::LinkedIn => 'linkedin.com/developers → Create app → Products → Sign In with LinkedIn using OpenID Connect. Sem esse produto, o provedor não devolve email_verified.',
-            ProvedorSocial::X        => 'developer.x.com → Projects & Apps → User authentication settings, tipo Web App com OAuth 2.0. Pedir o e-mail exige users.email, e o X só devolve endereço que ele já confirmou.',
+            ProvedorSocial::Google   => __('console.cloud.google.com → APIs & services → Credentials → OAuth client ID.'),
+            ProvedorSocial::Github   => __('github.com/settings/developers → OAuth Apps → New OAuth App. The kit asks for the user:email scope, and that is what lets us confirm the e-mail address.'),
+            ProvedorSocial::LinkedIn => __('linkedin.com/developers → Create app → Products → Sign In with LinkedIn using OpenID Connect. Without that product the provider does not return an e-mail.'),
+            ProvedorSocial::X        => __('developer.x.com → Projects & Apps → User authentication settings, Web App type with OAuth 2.0. Asking for the e-mail requires users.email, and X only delivers it with that scope.'),
         };
     }
 
@@ -783,8 +787,8 @@ class ConfiguracoesDoKit extends SettingsPage
             ->icon('heroicon-o-squares-2x2')
             ->schema([
                 Toggle::make('hub_de_navegacao')
-                    ->label('Hub de navegação em cartões')
-                    ->helperText('Uma grade de cartões com os destinos, nos painéis /admin e /app. O /infra tem hub independente desta chave.'),
+                    ->label(__('Navigation hub in cards'))
+                    ->helperText(__('A card grid with the destinations, in the /admin and /app panels. /infra has an independent hub, not this key.')),
 
                 /*
                  * Interruptor lido por REQUEST: os três providers passam uma Closure para
@@ -792,8 +796,8 @@ class ConfiguracoesDoKit extends SettingsPage
                  * no próximo F5, sem cache nem restart.
                  */
                 Toggle::make('alerta_alteracoes_nao_salvas')
-                    ->label('Avisar sobre alterações não salvas')
-                    ->helperText('Ao sair de um formulário com alteração pendente, o navegador pede confirmação antes de descartar. Vale para as telas de cadastro e edição dos três painéis, inclusive as dos plugins.'),
+                    ->label(__('Warn about unsaved changes'))
+                    ->helperText(__('When leaving a form with a pending change, the browser asks for confirmation before discarding. Applies to the create and edit screens of all three panels, including the plugins.')),
 
                 /*
                  * Select de NÍVEIS e não Toggle, e a diferença não é estética: apertar por
@@ -815,7 +819,7 @@ class ConfiguracoesDoKit extends SettingsPage
                  */
                 Select::make('densidade_do_layout')
                     ->label('Densidade do layout')
-                    ->helperText('Aperta de uma vez os cartões de estatística, as tabelas, o menu lateral e os botões dos três painéis. "Confortável" é o padrão do Filament e não muda nada.')
+                    ->helperText(__('Tightens the statistic cards, tables, sidebar menu and buttons of all three panels at once. "Comfortable" is the Filament default and changes nothing.'))
                     ->options(DensidadeDoLayout::opcoes())
                     ->selectablePlaceholder(false)
                     ->required(),
@@ -826,8 +830,8 @@ class ConfiguracoesDoKit extends SettingsPage
                  * nasceu. A versão do SISTEMA fica na aba Identidade.
                  */
                 Toggle::make('exibir_versao_do_kit')
-                    ->label('Mostrar também a versão do kit no rodapé')
-                    ->helperText('Acrescenta a versão do starter kit ao lado da versão do sistema. Desligado, o rodapé só mostra a sua. A versão do kit continua disponível em `php artisan kit:info`.'),
+                    ->label(__('Also show the kit version in the footer'))
+                    ->helperText(__('Adds the starter kit version next to the system version. Off, the footer shows only yours. The kit version remains available in `php artisan kit:info`.')),
 
                 /*
                  * O interruptor do dashboard dinâmico. A troca é por REQUEST — as duas
@@ -838,27 +842,27 @@ class ConfiguracoesDoKit extends SettingsPage
                  * Desligar NUNCA apaga dado: os dashboards montados ficam em
                  * `dashboards`/`dashboard_widgets` e voltam ao religar.
                  */
-                Section::make('Dashboard dinâmico')
-                    ->description('A tela de entrada dos painéis vira uma grade que o usuário monta, move e redimensiona (mddev31/filament-dynamic-dashboard). Desligado, responde o dashboard clássico de sempre.')
+                Section::make(__('Dynamic dashboard'))
+                    ->description(__('The panel landing screen becomes a grid the user arranges, moves and resizes (mddev31/filament-dynamic-dashboard). When off, the usual classic dashboard renders.'))
                     ->icon('heroicon-o-squares-plus')
                     ->columnSpanFull()
                     ->schema([
                         Toggle::make('dashboard_dinamico_habilitado')
-                            ->label('Dashboard dinâmico como tela de entrada')
-                            ->helperText('Ligado, a raiz de cada painel devolve para a grade editável em /dashboard-dinamico; desligado, a raiz responde o clássico de sempre. Quem pode montar é quem tem a permissão "Manage:Dashboard" — os demais só veem.')
+                            ->label(__('Dynamic dashboard as the landing screen'))
+                            ->helperText(__('When on, each panel root answers with the editable grid at /dashboard-dinamico; when off, the root answers the classic one. Only people with the "Manage:Dashboard" permission can arrange it — the others only see.'))
                             ->live(),
 
                         Select::make('dashboard_dinamico_paineis')
-                            ->label('Painéis onde vale')
-                            ->helperText('Em branco = todos os painéis. Escolha para restringir — por exemplo, só o /app.')
+                            ->label(__('Panels where it applies'))
+                            ->helperText(__('Blank = all panels. Choose to restrict — for example, only /app.'))
                             ->multiple()
                             ->options(Paineis::opcoes())
                             ->visible(fn (Get $get): bool => (bool) $get('dashboard_dinamico_habilitado')),
                     ]),
 
                 TextInput::make('rotulo_da_organizacao')
-                    ->label('Como chamar cada organização')
-                    ->helperText('Vocabulário da INSTALAÇÃO (Empresa, Cliente, Escola, Unidade). Não é a configuração de uma organização — essa fica em /admin/organizacoes.')
+                    ->label(__('What to call each organization'))
+                    ->helperText(__('Vocabulary of the INSTALLATION (Company, Client, School, Unit). It is not one organization\'s setting — that lives in /admin/organizacoes.'))
                     ->required()
                     ->maxLength(255),
 
@@ -954,10 +958,10 @@ class ConfiguracoesDoKit extends SettingsPage
             ->rule('mimes:'.self::FORMATOS_DE_IMAGEM)
             ->maxSize(TetoDeUpload::emKb())
             ->validationMessages([
-                'max'   => "O arquivo passa de {$maximoEmMb} MB.",
-                'mimes' => "SVG não é aceito. Envie {$formatos}.",
+                'max'   => __('The file is over :max MB.', ['max' => $maximoEmMb]),
+                'mimes' => __('SVG is not accepted. Send :formats.', ['formats' => $formatos]),
             ])
-            ->helperText("{$ajuda} Até {$maximoEmMb} MB, e SVG não é aceito.")
+            ->helperText($ajuda.' '.__('Up to :max MB, and SVG is not accepted.', ['max' => $maximoEmMb]))
             ->disk('public')
             ->directory('kit')
             ->visibility('public');

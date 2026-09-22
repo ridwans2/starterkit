@@ -119,7 +119,7 @@ trait AprovacaoDeCadastro
             ->visible(fn (User $record): bool => $record->aprovacao_pendente)
             ->requiresConfirmation()
             ->modalHeading(__('Approve this registration?'))
-            ->modalDescription('A pessoa passa a acessar o painel de negócio com o perfil básico. Você pode ajustar os papéis dela depois, na edição.')
+            ->modalDescription(__('The person gets access to the business panel with the basic profile. You can adjust their roles later, in the edit screen.'))
             ->successNotificationTitle('Cadastro aprovado')
             ->action(function (User $record): void {
                 $record->aprovar();

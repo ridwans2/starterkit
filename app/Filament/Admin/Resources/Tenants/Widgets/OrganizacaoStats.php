@@ -31,7 +31,10 @@ class OrganizacaoStats extends StatsOverviewWidget
 
     protected int|string|array $columnSpan = 'full';
 
-    protected ?string $heading = 'Números desta organização';
+    protected function getHeading(): ?string
+    {
+        return __('Numbers for this organization');
+    }
 
     public static function canView(): bool
     {
@@ -51,21 +54,21 @@ class OrganizacaoStats extends StatsOverviewWidget
         $ativos     = $this->usuariosComAcesso();
 
         return [
-            StatPlus::make('Usuários vinculados', $vinculados)
+            StatPlus::make(__('Linked users'), $vinculados)
                 ->icon('heroicon-o-users')
                 ->iconColor('primary')
                 ->accentColor('primary')
-                ->description('Pessoas com acesso a esta organização'),
+                ->description(__('People with access to this organization')),
 
             StatPlus::make('Ativos em '.TenantResource::DIAS_DE_INSIGHT.' dias', $ativos)
                 ->icon('heroicon-o-arrow-right-on-rectangle')
                 ->iconColor($ativos > 0 ? 'success' : 'warning')
                 ->accentColor($ativos > 0 ? 'success' : 'warning')
                 ->description($vinculados === 0
-                    ? 'Nenhum usuário vinculado ainda'
-                    : $ativos.' de '.$vinculados.' entraram na janela'),
+                    ? __('No user linked yet')
+                    : (string) __(':active of :total joined in the window', ['active' => $ativos, 'total' => $vinculados])),
 
-            StatPlus::make('Último acesso', 0)
+            StatPlus::make(__('Last access'), 0)
                 ->icon('heroicon-o-clock')
                 ->iconColor('gray')
                 ->accentColor('gray')
@@ -96,7 +99,7 @@ class OrganizacaoStats extends StatsOverviewWidget
     private function descreverUltimoAcesso(): string
     {
         if (! $this->logDisponivel()) {
-            return 'Log de acesso não disponível nesta instalação';
+            return __('Access log not available on this installation');
         }
 
         $quando = AuthenticationLog::query()
@@ -106,7 +109,7 @@ class OrganizacaoStats extends StatsOverviewWidget
             ->max('login_at');
 
         return $quando === null
-            ? 'Ninguém desta organização entrou ainda'
+            ? __('No one from this organization has signed in yet')
             : Carbon::parse($quando)->diffForHumans();
     }
 

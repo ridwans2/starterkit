@@ -6,6 +6,7 @@ namespace App\Filament\Admin\Widgets;
 
 use App\Filament\Concerns\ExigePermissaoDoWidget;
 use App\Models\User;
+use App\Support\Formatos;
 use Filament\Widgets\StatsOverviewWidget;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
@@ -48,7 +49,10 @@ class UsuariosVisaoGeralStats extends StatsOverviewWidget
 
     protected int|string|array $columnSpan = 'full';
 
-    protected ?string $heading = 'Usuários e acesso';
+    protected function getHeading(): ?string
+    {
+        return __('Users and access');
+    }
 
     /**
      * @return array<int, StatPlus>
@@ -60,13 +64,13 @@ class UsuariosVisaoGeralStats extends StatsOverviewWidget
         $comDoisFatores = $this->contarUsuariosComDoisFatores();
 
         $stats = [
-            StatPlus::make('Usuários', $total)
+            StatPlus::make(__('Users'), $total)
                 ->icon('heroicon-o-users')
                 ->iconColor('primary')
                 ->accentColor('primary')
                 ->description(__('Accounts registered in the system')),
 
-            StatPlus::make('Com 2FA ativo', $comDoisFatores)
+            StatPlus::make(__('With 2FA enabled'), $comDoisFatores)
                 ->icon('heroicon-o-shield-check')
                 // Verde só quando TODO mundo está protegido; caso contrário é
                 // uma pendência de segurança, não uma conquista.
@@ -74,19 +78,19 @@ class UsuariosVisaoGeralStats extends StatsOverviewWidget
                 ->accentColor($total > 0 && $comDoisFatores === $total ? 'success' : 'warning')
                 ->description($this->descreverCobertura($comDoisFatores, $total)),
 
-            StatPlus::make('Novos em 30 dias', $novos)
+            StatPlus::make(__('New in 30 days'), $novos)
                 ->icon('heroicon-o-user-plus')
                 ->iconColor('info')
                 ->accentColor('info')
-                ->description('Cadastros desde '.now()->subDays(30)->translatedFormat('d/m/Y')),
+                ->description((string) __('Sign-ups since :date', ['date' => now()->subDays(30)->translatedFormat(Formatos::data())])),
 
-            StatPlus::make('Papéis', Role::query()->count())
+            StatPlus::make(__('Roles'), Role::query()->count())
                 ->icon('heroicon-o-identification')
                 ->iconColor('gray')
                 ->accentColor('gray')
                 ->description(__('Access profiles (Shield)')),
 
-            StatPlus::make('Permissões', Permission::query()->count())
+            StatPlus::make(__('Permissions'), Permission::query()->count())
                 ->icon('heroicon-o-key')
                 ->iconColor('gray')
                 ->accentColor('gray')
@@ -107,7 +111,7 @@ class UsuariosVisaoGeralStats extends StatsOverviewWidget
         if ($this->logDeAcessoDisponivel()) {
             $serie = $this->loginsPorDia();
 
-            $stats[] = StatPlus::make('Logins hoje', (int) end($serie))
+            $stats[] = StatPlus::make(__('Logins today'), (int) end($serie))
                 ->icon('heroicon-o-arrow-right-on-rectangle')
                 ->iconColor('success')
                 ->accentColor('success')
@@ -115,7 +119,7 @@ class UsuariosVisaoGeralStats extends StatsOverviewWidget
                 // Explícito: sem isto o gráfico herda `getColor()`, que no StatPlus
                 // não é necessariamente o mesmo do `accentColor()`.
                 ->chartColor('success')
-                ->description('Entradas confirmadas · série dos últimos '.self::DIAS_DO_HISTORICO.' dias');
+                ->description(__('Confirmed logins · series of the last :days days', ['days' => self::DIAS_DO_HISTORICO]));
         }
 
         return $stats;
@@ -218,9 +222,9 @@ class UsuariosVisaoGeralStats extends StatsOverviewWidget
     private function descreverCobertura(int $parte, int $total): string
     {
         if ($total === 0) {
-            return 'Nenhum usuário cadastrado ainda';
+            return (string) __('No users registered yet');
         }
 
-        return round(($parte / $total) * 100).'% dos usuários';
+        return (string) __(':percent of users', ['percent' => round(($parte / $total) * 100)]);
     }
 }

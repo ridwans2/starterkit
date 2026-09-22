@@ -6,6 +6,7 @@ namespace App\Filament\Infra\Widgets;
 
 use App\Filament\Concerns\ExigePermissaoDoWidget;
 use App\Models\User;
+use App\Support\Formatos;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
@@ -41,17 +42,17 @@ class AuditoriaRecente extends TimelineWidget
 
     public function getHeading(): ?string
     {
-        return 'Alterações recentes';
+        return __('Recent changes');
     }
 
     public function getHeadingDescription(): ?string
     {
-        return 'Trilha de auditoria — quem mudou o quê, e quando';
+        return __('Audit trail — who changed what, and when');
     }
 
     public function getEmptyStateHeading(): string
     {
-        return 'Nenhuma alteração auditada';
+        return __('No audited change');
     }
 
     public function getEmptyStateIcon(): string
@@ -84,9 +85,9 @@ class AuditoriaRecente extends TimelineWidget
         }
 
         return match (true) {
-            $timestamp->isToday()     => 'Hoje',
-            $timestamp->isYesterday() => 'Ontem',
-            default                   => $timestamp->translatedFormat('d/m/Y'),
+            $timestamp->isToday()     => __('Today'),
+            $timestamp->isYesterday() => __('Yesterday'),
+            default                   => $timestamp->translatedFormat(Formatos::data()),
         };
     }
 
@@ -188,7 +189,7 @@ class AuditoriaRecente extends TimelineWidget
         $id   = $registro->getAttribute('user_id');
 
         if ($tipo === null || ! (is_int($id) || is_string($id))) {
-            return 'Sistema';
+            return __('System');
         }
 
         // Autor de outro tipo (o morph aceita qualquer model) não vira
@@ -221,9 +222,9 @@ class AuditoriaRecente extends TimelineWidget
     private function rotuloDoEvento(Audit $registro): string
     {
         return match ($registro->event) {
-            'created'  => 'criado',
+            'created'  => __('created'),
             'updated'  => 'alterado',
-            'deleted'  => 'excluído',
+            'deleted'  => __('deleted'),
             'restored' => 'restaurado',
             default    => $registro->event,
         };

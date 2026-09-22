@@ -122,7 +122,7 @@ class BoasVindas extends CardsPage
 
     public function getSubheading(): ?string
     {
-        return 'Um cartão por painel. O acesso a cada um continua pedindo login.';
+        return __('One card per panel. Access to each still requires signing in.');
     }
 
     /**
@@ -173,28 +173,28 @@ class BoasVindas extends CardsPage
         $hub     = (bool) config('kit.hub');
 
         return $schema->components([
-            Section::make('Este projeto')
-                ->description('O que o kit:install personalizou. Sem o comando, você vê os padrões do kit.')
+            Section::make(__('This project'))
+                ->description(__('What kit:install customized. Without the command you see the kit defaults.'))
                 ->icon(Heroicon::OutlinedSparkles)
                 ->columns(3)
                 ->columnSpanFull()
                 ->schema([
                     TextEntry::make('nome_da_aplicacao')
-                        ->label('Nome da aplicação')
+                        ->label(__('Application name'))
                         ->state((string) config('app.name')),
 
                     TextEntry::make('cor_primaria')
-                        ->label('Cor primária')
+                        ->label(__('Primary color'))
                         ->state(static::corPrimaria()),
 
                     TextEntry::make('multi_organizacao')
-                        ->label('Multi-organização')
+                        ->label(__('Multi-organization'))
                         ->state($tenancy ? 'Ligada' : 'Desligada')
                         ->badge()
                         ->color($tenancy ? 'success' : 'gray'),
 
                     TextEntry::make('rotulo_da_organizacao')
-                        ->label('Como a organização é chamada')
+                        ->label(__('What the organization is called'))
                         ->state(sprintf(
                             '%s / %s',
                             (string) config('kit.tenancy.label'),
@@ -202,52 +202,51 @@ class BoasVindas extends CardsPage
                         )),
 
                     TextEntry::make('demo')
-                        ->label('Cenário de demonstração')
+                        ->label(__('Demonstration scenario'))
                         ->state($demo ? 'Ligado' : 'Desligado')
                         ->badge()
                         ->color($demo ? 'success' : 'gray'),
 
                     TextEntry::make('hub')
-                        ->label('Hub em cartões')
+                        ->label(__('Hub in cards'))
                         ->state($hub ? 'Ligado' : 'Desligado')
                         ->badge()
                         ->color($hub ? 'success' : 'gray'),
                 ]),
 
-            Section::make('Configuração do kit')
-                ->description('Lida de config/kit.php — troque no .env, não no arquivo.')
+            Section::make(__('Kit configuration'))
+                ->description(__('Read from config/kit.php — change it in the .env, not in the file.'))
                 ->icon(Heroicon::OutlinedCog6Tooth)
                 ->columns(2)
                 ->columnSpanFull()
                 ->schema([
                     TextEntry::make('versao_do_kit')
-                        ->label('Versão do kit')
+                        ->label(__('Kit version'))
                         ->state((string) config('kit.version')),
 
                     TextEntry::make('idiomas')
-                        ->label('Idiomas do painel')
+                        ->label(__('Panel languages'))
                         ->state(implode(', ', array_map('strval', (array) config('kit.idiomas')))),
 
                     TextEntry::make('validade_do_convite')
-                        ->label('Validade do convite')
+                        ->label(__('Invitation validity'))
                         ->state(static::emDias((int) config('kit.convites.validade_em_dias'))),
 
                     TextEntry::make('lembretes_do_convite')
-                        ->label('Lembretes do convite')
+                        ->label(__('Invitation reminders'))
                         ->state(static::lembretes((array) config('kit.convites.lembretes_dias'))),
 
                     TextEntry::make('limite_do_lote')
-                        ->label('Convites por lote')
+                        ->label(__('Invitations per batch'))
                         ->state((string) (int) config('kit.convites.limite_do_lote')),
 
                     TextEntry::make('retencao')
-                        ->label('Retenção de trilhas')
-                        ->state(sprintf(
-                            'exceções %s · e-mails %s · importações e exportações %s',
-                            static::retencao((int) config('kit.retencao.excecoes_em_dias')),
-                            static::retencao((int) config('kit.retencao.emails_em_dias')),
-                            static::retencao((int) config('kit.retencao.importacoes_em_dias')),
-                        )),
+                        ->label(__('Trail retention'))
+                        ->state((string) __('exceptions :exceptions · emails :emails · imports and exports :exports', [
+                            'exceptions' => static::retencao((int) config('kit.retencao.excecoes_em_dias')),
+                            'emails'     => static::retencao((int) config('kit.retencao.emails_em_dias')),
+                            'exports'    => static::retencao((int) config('kit.retencao.importacoes_em_dias')),
+                        ])),
                 ]),
         ]);
     }

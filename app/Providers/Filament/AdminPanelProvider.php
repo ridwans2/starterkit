@@ -203,9 +203,9 @@ class AdminPanelProvider extends PanelProvider
                  * `vendor:publish --force` sobrescreveria o arquivo de idioma.
                  */
                 FilamentShieldPlugin::make()
-                    ->modelLabel('Papel')
-                    ->pluralModelLabel('Papéis')
-                    ->navigationLabel('Papéis')
+                    ->modelLabel('Role')
+                    ->pluralModelLabel('Roles')
+                    ->navigationLabel('Roles')
                     /*
                      * O grupo, senão a barra lateral exibe "Filament Shield" — nome do PACOTE
                      * vazando na navegação, do lado de "Administração" e "IA", que são nomes do
@@ -217,12 +217,12 @@ class AdminPanelProvider extends PanelProvider
                      * Papéis é assunto de Administração, ao lado de Convites e Organizações.
                      * Achado na inspeção visual da tela (RQ-12 da wiki `tela-de-perfis`).
                      */
-                    ->navigationGroup('Administração'),
+                    ->navigationGroup('Administration'),
 
                 // Perfil do usuário + 2FA. O label explícito evita repetir o nome
                 // do usuário duas vezes no dropdown.
                 BreezyCore::make()
-                    ->myProfile(shouldRegisterUserMenu: true, hasAvatars: true, slug: 'meu-perfil', userMenuLabel: 'Meu perfil')
+                    ->myProfile(shouldRegisterUserMenu: true, hasAvatars: true, slug: 'meu-perfil', userMenuLabel: 'My profile')
                     // Quem entrou por login social não tem senha atual — e a troca de senha, o 2FA e o
                     // desbloqueio da sessão pedem uma. O bloco manda o link de definição por e-mail.
                     ->myProfileComponents(['definir_senha_por_email' => DefinirSenhaPorEmail::class])

@@ -43,7 +43,12 @@ class ConviteResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedEnvelope;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Administração';
+    public static function getNavigationGroup(): string|UnitEnum|null
+    {
+
+        return 'Administration';
+
+    }
 
     public static function getModelLabel(): string
     {

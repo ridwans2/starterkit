@@ -30,21 +30,21 @@ class AiRunExporter extends ExportadorDoKit
     {
         return [
             ExportColumn::make('task')
-                ->label('Tarefa'),
+                ->label(__('Task')),
             ExportColumn::make('driver')
                 ->label('Driver'),
             ExportColumn::make('model')
-                ->label('Modelo'),
+                ->label(__('Model')),
             ExportColumn::make('status')
                 ->label('Status'),
             ExportColumn::make('tokens_in')
                 ->label('Tokens de entrada'),
             ExportColumn::make('tokens_out')
-                ->label('Tokens de saída'),
+                ->label(__('Output tokens')),
             ExportColumn::make('cost')
                 ->label('Custo'),
             ExportColumn::make('duration_ms')
-                ->label('Duração (ms)'),
+                ->label(__('Duration (ms)')),
             ExportColumn::make('started_at')
                 ->label(__('Home')),
             ExportColumn::make('finished_at')

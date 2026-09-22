@@ -2,6 +2,7 @@
 
 namespace App\Filament\Infra\Resources\AiRuns\Schemas;
 
+use App\Support\Formatos;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -18,11 +19,11 @@ class AiRunInfolist
     public static function configure(Schema $schema): Schema
     {
         return $schema->components([
-            Section::make('Execução')->columns(2)->schema([
-                TextEntry::make('created_at')->label('Quando')->dateTime('d/m/Y H:i:s'),
-                TextEntry::make('task')->label('Tarefa')->badge(),
+            Section::make(__('Run'))->columns(2)->schema([
+                TextEntry::make('created_at')->label(__('When'))->dateTime(Formatos::dataHoraComSegundos()),
+                TextEntry::make('task')->label(__('Task'))->badge(),
                 TextEntry::make('driver')->label('Driver')->badge()->color('gray'),
-                TextEntry::make('request.options.model')->label('Modelo')->placeholder('—'),
+                TextEntry::make('request.options.model')->label(__('Model'))->placeholder('—'),
                 TextEntry::make('status')->label('Status')->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'ok'            => 'success',
@@ -32,8 +33,8 @@ class AiRunInfolist
                         default         => 'gray',
                     }),
                 TextEntry::make('dispatch')->label('Dispatch')->badge()->color('gray'),
-                TextEntry::make('subject_id')->label('Usuário (subject)')->placeholder('—'),
-                TextEntry::make('error')->label('Erro')->placeholder('—')->color('danger')->columnSpanFull(),
+                TextEntry::make('subject_id')->label(__('User (subject)'))->placeholder('—'),
+                TextEntry::make('error')->label(__('Error'))->placeholder('—')->color('danger')->columnSpanFull(),
             ]),
             Section::make('Consumo')->columns(3)->schema([
                 OdometerEntry::make('tokens_in')->label('Tokens in')->placeholder('—'),
@@ -43,9 +44,9 @@ class AiRunInfolist
                     ->placeholder('—'),
                 OdometerEntry::make('cache_read_tokens')->label('Cache lido')->placeholder('—'),
                 OdometerEntry::make('cache_write_tokens')->label('Cache gravado')->placeholder('—'),
-                OdometerEntry::make('duration_ms')->label('Duração (ms)')->placeholder('—'),
+                OdometerEntry::make('duration_ms')->label(__('Duration (ms)'))->placeholder('—'),
             ]),
-            Section::make('Detalhes')->collapsed()->schema([
+            Section::make(__('Details'))->collapsed()->schema([
                 // Model do vendor sem @property declarado: getAttribute() em vez de acesso
                 // mágico (o cast `array` do pacote continua valendo).
                 TextEntry::make('request')->label('Request')

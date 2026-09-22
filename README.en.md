@@ -174,7 +174,7 @@ The other two already come complete.
 |---|---:|
 | Test cases (`Kit` + `Tenancy`, measured on 2026-09-08) | **2,226**, with **7,428 assertions** |
 | Screens swept in a real browser | **55** |
-| Test files | **151** in `Kit` + `Tenancy` (**180** in total) |
+| Test files | **151** in `Kit` + `Tenancy` (**184** in total) |
 | PHPStan | **level 7**, zero errors |
 | FilaCheck | **17** rules, all passing |
 
@@ -182,7 +182,7 @@ The other two already come complete.
 |---|---:|
 | Reference documents (`wikis/`) | **10** |
 | Specified features (`wikis/specs/`) | **66** |
-| Project rules for AI agents (`.ai/rules/`, excluding the index) | **18** |
+| Project rules for AI agents (`.ai/rules/`, excluding the index) | **19** |
 
 > The details moved to the site: **[Reference](https://gsferro.github.io/filament-starter-kit-easy/en/referencia/)** and **[Getting started](https://gsferro.github.io/filament-starter-kit-easy/en/comecar/)**.
 

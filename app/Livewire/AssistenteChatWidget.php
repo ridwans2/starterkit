@@ -38,10 +38,15 @@ class AssistenteChatWidget extends Component
     /**
      * `message` sobrescreve o texto padrão do Laravel ("indicação de um valor para o campo
      * mensagem"): aqui o campo é uma pergunta, e "valor" faz o usuário pensar em número.
+     *
+     * Inglês cru, e não `__()`: argumento de atributo é expressão constante no PHP, então
+     * traduzir aqui é `Constant expression contains invalid operations`. É o único tipo de
+     * string que `i18n:extract` recusou neste projeto — ele pula `#[...]` de propósito e o
+     * motivo está no docblock do comando.
      */
     #[Validate('required|string|max:2000', message: [
-        'mensagem.required' => 'Digite sua pergunta antes de enviar.',
-        'mensagem.max'      => 'A pergunta deve ter no máximo 2000 caracteres.',
+        'mensagem.required' => 'Type your question before sending.',
+        'mensagem.max'      => 'The question must be at most 2000 characters.',
     ])]
     public string $mensagem = '';
 

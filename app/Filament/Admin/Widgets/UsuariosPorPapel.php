@@ -73,7 +73,7 @@ class UsuariosPorPapel extends BreakdownWidget
         $semPapel = User::query()->doesntHave('roles')->count();
 
         if ($semPapel > 0) {
-            $itens[] = BreakdownItem::make('Sem papel', $semPapel)
+            $itens[] = BreakdownItem::make(__('No role'), $semPapel)
                 ->icon('heroicon-o-exclamation-triangle')
                 ->color('warning');
         }

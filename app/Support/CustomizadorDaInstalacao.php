@@ -154,7 +154,7 @@ final class CustomizadorDaInstalacao
             ),
             'cor'   => select(
                 label: 'Cor primária dos painéis',
-                options: ['' => 'Padrão do Filament (âmbar)', ...array_combine(self::CORES, self::CORES)],
+                options: ['' => __('Filament default (amber)'), ...array_combine(self::CORES, self::CORES)],
                 default: '',
             ),
         ];
@@ -224,7 +224,7 @@ final class CustomizadorDaInstalacao
              */
             'cor' => (string) select(
                 label: 'Cor primária dos painéis',
-                options: ['' => 'Padrão do Filament (âmbar)', ...array_combine(self::CORES, self::CORES)],
+                options: ['' => __('Filament default (amber)'), ...array_combine(self::CORES, self::CORES)],
                 default: (string) config('kit.cor_primaria', ''),
             ),
         ];
@@ -408,9 +408,9 @@ final class CustomizadorDaInstalacao
         $banco = (string) select(
             label: 'Banco de dados',
             options: [
-                'sqlite' => 'SQLite — padrão, não depende de nenhum serviço externo',
-                'pgsql'  => 'PostgreSQL — recomendado: único com pgvector, exigido pelas funções de IA local',
-                'mysql'  => 'MySQL / MariaDB — container próprio: docker compose up -d mysql redis',
+                'sqlite' => __('SQLite — default, depends on no external service'),
+                'pgsql'  => __('PostgreSQL — recommended: the only one with pgvector, required by the local AI features'),
+                'mysql'  => __('MySQL / MariaDB — own container: docker compose up -d mysql redis'),
             ],
             default: 'sqlite',
         );

@@ -239,7 +239,7 @@ class RegistroPorConvite extends Register
 
         Notification::make()
             ->title(__('Registration received'))
-            ->body('Sua conta foi criada e aguarda aprovação de quem administra o sistema. Você poderá entrar assim que ela for liberada.')
+            ->body(__('Your account was created and is waiting for approval by whoever administers the system. You will be able to sign in as soon as it is granted.'))
             ->success()
             ->persistent()
             ->send();
@@ -366,7 +366,7 @@ class RegistroPorConvite extends Register
 
         // `helperText()` vive em `Field`, e a assinatura do Filament promete `Component`.
         return $campo instanceof Field
-            ? $campo->helperText('O convite foi enviado para este endereço.')
+            ? $campo->helperText(__('The invitation was sent to this address.'))
             : $campo;
     }
 
@@ -457,7 +457,7 @@ class RegistroPorConvite extends Register
 
         Notification::make()
             ->title(__('Invalid or expired invitation'))
-            ->body('Peça um convite novo a quem administra o sistema. Se você já tem conta, entre por aqui.')
+            ->body(__('Ask whoever administers the system for a new invitation. If you already have an account, sign in here.'))
             ->danger()
             ->persistent()
             ->send();

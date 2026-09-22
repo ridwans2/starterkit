@@ -20,7 +20,7 @@
         if ($user) {
             // E-mail em vez do id: identifica a conta para quem está depurando
             // sem expor a chave primária.
-            $auth['Conta'] = $user->email ?? $user->getAuthIdentifier();
+            $auth[__('Account')] = $user->email ?? $user->getAuthIdentifier();
         }
 
         // O que falta diz mais do que o que se tem. A UnauthorizedException do
@@ -49,17 +49,17 @@
         ));
 
         if ($faltando) {
-            $auth['Permissão ausente'] = implode(', ', $faltando);
+            $auth[__('Missing permission')] = implode(', ', $faltando);
 
             $auth['Tipo'] = match (true) {
-                str_starts_with($faltando[0], 'page_') => 'Página',
-                str_starts_with($faltando[0], 'widget_') => 'Widget',
-                default => 'Permissão customizada',
+                str_starts_with($faltando[0], 'page_') => __('Page'),
+                str_starts_with($faltando[0], 'widget_') => __('Widget'),
+                default => __('Custom permission'),
             };
         }
 
         if ($papeisFaltando) {
-            $auth['Papel ausente'] = implode(', ', $papeisFaltando);
+            $auth[__('Missing role')] = implode(', ', $papeisFaltando);
         }
 
         // Só cai nos papéis que o usuário tem quando a negativa não nomeou o que queria.
@@ -67,12 +67,12 @@
             $papeis = $user->getRoleNames()->all();
 
             if ($papeis) {
-                $auth['Seus papéis'] = implode(', ', $papeis);
+                $auth[__('Your roles')] = implode(', ', $papeis);
             }
         }
 
         if ($e && $e->getMessage() !== '') {
-            $auth['Motivo'] = $e->getMessage();
+            $auth[__('Reason')] = $e->getMessage();
         }
     }
 
@@ -94,8 +94,8 @@
 @extends('errors.sentinel-layout', [
     'code' => 403,
     'tone' => 'warning',
-    'title' => 'Acesso negado',
-    'body' => 'Você não tem permissão para acessar este recurso. O acesso foi barrado por uma política de segurança ou por falta de privilégios.',
+    'title' => __('Access denied'),
+    'body' => __('You do not have permission to access this resource. Access was blocked by a security policy or by missing privileges.'),
     'exception' => $exception ?? null,
 ])
 
@@ -109,18 +109,18 @@
             <dl class="sn-rows">
                 @foreach ($auth as $rotulo => $valor)
                     <dt>{{ $rotulo }}</dt>
-                    <dd class="{{ in_array($rotulo, ['Motivo', 'Tipo'], true) ? '' : 'mono' }}">{{ $valor }}</dd>
+                    <dd class="{{ in_array($rotulo, [__('Reason'), __('Type')], true) ? '' : 'mono' }}">{{ $valor }}</dd>
                 @endforeach
             </dl>
         </div>
     @endif
 
     <div class="sn-actions">
-        <a class="sn-btn sn-btn-primary" href="{{ $urlVoltar }}">Voltar</a>
+        <a class="sn-btn sn-btn-primary" href="{{ $urlVoltar }}">{{ __('Back') }}</a>
     </div>
 
     <div class="sn-note">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"/></svg>
-        <span>Precisa de acesso a este recurso? Peça as permissões ao administrador da aplicação.</span>
+        <span>{{ __('Need access to this resource? Ask the application administrator for the permissions.') }}</span>
     </div>
 @endsection

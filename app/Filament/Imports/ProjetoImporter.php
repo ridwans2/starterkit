@@ -33,7 +33,7 @@ class ProjetoImporter extends ImportadorDoKit
     {
         return [
             ImportColumn::make('nome')
-                ->label('Nome')
+                ->label(__('Name'))
                 ->requiredMapping()
                 ->rules(['required', 'string', 'max:255']),
         ];

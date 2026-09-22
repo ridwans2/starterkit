@@ -33,7 +33,7 @@ final class CriadorDeDashboardPadrao
             /** @var Dashboard $dashboard */
             $dashboard = new $model;
             $dashboard->fill([
-                'name'         => 'Padrão',
+                'name'         => 'Default',
                 'description'  => 'Dashboard padrão',
                 'page'         => DashboardDoApp::class,
                 'is_active'    => true,

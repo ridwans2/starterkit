@@ -14,11 +14,11 @@
     */
     $excluida = $motivo === 'conta_excluida';
 
-    $titulo = $excluida ? 'Conta excluída' : 'Conta desativada';
+    $titulo = $excluida ? __('Account deleted') : __('Account disabled');
 
     $corpo = $excluida
-        ? 'Sua conta foi excluída em '.($excluidaEm?->format('d/m/Y') ?? 'data não registrada').'. Entre em contato com o administrador para restaurá-la.'
-        : 'Sua conta está desativada. Entre em contato com o administrador para reativá-la.';
+        ? (string) __('Your account was deleted on :date. Contact the administrator to restore it.', ['date' => $excluidaEm?->format(App\Support\Formatos::data()) ?? __('no recorded date')])
+        : (string) __('Your account is disabled. Contact the administrator to reactivate it.');
 @endphp
 
 @extends('errors.sentinel-layout', [
@@ -35,11 +35,11 @@
 
 @section('content')
     <div class="sn-actions">
-        <a class="sn-btn sn-btn-primary" href="{{ $voltarPara }}">Voltar ao login</a>
+        <a class="sn-btn sn-btn-primary" href="{{ $voltarPara }}">{{ __('Back to sign in') }}</a>
     </div>
 
     <div class="sn-note">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"/></svg>
-        <span>Quem administra a aplicação pode {{ $excluida ? 'restaurar' : 'reativar' }} a sua conta. Nada foi apagado.</span>
+        <span>{{ __('Whoever administers the application can :verb your account. Nothing was deleted.', ['verb' => $excluida ? (string) __('restore') : (string) __('reactivate')]) }}</span>
     </div>
 @endsection

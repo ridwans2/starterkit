@@ -52,17 +52,17 @@ class AtualizacoesDasOrganizacoes extends AuditoriaRecente
 
     public function getHeading(): ?string
     {
-        return 'Atualizações recentes';
+        return __('Recent updates');
     }
 
     public function getHeadingDescription(): ?string
     {
-        return 'O que mudou no cadastro das organizações';
+        return __('What changed in the organization records');
     }
 
     public function getEmptyStateHeading(): string
     {
-        return 'Nenhuma alteração no cadastro';
+        return __('No change in the record');
     }
 
     public function getEmptyStateIcon(): string

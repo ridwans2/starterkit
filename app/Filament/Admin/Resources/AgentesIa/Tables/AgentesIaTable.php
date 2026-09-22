@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\AgentesIa\Tables;
 
+use App\Support\Formatos;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -20,17 +21,17 @@ class AgentesIaTable
         return $table
             ->defaultSort('nome')
             ->columns([
-                TextColumn::make('nome')->label('Nome')->searchable(['nome', 'slug'])->sortable(),
+                TextColumn::make('nome')->label(__('Name'))->searchable(['nome', 'slug'])->sortable(),
                 TextColumn::make('slug')->label('Slug')->badge()->color('gray')->searchable(),
-                IconColumn::make('ativo')->label('Ativo')->boolean(),
+                IconColumn::make('ativo')->label(__('Active'))->boolean(),
                 TextColumn::make('provider')->label('Provider')->badge()->placeholder('default')->searchable(),
-                TextColumn::make('modelo')->label('Modelo')->placeholder('default')->searchable(),
-                TextColumn::make('versao')->label('Versão')->badge()->color('gray')->sortable(),
-                TextColumn::make('updated_at')->label('Atualizado em')->dateTime('d/m/Y H:i')
+                TextColumn::make('modelo')->label(__('Model'))->placeholder('default')->searchable(),
+                TextColumn::make('versao')->label(__('Version'))->badge()->color('gray')->sortable(),
+                TextColumn::make('updated_at')->label(__('Updated at'))->dateTime(Formatos::dataHora())
                     ->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                TernaryFilter::make('ativo')->label('Ativo'),
+                TernaryFilter::make('ativo')->label(__('Active')),
             ])
             ->recordActions([
                 EditAction::make(),

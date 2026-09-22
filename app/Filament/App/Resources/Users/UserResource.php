@@ -12,6 +12,7 @@ use App\Filament\Concerns\BadgeContagemNavegacao;
 use App\Filament\Concerns\SituacaoDaConta;
 use App\Models\Tenant;
 use App\Models\User;
+use App\Support\Formatos;
 use App\Support\Papeis;
 use BackedEnum;
 use Filament\Actions\EditAction;
@@ -50,9 +51,15 @@ class UserResource extends Resource
     use SituacaoDaConta;
 
     /** Motivo da negação, e ela existe para não haver 403 mudo em tela. */
-    private const MOTIVO_DA_NEGACAO = 'Excluir usuário é ato global e não se faz a partir de uma organização.';
+    private static function motivoDaNegacao(): string
+    {
+        return __('Deleting a user is a global act and is not done from an organization.');
+    }
 
-    private const MOTIVO_DA_NEGACAO_DE_INSTALACAO = 'Quem governa a instalação não se edita a partir de uma organização.';
+    private static function motivoDaNegacaoInstalacao(): string
+    {
+        return __('Whoever governs the installation is not edited from an organization.');
+    }
 
     protected static ?string $model = User::class;
 
@@ -79,7 +86,12 @@ class UserResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Administração';
+    public static function getNavigationGroup(): string|UnitEnum|null
+    {
+
+        return 'Administration';
+
+    }
 
     public static function getModelLabel(): string
     {
@@ -132,12 +144,12 @@ class UserResource extends Resource
      */
     public static function getDeleteAuthorizationResponse(Model $record): Response
     {
-        return Response::deny(self::MOTIVO_DA_NEGACAO);
+        return Response::deny(static::motivoDaNegacao());
     }
 
     public static function getDeleteAnyAuthorizationResponse(): Response
     {
-        return Response::deny(self::MOTIVO_DA_NEGACAO);
+        return Response::deny(static::motivoDaNegacao());
     }
 
     /**
@@ -235,7 +247,7 @@ class UserResource extends Resource
                 ],
             );
 
-            return Response::deny(self::MOTIVO_DA_NEGACAO_DE_INSTALACAO);
+            return Response::deny(static::motivoDaNegacaoInstalacao());
         }
 
         return parent::getEditAuthorizationResponse($record);
@@ -278,7 +290,7 @@ class UserResource extends Resource
                 ],
             );
 
-            return Response::deny(self::MOTIVO_DA_NEGACAO_DE_INSTALACAO);
+            return Response::deny(static::motivoDaNegacaoInstalacao());
         }
 
         return parent::getViewAuthorizationResponse($record);
@@ -296,7 +308,7 @@ class UserResource extends Resource
     {
         return $schema->components([
             TextInput::make('name')
-                ->label('Nome')
+                ->label(__('Name'))
                 ->required()
                 ->maxLength(255),
             TextInput::make('email')
@@ -305,7 +317,7 @@ class UserResource extends Resource
                 ->required()
                 ->unique(),
             TextInput::make('password')
-                ->label('Senha')
+                ->label(__('Password'))
                 ->password()
                 ->revealable()
                 ->required(fn (string $operation): bool => $operation === 'create')
@@ -327,7 +339,7 @@ class UserResource extends Resource
                 // Obrigatório, MENOS para cadastro pendente de aprovação, que não tem papel por
                 // desenho. Ver `AprovacaoDeCadastro::papelObrigatorioNaEdicao()`.
                 ->required(self::papelObrigatorioNaEdicao())
-                ->helperText('Os papéis valem apenas dentro desta '.mb_strtolower((string) config('kit.tenancy.label', 'Organização')).'.')
+                ->helperText(__('Roles apply only within this :organization.', ['organization' => mb_strtolower(__((string) config('kit.tenancy.label', 'Organization')))]))
                 ->saveRelationshipsUsing(self::gravarPapeis(...)),
 
             /*
@@ -353,7 +365,7 @@ class UserResource extends Resource
                     ->disk('public')
                     ->circular()
                     ->simpleLightbox(),
-                TextColumn::make('name')->label('Nome')->searchable()->sortable(),
+                TextColumn::make('name')->label(__('Name'))->searchable()->sortable(),
                 TextColumn::make('email')->label(__('Email'))->searchable()->sortable(),
                 // Mostra só os papéis do contexto corrente: o `wherePivot` que o spatie
                 // põe em `roles()` faz o recorte por team sozinho.
@@ -368,7 +380,7 @@ class UserResource extends Resource
                     ->color(fn (User $record): string => ($record->origem ?? User::ORIGEM_INTERNO) === User::ORIGEM_INTERNO ? 'gray' : 'info')
                     ->sortable()
                     ->toggleable(),
-                TextColumn::make('created_at')->label(__('Created at'))->dateTime('d/m/Y H:i')->sortable(),
+                TextColumn::make('created_at')->label(__('Created at'))->dateTime(Formatos::dataHora())->sortable(),
                 self::colunaDeSituacao(),
             ])
             ->filters([
@@ -387,8 +399,8 @@ class UserResource extends Resource
                 ViewAction::make(),
                 EditAction::make(),
             ])
-            ->emptyStateHeading('Nenhum usuário nesta '.mb_strtolower((string) config('kit.tenancy.label', 'Organização')))
-            ->emptyStateDescription('Crie aqui ou convide por e-mail — em qualquer caso a pessoa nasce vinculada a esta organização.');
+            ->emptyStateHeading(__('No users in this :organization.', ['organization' => mb_strtolower(__((string) config('kit.tenancy.label', 'Organization')))]))
+            ->emptyStateDescription(__('Create it here or invite by email — either way the person starts linked to this organization.'));
     }
 
     /**

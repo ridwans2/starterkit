@@ -15,6 +15,7 @@
 */
 
 use App\Providers\LocalizacaoProvider;
+use App\Support\Formatos;
 use BezhanSalleh\LanguageSwitch\LanguageSwitch;
 
 it('declara inglês como idioma padrão e português como segundo idioma', function (): void {
@@ -61,3 +62,30 @@ it('não sobrescreve kit.idiomas durante os testes', function (): void {
 
     expect(config('kit.idiomas'))->toBe(['pt_BR']);
 });
+
+it('troca a máscara de data junto com o idioma, e devolve a do kit em pt_BR', function (string $idioma, string $esperada): void {
+    /*
+     * A máscara É conteúdo de idioma: `22/09/2026 18:43` numa frase em inglês está
+     * dizendo outra coisa do resto da tela. O que este caso trava é o contrato dos dois
+     * lados — em `pt_BR` a máscara tem de continuar `d/m/Y H:i` EXATAMENTE como estava
+     * escrita à mão em 25 pontos do código (é o que as telas afirmam hoje), e nos outros
+     * dois idiomas ela tem de ser a ISO, não o padrão `M j, Y` do Filament.
+     */
+    $original = app()->getLocale();
+
+    try {
+        app()->setLocale($idioma);
+
+        expect(Formatos::dataHora())->toBe($esperada)
+            ->and(Formatos::data())->toBe(match ($idioma) {
+                'pt_BR' => 'd/m/Y',
+                default => 'Y-m-d',
+            });
+    } finally {
+        app()->setLocale($original);
+    }
+})->with([
+    'en'    => ['en', 'Y-m-d H:i'],
+    'id'    => ['id', 'Y-m-d H:i'],
+    'pt_BR' => ['pt_BR', 'd/m/Y H:i'],
+]);

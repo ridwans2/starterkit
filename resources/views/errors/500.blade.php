@@ -25,8 +25,8 @@
 @extends('errors.sentinel-layout', [
     'code' => 500,
     'tone' => 'danger',
-    'title' => 'Algo deu errado',
-    'body' => 'Um erro inesperado interrompeu sua requisição.',
+    'title' => __('Something went wrong'),
+    'body' => __('An unexpected error interrupted your request.'),
     'exception' => $exception ?? null,
 ])
 
@@ -47,7 +47,7 @@
             <dt>System response</dt>
             <dd>Nothing was saved — the operation was rolled back safely.</dd>
             <dt>What to do</dt>
-            <dd>Tente de novo em instantes. Se persistir, informe ao suporte o número da mensagem abaixo.</dd>
+            <dd>{{ __('Try again in a moment. If it persists, report the message number below to support.') }}</dd>
         </dl>
     </div>
 
@@ -64,7 +64,7 @@
     <div class="sn-actions">
         <a class="sn-btn sn-btn-primary" href="{{ url()->current() }}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992V4.356M2.985 19.644v-4.992h4.992m11.667-6.667a8.25 8.25 0 0 0-13.803-3.7L2.985 8.649m0 0V4.356m0 4.293h4.293"/></svg>
-            Tentar de novo
+            {{ __('Try again') }}
         </a>
         <a class="sn-btn sn-btn-gray" href="/">Início</a>
     </div>

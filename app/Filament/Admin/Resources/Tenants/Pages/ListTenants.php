@@ -29,7 +29,7 @@ class ListTenants extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make()->label('Novo registro'),
+            CreateAction::make()->label(__('New record')),
 
             ExportAction::make()
                 ->exporter(TenantExporter::class)

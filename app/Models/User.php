@@ -480,9 +480,9 @@ class User extends Authenticatable implements Auditable, FilamentUser, HasAvatar
         $origem = (string) ($this->origem ?? self::ORIGEM_INTERNO);
 
         return ProvedorSocial::tryFrom($origem)?->rotulo() ?? match ($origem) {
-            self::ORIGEM_CONVITE  => 'Convite',
-            self::ORIGEM_REGISTRO => 'Registro aberto',
-            default               => 'Interno',
+            self::ORIGEM_CONVITE  => __('Invitation'),
+            self::ORIGEM_REGISTRO => __('Open signup'),
+            default               => __('Internal'),
         };
     }
 
@@ -500,20 +500,37 @@ class User extends Authenticatable implements Auditable, FilamentUser, HasAvatar
      */
     public function rotuloDaSituacao(): string
     {
+        return __($this->chaveDaSituacao());
+    }
+
+    /**
+     * Identidade estável da situação — inglês cru, que é também a chave do overlay.
+     *
+     * `corDaSituacao()` abaixo faz `match` sobre este valor. Se ela casasse sobre
+     * o rótulo traduzido, a cor funcionaria em `en` e quebraria em `pt_BR`
+     * ('Não ativo' ≠ 'Inativo'): bug visual que só aparece no outro idioma, com
+     * todas as telas verdes. Quem mostra na tela é `rotuloDaSituacao()`.
+     *
+     * 'Awaiting approval', e não 'Pending', porque a chave `Pending` já pertence
+     * ao rótulo jamak do filtro ('Pendentes') — um chave para dois sentidos
+     * diferentes seria o dicionário ambíguo que `i18n:extract` recusa.
+     */
+    private function chaveDaSituacao(): string
+    {
         return match (true) {
-            (bool) $this->aprovacao_pendente => 'Pendente',
-            ! $this->ativo                   => 'Inativo',
-            default                          => 'Ativo',
+            (bool) $this->aprovacao_pendente => 'Awaiting approval',
+            ! $this->ativo                   => 'Inactive',
+            default                          => 'Active',
         };
     }
 
     /** A cor do rótulo de `rotuloDaSituacao()`. Exibição, nunca autorização. */
     public function corDaSituacao(): string
     {
-        return match ($this->rotuloDaSituacao()) {
-            'Pendente' => 'warning',
-            'Inativo'  => 'danger',
-            default    => 'success',
+        return match ($this->chaveDaSituacao()) {
+            'Awaiting approval' => 'warning',
+            'Inactive'          => 'danger',
+            default             => 'success',
         };
     }
 

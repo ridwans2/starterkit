@@ -106,9 +106,9 @@ enum DensidadeDoLayout: string implements HasLabel
     public function getLabel(): string
     {
         return match ($this) {
-            self::Confortavel => 'Confortável — o padrão do Filament, nada muda',
-            self::Compacto    => 'Compacto — cabe mais linha sem que ícone e caixa de seleção fiquem estranhos',
-            self::Denso       => 'Denso — o máximo deste mecanismo; ícone e caixa de seleção encolhem junto',
+            self::Confortavel => __('Comfortable — the Filament default, nothing changes'),
+            self::Compacto    => __('Compact — more rows fit without the icon and checkbox looking off'),
+            self::Denso       => __('Dense — the maximum this mechanism offers; icon and checkbox shrink too'),
         };
     }
 

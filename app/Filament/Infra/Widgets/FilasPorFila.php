@@ -40,17 +40,17 @@ class FilasPorFila extends BreakdownWidget
 
     public function getHeading(): ?string
     {
-        return 'Jobs por fila';
+        return __('Jobs by queue');
     }
 
     public function getHeadingDescription(): ?string
     {
-        return 'Total monitorado e falhas de cada fila';
+        return __('Monitored total and failures for each queue');
     }
 
     public function getEmptyStateHeading(): string
     {
-        return 'Nenhum job monitorado';
+        return __('No monitored job');
     }
 
     public function getEmptyStateIcon(): string
@@ -79,7 +79,7 @@ class FilasPorFila extends BreakdownWidget
             $itens[] = BreakdownItem::make($fila, $total)
                 ->icon('heroicon-o-queue-list')
                 ->color($comFalha > 0 ? 'danger' : 'success')
-                ->description($comFalha > 0 ? "{$comFalha} com falha" : 'sem falhas');
+                ->description($comFalha > 0 ? "{$comFalha} com falha" : __('no failures'));
         }
 
         return $itens;

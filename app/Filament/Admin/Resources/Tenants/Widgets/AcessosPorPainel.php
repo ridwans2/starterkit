@@ -50,17 +50,17 @@ class AcessosPorPainel extends BreakdownWidget
 
     public function getHeading(): ?string
     {
-        return 'Acessos por painel';
+        return __('Accesses by panel');
     }
 
     public function getHeadingDescription(): ?string
     {
-        return 'Entradas confirmadas nos últimos '.TenantResource::DIAS_DE_INSIGHT.' dias';
+        return __('Confirmed logins in the last :days days', ['days' => TenantResource::DIAS_DE_INSIGHT]);
     }
 
     public function getEmptyStateHeading(): string
     {
-        return 'Nenhum acesso registrado na janela';
+        return __('No access recorded in the window');
     }
 
     public function getEmptyStateIcon(): string
@@ -100,7 +100,7 @@ class AcessosPorPainel extends BreakdownWidget
         if (! is_string($painel) || $painel === '') {
             return BreakdownItem::make('Antes do registro por painel', $acessos)
                 ->color('gray')
-                ->description('Acessos anteriores ao carimbo — o painel não é inferível');
+                ->description(__('Sign-ins before the stamp — the panel cannot be inferred'));
         }
 
         $registrado = rescue(
@@ -111,6 +111,6 @@ class AcessosPorPainel extends BreakdownWidget
 
         return BreakdownItem::make($registrado ?? $painel, $acessos)
             ->color($registrado === null ? 'warning' : 'primary')
-            ->description($registrado === null ? 'Painel que não existe mais nesta instalação' : null);
+            ->description($registrado === null ? (string) __('Panel that no longer exists in this installation') : null);
     }
 }

@@ -37,17 +37,17 @@ class IaTokensPorDriver extends BreakdownWidget
 
     public function getHeading(): ?string
     {
-        return 'Tokens por driver';
+        return __('Tokens by driver');
     }
 
     public function getHeadingDescription(): ?string
     {
-        return 'Entrada + saída, somadas por provedor';
+        return __('Input + output, summed per provider');
     }
 
     public function getEmptyStateHeading(): string
     {
-        return 'Nenhum token contabilizado';
+        return __('No token accounted');
     }
 
     public function getEmptyStateIcon(): string

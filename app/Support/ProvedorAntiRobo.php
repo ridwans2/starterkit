@@ -34,8 +34,8 @@ enum ProvedorAntiRobo: string implements HasLabel
     public function getLabel(): string
     {
         return match ($this) {
-            self::RecaptchaV2 => 'Google reCAPTCHA v2 (caixa "não sou um robô")',
-            self::RecaptchaV3 => 'Google reCAPTCHA v3 (invisível, por pontuação)',
+            self::RecaptchaV2 => __('Google reCAPTCHA v2 ("I\'m not a robot" checkbox)'),
+            self::RecaptchaV3 => __('Google reCAPTCHA v3 (invisible, scored)'),
             self::Turnstile   => 'Cloudflare Turnstile',
             self::Hcaptcha    => 'hCaptcha',
         };
@@ -51,10 +51,10 @@ enum ProvedorAntiRobo: string implements HasLabel
     public function ondeCriarAsChaves(): string
     {
         return match ($this) {
-            self::RecaptchaV2 => 'google.com/recaptcha/admin → Criar → tipo "Desafio (v2)", caixa "Não sou um robô", com o seu domínio. Copie a chave do site e a chave secreta.',
-            self::RecaptchaV3 => 'google.com/recaptcha/admin → Criar → tipo "Pontuação (v3)", com o seu domínio. Copie a chave do site e a chave secreta, e ajuste o limiar abaixo (0,5 é o sugerido pelo Google).',
-            self::Turnstile   => 'dash.cloudflare.com → Turnstile → Add widget, modo "Managed", com o seu domínio. Copie a Site Key e a Secret Key.',
-            self::Hcaptcha    => 'dashboard.hcaptcha.com → Sites → New, com o seu domínio. A Site Key fica no site; a Secret Key, em Settings.',
+            self::RecaptchaV2 => __('google.com/recaptcha/admin → Create → type "Challenge (v2)", the "I am not a robot" box, with your domain. Copy the site key and the secret key.'),
+            self::RecaptchaV3 => __('google.com/recaptcha/admin → Create → type "Score (v3)", with your domain. Copy the site key and the secret key, and adjust the threshold below (0.5 is the usual starting point).'),
+            self::Turnstile   => __('dash.cloudflare.com → Turnstile → Add widget, "Managed" mode, with your domain. Copy the Site Key and the Secret Key.'),
+            self::Hcaptcha    => __('dashboard.hcaptcha.com → Sites → New, with your domain. The Site Key lives on the site; the Secret Key is in Settings.'),
         };
     }
 }

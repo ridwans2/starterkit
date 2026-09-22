@@ -22,7 +22,7 @@ class TenantsSeeder extends Seeder
     {
         $tenant = Tenant::updateOrCreate(
             ['slug' => 'padrao'],
-            ['nome' => config('kit.tenancy.label', 'Organização').' Padrão', 'ativo' => true],
+            ['nome' => config('kit.tenancy.label', 'Organization').' Standard', 'ativo' => true],
         );
 
         // Vincula o usuário inicial, senão ele entra no /admin mas não no /app.

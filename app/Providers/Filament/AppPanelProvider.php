@@ -339,7 +339,7 @@ class AppPanelProvider extends PanelProvider
                     ),
 
                 BreezyCore::make()
-                    ->myProfile(shouldRegisterUserMenu: true, hasAvatars: true, slug: 'meu-perfil', userMenuLabel: 'Meu perfil')
+                    ->myProfile(shouldRegisterUserMenu: true, hasAvatars: true, slug: 'meu-perfil', userMenuLabel: 'My profile')
                     // Quem entrou por login social não tem senha atual — e a troca de senha, o 2FA e o
                     // desbloqueio da sessão pedem uma. O bloco manda o link de definição por e-mail.
                     ->myProfileComponents(['definir_senha_por_email' => DefinirSenhaPorEmail::class])

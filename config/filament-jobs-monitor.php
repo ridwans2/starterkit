@@ -10,7 +10,7 @@ return [
         'enabled'                => true,
         'label'                  => 'Job',
         'plural_label'           => 'Jobs',
-        'navigation_group'       => 'Observabilidade',
+        'navigation_group'       => 'Observability',
         'navigation_icon'        => 'heroicon-o-cpu-chip',
         'navigation_sort'        => null,
         'navigation_count_badge' => false,

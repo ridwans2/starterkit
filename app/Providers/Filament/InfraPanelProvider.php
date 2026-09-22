@@ -150,10 +150,10 @@ class InfraPanelProvider extends PanelProvider
              * expõe (método do plugin, chave de config ou tradução).
              */
             ->navigationGroups([
-                'Observabilidade',
-                'IA',
-                'Trilhas',
-                'Sistema',
+                'Observability',
+                'AI',
+                'Trails',
+                'System',
             ])
             ->pages([
                 // Par sempre registrado — o decisor é por request (ver AppPanelProvider).
@@ -186,8 +186,8 @@ class InfraPanelProvider extends PanelProvider
                 // Dashboard de estatísticas do fomvasss/laravel-ai-tasks (rota do
                 // pacote, fora do Filament) — mesmo gate do resource Execuções de IA.
                 NavigationItem::make('dashboard-ia')
-                    ->label('Dashboard de IA')
-                    ->group('IA')
+                    ->label(__('AI dashboard'))
+                    ->group('AI')
                     ->icon('heroicon-o-chart-bar')
                     ->url(fn (): string => route('ai-tasks.index'), shouldOpenInNewTab: true)
                     ->visible(fn (): bool => auth()->user()?->can('ver-ai-tasks') ?? false),
@@ -250,7 +250,7 @@ class InfraPanelProvider extends PanelProvider
                     ),
 
                 BreezyCore::make()
-                    ->myProfile(shouldRegisterUserMenu: true, hasAvatars: true, slug: 'meu-perfil', userMenuLabel: 'Meu perfil')
+                    ->myProfile(shouldRegisterUserMenu: true, hasAvatars: true, slug: 'meu-perfil', userMenuLabel: 'My profile')
                     // Quem entrou por login social não tem senha atual — e a troca de senha, o 2FA e o
                     // desbloqueio da sessão pedem uma. O bloco manda o link de definição por e-mail.
                     ->myProfileComponents(['definir_senha_por_email' => DefinirSenhaPorEmail::class])
@@ -301,7 +301,7 @@ class InfraPanelProvider extends PanelProvider
                  * `wikis/specs/feat/permissoes-de-telas-de-pacote/permissoes-de-telas-de-pacote/`.
                  */
                 FilamentSpatieLaravelHealthPlugin::make()
-                    ->navigationGroup('Observabilidade')
+                    ->navigationGroup('Observability')
                     ->authorize(fn (): bool => auth()->check()
                         && PermissaoDaTela::permite(HealthCheckResults::class)),
                 /*
@@ -335,7 +335,7 @@ class InfraPanelProvider extends PanelProvider
                  * evidências sem registro. Retenção é papel da rotação diária.
                  */
                 FilamentLogsExplorerPlugin::make()
-                    ->navigationGroup('Trilhas')
+                    ->navigationGroup('Trails')
                     ->navigationSort(210)
                     /*
                      * As DUAS condições valem, e não é redundância decorativa.
@@ -362,7 +362,7 @@ class InfraPanelProvider extends PanelProvider
                  * homologação. Entrar no /infra já exige papel de infra.
                  */
                 DependencyGraphPlugin::make()
-                    ->navigationGroup('Sistema')
+                    ->navigationGroup('System')
                     ->navigationSort(220)
                     /*
                      * O `auth()->check() &&` aqui tem um motivo EXTRA, além do que vale para os
@@ -438,7 +438,7 @@ class InfraPanelProvider extends PanelProvider
                  * por Page, e é o sinal de revisar ADR-05.
                  */
                 CommandCenterPlugin::make()
-                    ->navigationGroup('Sistema')
+                    ->navigationGroup('System')
                     ->navigationSort(260)
                     ->authorize(fn (): bool => (bool) config('command-center.enabled', true)
                         && (auth()->user()?->can('command-center:access') ?? false)),
@@ -500,7 +500,7 @@ class InfraPanelProvider extends PanelProvider
                  * só aqui, onde entrar já exige `master_global` ou `infra`.
                  */
                 FilamentExceptionsPlugin::make()
-                    ->navigationGroup('Observabilidade')
+                    ->navigationGroup('Observability')
                     ->navigationSort(60)
                     ->navigationBadge()
                     /*
@@ -578,8 +578,8 @@ class InfraPanelProvider extends PanelProvider
                  * Acrescente aqui toda model que ganhar `SoftDeletes` + `Recyclable`.
                  */
                 RevivePlugin::make()
-                    ->navigationGroup('Sistema')
-                    ->navigationLabel('Lixeira')
+                    ->navigationGroup('System')
+                    ->navigationLabel('Recycle bin')
                     ->navigationSort(250)
                     /*
                      * `->authorize()` é o ponto de extensão do pacote (`RevivePlugin.php:155-168`),
@@ -619,8 +619,8 @@ class InfraPanelProvider extends PanelProvider
              * Só rótulo, nunca slug (mudar slug por setter estático quebra a rota).
              */
             ->bootUsing(function (Panel $panel): void {
-                CommandCenterCommands::navigationLabel('Comandos');
-                CommandCenterHistory::navigationLabel('Histórico de execuções');
+                CommandCenterCommands::navigationLabel('Commands');
+                CommandCenterHistory::navigationLabel(__('Run history'));
             })
             /*
              * Gatilho da busca ⌘K, no lugar exato do campo nativo.

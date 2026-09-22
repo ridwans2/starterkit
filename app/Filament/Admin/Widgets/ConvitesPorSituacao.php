@@ -6,6 +6,8 @@ namespace App\Filament\Admin\Widgets;
 
 use App\Filament\Concerns\ExigePermissaoDoWidget;
 use App\Models\Convite;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Schema;
 use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
@@ -34,9 +36,15 @@ class ConvitesPorSituacao extends ApexChartWidget
 
     protected static ?string $chartId = 'convitesPorSituacao';
 
-    protected static ?string $heading = 'Convites por situação';
+    protected function getHeading(): null|string|Htmlable|View
+    {
+        return __('Invitations by status');
+    }
 
-    protected static ?string $subheading = 'Quantos dos convites enviados viraram conta';
+    protected function getSubheading(): null|string|Htmlable|View
+    {
+        return __('How many sent invitations became accounts');
+    }
 
     protected static ?int $sort = 35;
 
@@ -85,7 +93,12 @@ class ConvitesPorSituacao extends ApexChartWidget
                 fn (string $situacao): int => $porSituacao->get($situacao, 0),
                 array_keys(self::SITUACOES),
             ),
-            'labels' => array_keys(self::SITUACOES),
+            'labels' => array_map(
+                // A legenda é o que muda de idioma; a identidade (chave de `SITUACOES` e de
+                // `countBy`) continua a mesma, senão série e legenda deixam de bater.
+                static fn (string $situacao): string => __(Convite::ROTULOS_DA_SITUACAO[$situacao]),
+                array_keys(self::SITUACOES),
+            ),
             'colors' => array_values(self::SITUACOES),
             'legend' => ['position' => 'bottom', 'fontFamily' => 'inherit'],
         ];

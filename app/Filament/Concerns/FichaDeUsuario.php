@@ -3,6 +3,7 @@
 namespace App\Filament\Concerns;
 
 use App\Models\User;
+use App\Support\Formatos;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 
@@ -35,10 +36,10 @@ trait FichaDeUsuario
      */
     protected static function secaoDaConta(): Section
     {
-        return Section::make('Conta')
+        return Section::make(__('Account'))
             ->columns(2)
             ->schema([
-                TextEntry::make('name')->label('Nome'),
+                TextEntry::make('name')->label(__('Name')),
                 TextEntry::make('email')->label(__('Email'))->copyable(),
                 TextEntry::make('situacao')
                     ->label(__('Status'))
@@ -50,10 +51,10 @@ trait FichaDeUsuario
                     ->state(fn (User $record): string => $record->rotuloDaOrigem()),
                 TextEntry::make('email_verified_at')
                     ->label('E-mail confirmado em')
-                    ->dateTime('d/m/Y H:i')
-                    ->placeholder('Não confirmado'),
-                TextEntry::make('created_at')->label(__('Registered at'))->dateTime('d/m/Y H:i'),
-                TextEntry::make('updated_at')->label('Atualizado em')->dateTime('d/m/Y H:i'),
+                    ->dateTime(Formatos::dataHora())
+                    ->placeholder(__('Not confirmed')),
+                TextEntry::make('created_at')->label(__('Registered at'))->dateTime(Formatos::dataHora()),
+                TextEntry::make('updated_at')->label(__('Updated at'))->dateTime(Formatos::dataHora()),
                 /*
                  * NAO ha entrada `deleted_at` aqui, e a ausencia e deliberada — a primeira versao
                  * tinha uma, com `->visible(fn (User $record) => $record->trashed())`, e ela era

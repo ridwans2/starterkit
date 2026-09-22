@@ -33,7 +33,7 @@ class ConviteExporter extends ExportadorDoKit
             ExportColumn::make('tenant.nome')
                 ->label(__('Organization')),
             ExportColumn::make('convidadoPor.name')
-                ->label('Convidado por'),
+                ->label(__('Invited by')),
             ExportColumn::make('expira_em')
                 ->label(__('Expires at')),
             ExportColumn::make('enviado_em')

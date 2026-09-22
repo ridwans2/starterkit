@@ -10,9 +10,9 @@ return [
     | AdminPanelProvider); estas chaves são o kill-switch e o tempo ocioso.
     */
 
-    'enabled' => env('LOCKSCREEN_ENABLED', true),
+    'enabled' => env('LOCKSCREEN_ENABLED', false),
 
     // Segundos sem navegação até a tela de bloqueio (30 min).
-    'idle_timeout' => env('LOCKSCREEN_IDLE_TIMEOUT', 1800),
+    'idle_timeout' => env('LOCKSCREEN_IDLE_TIMEOUT', 18000),
 
 ];

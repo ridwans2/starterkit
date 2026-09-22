@@ -23,7 +23,7 @@ class GuardaPromptSeeder extends Seeder
             ['slug' => 'guarda-prompt'],
             [
                 'nome'      => 'GuardaPrompt',
-                'descricao' => 'Classificador de segurança de prompt (pré-flight de todo prompt do assistente).',
+                'descricao' => 'Prompt security classifier (pre-flight for every assistant prompt).',
                 'ativo'     => true,
                 'provider'  => null,
                 'modelo'    => null,

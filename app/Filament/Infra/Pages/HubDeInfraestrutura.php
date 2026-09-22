@@ -132,30 +132,30 @@ class HubDeInfraestrutura extends CardsPage
     {
         return [
             // Observabilidade
-            HealthCheckResults::class   => 'Estado atual dos checks de banco, cache, fila, agendador, disco e ambiente.',
-            QueueMonitorResource::class => 'Histórico dos jobs da fila: o que rodou, o que falhou e quanto tempo levou.',
-            ExceptionResource::class    => 'Exceções agrupadas por tipo e frequência, com stack trace e dados da requisição.',
-            Pulse::class                => 'Requisições e queries lentas, uso de servidor e vazão das filas.',
+            HealthCheckResults::class   => __('Current state of the database, cache, queue, scheduler, disk and environment checks.'),
+            QueueMonitorResource::class => __('Queue job history: what ran, what failed and how long it took.'),
+            ExceptionResource::class    => __('Exceptions grouped by type and frequency, with stack trace and request data.'),
+            Pulse::class                => __('Slow requests and queries, server usage and queue throughput.'),
 
             // IA
-            AiRunResource::class => 'Ledger das execuções de IA: prompt, resposta, tokens, custo em USD e duração.',
+            AiRunResource::class => __('AI run ledger: prompt, response, tokens, cost in USD and duration.'),
 
             // Trilhas
-            AuthenticationLogResource::class => 'Quem entrou, de qual IP e em qual dispositivo — e as tentativas que falharam.',
-            AuditResource::class             => 'Trilha de alterações dos registros: quem mudou o quê, com o valor antes e depois.',
-            MailLogResource::class           => 'Todo e-mail que a aplicação enviou, com destinatário, assunto e corpo.',
-            LogsExplorer::class              => 'Os arquivos de log da aplicação, lidos pela interface, sem acesso ao servidor.',
+            AuthenticationLogResource::class => __('Who signed in, from which IP and on which device — and the attempts that failed.'),
+            AuditResource::class             => __('Record change trail: who changed what, with the before and after value.'),
+            MailLogResource::class           => __('Every email the application sent, with recipient, subject and body.'),
+            LogsExplorer::class              => __('The application log files, read through the interface, with no server access.'),
 
             // Sem grupo — ficam no topo do menu
-            BackupRunsPage::class => 'Últimos backups: quando rodaram, o tamanho e se o destino respondeu.',
+            BackupRunsPage::class => __('Recent backups: when they ran, their size and whether the destination answered.'),
 
             // Sistema
-            ComposerReleasePackageResource::class => 'Versões novas dos pacotes instalados, comparadas com o composer.lock.',
+            ComposerReleasePackageResource::class => __('New versions of installed packages, compared against composer.lock.'),
             Commands::class                       => 'Roda um comando Artisan pela interface, dentro da lista autorizada.',
-            History::class                        => 'Histórico de execução dos comandos: quem rodou, com quais argumentos e a saída.',
-            CommandRecordResource::class          => 'Cadastro dos comandos liberados para a central de comandos.',
-            RecycleBin::class                     => 'Registros apagados com soft delete, com restauração registro por registro.',
-            DependencyGraphPage::class            => 'Mapa dos models, relações, resources e painéis da aplicação.',
+            History::class                        => __('Command run history: who ran it, with which arguments, and the output.'),
+            CommandRecordResource::class          => __('Registry of the commands released for the command center.'),
+            RecycleBin::class                     => __('Records deleted with a soft delete, restored one record at a time.'),
+            DependencyGraphPage::class            => __('Map of the application models, relations, resources and panels.'),
         ];
     }
 

@@ -64,9 +64,9 @@ class ListUsers extends ListRecords
     public function getTabs(): array
     {
         return [
-            'todos' => Tab::make('Todos'),
+            'todos' => Tab::make(__('All')),
 
-            'pendentes' => Tab::make('Pendentes de aprovação')
+            'pendentes' => Tab::make(__('Pending approval'))
                 ->icon(Heroicon::OutlinedClock)
                 ->badge(fn (): int => UserResource::recorteDePendentes(UserResource::getEloquentQuery())->count())
                 ->modifyQueryUsing(UserResource::recorteDePendentes(...)),

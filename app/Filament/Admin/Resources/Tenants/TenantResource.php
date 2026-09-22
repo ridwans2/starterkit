@@ -71,7 +71,12 @@ class TenantResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingOffice2;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Administração';
+    public static function getNavigationGroup(): string|UnitEnum|null
+    {
+
+        return 'Administration';
+
+    }
 
     protected static ?string $recordTitleAttribute = 'nome';
 

@@ -126,7 +126,7 @@ class EscolhaDePainel extends CardsPage
         session()->regenerateToken();
 
         Notification::make()
-            ->title('Sua conta não tem acesso a nenhum painel.')
+            ->title(__('Your account has no access to any panel.'))
             ->body('Procure quem administra o sistema.')
             ->warning()
             ->persistent()

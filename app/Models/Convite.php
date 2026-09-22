@@ -601,6 +601,26 @@ class Convite extends Model implements Auditable
     }
 
     /**
+     * Identidade => rótulo de tela.
+     *
+     * `situacao()` devolve as quatro strings em português porque os testes do kit comparam
+     * exatamente esse bytes (`Kit/ConviteUsuarioExistenteTest`, `Kit/GraficosDoDashboardTest`).
+     * Quem MOSTRA estado usa este mapa: em `en` sai inglês, em `pt_BR` o overlay devolve a
+     * mesma string de antes — o display muda, a identidade não.
+     */
+    public const ROTULOS_DA_SITUACAO = [
+        'Aceito'   => 'Accepted',
+        'Pendente' => 'Awaiting approval',
+        'Recusado' => 'Declined',
+        'Expirado' => 'Expired',
+    ];
+
+    public function rotuloDaSituacao(): string
+    {
+        return __(self::ROTULOS_DA_SITUACAO[$this->situacao()]);
+    }
+
+    /**
      * Cria o usuário, vincula a organização e atribui o papel NO CONTEXTO CERTO.
      *
      * Roda dentro da transação que `Register::register()` já abriu

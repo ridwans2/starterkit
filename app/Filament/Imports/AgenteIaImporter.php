@@ -36,33 +36,33 @@ class AgenteIaImporter extends ImportadorDoKit
                 ->requiredMapping()
                 ->rules(['required', 'string', 'max:255']),
             ImportColumn::make('nome')
-                ->label('Nome')
+                ->label(__('Name'))
                 ->requiredMapping()
                 ->rules(['required', 'string', 'max:255']),
             ImportColumn::make('descricao')
-                ->label('Descrição'),
+                ->label(__('Description')),
             ImportColumn::make('ativo')
-                ->label('Ativo')
+                ->label(__('Active'))
                 ->boolean()
                 ->rules(['boolean']),
             ImportColumn::make('provider')
                 ->label('Provider'),
             ImportColumn::make('modelo')
-                ->label('Modelo'),
+                ->label(__('Model')),
             ImportColumn::make('temperatura')
-                ->label('Temperatura')
+                ->label(__('Temperature'))
                 ->numeric()
                 ->rules(['numeric', 'between:0,2']),
             ImportColumn::make('max_tokens')
-                ->label('Máximo de tokens')
+                ->label(__('Maximum tokens'))
                 ->numeric()
                 ->rules(['integer', 'min:1']),
             ImportColumn::make('instrucoes')
-                ->label('Instruções')
+                ->label(__('Instructions'))
                 ->requiredMapping()
                 ->rules(['required', 'string']),
             ImportColumn::make('versao')
-                ->label('Versão')
+                ->label(__('Version'))
                 ->numeric()
                 ->rules(['integer', 'min:1']),
         ];

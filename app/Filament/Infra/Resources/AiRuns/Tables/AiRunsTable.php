@@ -3,6 +3,7 @@
 namespace App\Filament\Infra\Resources\AiRuns\Tables;
 
 use App\Filament\Infra\Resources\AiRuns\AiRunResource;
+use App\Support\Formatos;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -20,12 +21,12 @@ class AiRunsTable
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
-                TextColumn::make('created_at')->label('Quando')->dateTime('d/m/Y H:i:s')->sortable(),
-                TextColumn::make('task')->label('Tarefa')->badge()->searchable(),
+                TextColumn::make('created_at')->label(__('When'))->dateTime(Formatos::dataHoraComSegundos())->sortable(),
+                TextColumn::make('task')->label(__('Task'))->badge()->searchable(),
                 TextColumn::make('driver')->label('Driver')->badge()->color('gray')->searchable(),
                 // O path JSON é só exibição; a busca vai na coluna `model` — mesmo valor, mas
                 // indexável.
-                TextColumn::make('request.options.model')->label('Modelo')->placeholder('—')->searchable(['model']),
+                TextColumn::make('request.options.model')->label(__('Model'))->placeholder('—')->searchable(['model']),
                 TextColumn::make('status')->label('Status')->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'ok'            => 'success',
@@ -42,28 +43,28 @@ class AiRunsTable
                 OdometerColumn::make('cost')->label('Custo (USD)')
                     ->format(['style' => 'currency', 'currency' => 'USD', 'minimumFractionDigits' => 2, 'maximumFractionDigits' => 6])
                     ->placeholder('—')->sortable(),
-                OdometerColumn::make('duration_ms')->label('Duração (ms)')->placeholder('—')->toggleable(isToggledHiddenByDefault: true),
+                OdometerColumn::make('duration_ms')->label(__('Duration (ms)'))->placeholder('—')->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('dispatch')->label('Dispatch')->badge()->color('gray')->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 SelectFilter::make('status')->label('Status')->options([
-                    'queued'  => 'Na fila',
+                    'queued'  => __('Queued'),
                     'running' => 'Executando',
                     'ok'      => 'OK',
-                    'error'   => 'Erro',
+                    'error'   => __('Error'),
                     'dead'    => 'Morta',
                     'waiting' => 'Aguardando',
                     'skipped' => 'Ignorada',
                 ]),
                 // Options por distinct no load da página — troque por lista fixa se a tabela
                 // crescer muito.
-                SelectFilter::make('task')->label('Tarefa')
+                SelectFilter::make('task')->label(__('Task'))
                     ->options(fn (): array => AiRun::query()->distinct()->orderBy('task')->pluck('task', 'task')->all()),
                 SelectFilter::make('driver')->label('Driver')
                     ->options(fn (): array => AiRun::query()->distinct()->orderBy('driver')->pluck('driver', 'driver')->all()),
             ])
             ->recordUrl(fn ($record): string => AiRunResource::getUrl('view', ['record' => $record]))
-            ->emptyStateHeading('Nenhuma execução de IA registrada')
-            ->emptyStateDescription('As execuções dos agentes aparecem aqui automaticamente.');
+            ->emptyStateHeading(__('No AI run recorded'))
+            ->emptyStateDescription(__('Agent runs show up here automatically.'));
     }
 }

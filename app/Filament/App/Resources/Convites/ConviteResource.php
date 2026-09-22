@@ -8,6 +8,7 @@ use App\Filament\Concerns\BadgeContagemNavegacao;
 use App\Models\Convite;
 use App\Models\Role;
 use App\Models\Tenant;
+use App\Support\Formatos;
 use App\Support\Papeis;
 use BackedEnum;
 use Filament\Facades\Filament;
@@ -43,13 +44,21 @@ class ConviteResource extends Resource
     use BadgeContagemNavegacao;
 
     /** Motivo da negação, e ela existe para não haver 403 mudo em tela. */
-    private const MOTIVO_DA_NEGACAO = 'Convite não se exclui a partir da organização: reenvio e revogação vivem no /admin.';
+    private static function motivoDaNegacao(): string
+    {
+        return __('An invitation is not deleted from the organization: resending and revoking live in the admin panel.');
+    }
 
     protected static ?string $model = Convite::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedEnvelope;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Administração';
+    public static function getNavigationGroup(): string|UnitEnum|null
+    {
+
+        return 'Administration';
+
+    }
 
     public static function getModelLabel(): string
     {
@@ -118,12 +127,11 @@ class ConviteResource extends Resource
                  * conta vira OFERTA DE ACESSO: ninguém é cadastrado de novo, a pessoa
                  * confirma autenticada e é vinculada a ESTA organização com o papel abaixo.
                  */
-                ->helperText('O convite sai por e-mail, com link de uso único. Se o endereço já tiver conta, ninguém é cadastrado de novo: a pessoa recebe uma oferta para entrar nesta '
-                    .mb_strtolower((string) config('kit.tenancy.label', 'Organização')).' e escolhe aceitar ou recusar.')
+
                 ->columnSpanFull(),
 
             Select::make('role_id')
-                ->label('Papel')
+                ->label(__('Role'))
                 // Barreira 1 (UX): só papéis do painel app aparecem.
                 ->relationship('papel', 'name', fn (Builder $query): Builder => $query->where('painel', 'app'))
                 ->getOptionLabelFromRecordUsing(fn (Role $record): string => Papeis::rotulo($record->name))
@@ -138,9 +146,7 @@ class ConviteResource extends Resource
                  * que promove alguém a administrador da instalação. Ver ADR-07.
                  */
                 ->rule(fn (): object => Rule::exists(config('permission.table_names.roles', 'roles'), 'id')
-                    ->where('painel', 'app'))
-                ->helperText('Só papéis do painel de negócio — e valem apenas dentro desta '
-                    .mb_strtolower((string) config('kit.tenancy.label', 'Organização')).'.'),
+                    ->where('painel', 'app')),
 
             // Nenhum campo de organização: ela vem do painel, sempre. Ver
             // CreateConvite::mutateFormDataBeforeCreate().
@@ -153,9 +159,9 @@ class ConviteResource extends Resource
             ->defaultSort('created_at', 'desc')
             ->columns([
                 TextColumn::make('email')->label(__('Email'))->searchable()->sortable(),
-                TextColumn::make('papel.name')->label('Papel')->badge()
+                TextColumn::make('papel.name')->label(__('Role'))->badge()
                     ->formatStateUsing(fn (?string $state): string => Papeis::rotulo($state)),
-                TextColumn::make('expira_em')->label(__('Expires at'))->dateTime('d/m/Y H:i')->sortable(),
+                TextColumn::make('expira_em')->label(__('Expires at'))->dateTime(Formatos::dataHora())->sortable(),
                 /*
                  * Situação DERIVADA pelo model, e não `aceito_em` com placeholder
                  * "Pendente": aquele placeholder mentia para convite recusado — mostrava
@@ -171,10 +177,10 @@ class ConviteResource extends Resource
                         'Expirado' => 'danger',
                         default    => 'warning',
                     })
-                    ->state(fn (Convite $record): string => $record->situacao()),
+                    ->state(fn (Convite $record): string => $record->rotuloDaSituacao()),
             ])
             ->emptyStateHeading(__('No invitations sent'))
-            ->emptyStateDescription('Convide alguém para que ela crie a própria senha e nasça dentro desta organização.');
+            ->emptyStateDescription(__('Invite someone so they set their own password and start inside this organization.'));
     }
 
     /**
@@ -188,12 +194,12 @@ class ConviteResource extends Resource
      */
     public static function getDeleteAuthorizationResponse(Model $record): Response
     {
-        return Response::deny(self::MOTIVO_DA_NEGACAO);
+        return Response::deny(static::motivoDaNegacao());
     }
 
     public static function getDeleteAnyAuthorizationResponse(): Response
     {
-        return Response::deny(self::MOTIVO_DA_NEGACAO);
+        return Response::deny(static::motivoDaNegacao());
     }
 
     /** Ficam pela navegação e pela busca global; não é aqui que a ação é autorizada. */

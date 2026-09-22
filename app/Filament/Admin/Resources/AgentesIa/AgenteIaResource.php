@@ -43,7 +43,12 @@ class AgenteIaResource extends Resource
         return __('AI agents');
     }
 
-    protected static string|UnitEnum|null $navigationGroup = 'IA';
+    public static function getNavigationGroup(): string|UnitEnum|null
+    {
+
+        return 'AI';
+
+    }
 
     protected static ?string $slug = 'agentes-ia';
 

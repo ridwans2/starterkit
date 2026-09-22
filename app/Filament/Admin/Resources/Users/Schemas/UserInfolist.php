@@ -36,23 +36,23 @@ class UserInfolist
             ->columns(1)
             ->components([
                 self::secaoDaConta(),
-                Section::make('Vinculos')
+                Section::make(__('Memberships'))
                     ->columns(2)
                     ->schema([
                         TextEntry::make('organizacoes')
-                            ->label('Organizacoes')
+                            ->label(__('Organizations'))
                             ->badge()
                             ->state(fn (User $record): array => $record->tenants()->pluck('nome')->all())
-                            ->placeholder('Nenhuma'),
+                            ->placeholder(__('None')),
                         /*
                      * `papeisEmQualquerContexto()`, nunca a relacao `roles` do spatie: com
                      * `permission.teams` ligada, ela filtra pelo team do REQUEST
-                     * (`app/Models/User.php:papeisEmQualquerContexto:683`), e no /admin o contexto
+                     * (`app/Models/User.php:papeisEmQualquerContexto:731`), e no /admin o contexto
                      * e o global — a ficha mostraria so os papeis globais e esconderia os de
                      * organizacao, com cara de "esta pessoa nao tem papel nenhum".
                      */
                         TextEntry::make('papeis')
-                            ->label('Papeis')
+                            ->label(__('Roles'))
                             ->badge()
                             ->state(fn (User $record): array => $record->papeisEmQualquerContexto()
                                 ->pluck('name')
@@ -60,7 +60,7 @@ class UserInfolist
                                 ->map(Papeis::rotulo(...))
                                 ->values()
                                 ->all())
-                            ->placeholder('Nenhum'),
+                            ->placeholder(__('None')),
                     ]),
             ]);
     }

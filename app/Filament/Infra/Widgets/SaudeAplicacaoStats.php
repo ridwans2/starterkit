@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Infra\Widgets;
 
 use App\Filament\Concerns\ExigePermissaoDoWidget;
+use App\Support\Formatos;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Gsferro\FilamentStatPlusEasy\Widgets\StatPlus;
@@ -28,7 +29,10 @@ class SaudeAplicacaoStats extends StatsOverviewWidget
 
     protected int|string|array $columnSpan = 'full';
 
-    protected ?string $heading = 'Saúde da aplicação';
+    protected function getHeading(): ?string
+    {
+        return __('Application health');
+    }
 
     /**
      * Sem a tabela de histórico não há o que mostrar — e o `latestResults()`
@@ -49,10 +53,10 @@ class SaudeAplicacaoStats extends StatsOverviewWidget
         $resultados = app(ResultStore::class)->latestResults();
 
         if ($resultados === null) {
-            return 'Nenhuma verificação executada ainda — rode `php artisan health:check`.';
+            return __('No check executed yet — run `php artisan health:check`.');
         }
 
-        return 'Última verificação '.$resultados->finishedAt->format('d/m/Y H:i');
+        return (string) __('Last check :at', ['at' => $resultados->finishedAt->format(Formatos::dataHora())]);
     }
 
     /**
@@ -68,13 +72,13 @@ class SaudeAplicacaoStats extends StatsOverviewWidget
                 ->icon('heroicon-o-check-badge')
                 ->iconColor('success')
                 ->accentColor('success')
-                ->description('Verificações dentro do esperado'),
+                ->description(__('Checks within expectations')),
 
             StatPlus::make('Com aviso', $contagem['warning'])
                 ->icon('heroicon-o-exclamation-triangle')
                 ->iconColor($contagem['warning'] > 0 ? 'warning' : 'gray')
                 ->accentColor($contagem['warning'] > 0 ? 'warning' : 'gray')
-                ->description('Ainda funciona, mas está no limite'),
+                ->description(__('Still working, but at the limit')),
 
             StatPlus::make('Falhando', $falhando)
                 ->icon('heroicon-o-x-circle')
@@ -82,12 +86,12 @@ class SaudeAplicacaoStats extends StatsOverviewWidget
                 ->accentColor($falhando > 0 ? 'danger' : 'gray')
                 // `crashed` (a checagem em si explodiu) entra junto de `failed`:
                 // para quem está de plantão, os dois significam "vá olhar".
-                ->description('Inclui verificações que quebraram ao rodar'),
+                ->description(__('Includes checks that crashed while running')),
 
             // Stat NATIVO, não StatPlus: o valor é texto ("Tudo certo"). O
             // odômetro só anima número e transformaria qualquer texto em 0.
             Stat::make('Situação geral', $this->resumo($contagem, $falhando))
-                ->description($contagem['skipped'] > 0 ? "{$contagem['skipped']} verificação(ões) pulada(s)" : 'Nenhuma verificação pulada')
+                ->description($contagem['skipped'] > 0 ? "{$contagem['skipped']} verificação(ões) pulada(s)" : __('No check skipped'))
                 ->color($this->corDoResumo($contagem, $falhando)),
         ];
     }
@@ -120,9 +124,9 @@ class SaudeAplicacaoStats extends StatsOverviewWidget
     private function resumo(array $contagem, int $falhando): string
     {
         return match (true) {
-            array_sum($contagem) === 0 => 'Sem dados',
-            $falhando > 0              => 'Atenção imediata',
-            $contagem['warning'] > 0   => 'Sob observação',
+            array_sum($contagem) === 0 => __('No data'),
+            $falhando > 0              => __('Immediate attention'),
+            $contagem['warning'] > 0   => __('Under observation'),
             default                    => 'Tudo certo',
         };
     }

@@ -55,10 +55,10 @@ final class GuardaPrompt extends AgenteBase implements HasStructuredOutput
                 ->required(),
             'categoria' => $schema->string()
                 ->enum(self::CATEGORIAS)
-                ->description('Classificação da mensagem.')
+                ->description(__('Message classification.'))
                 ->required(),
             'motivo' => $schema->string()
-                ->description('Justificativa curta, em português, sem repetir a mensagem do usuário.')
+                ->description(__('Short justification, in Portuguese, without repeating the user message.'))
                 ->required(),
         ];
     }

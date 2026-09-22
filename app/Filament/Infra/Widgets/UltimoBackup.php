@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Infra\Widgets;
 
 use App\Filament\Concerns\ExigePermissaoDoWidget;
+use App\Support\Formatos;
 use Brimham\BackupMonitor\Models\BackupRun;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Schema;
@@ -45,12 +46,12 @@ class UltimoBackup extends MetricWidget
 
     public function getEmptyStateHeading(): string
     {
-        return 'Nenhum backup registrado';
+        return __('No backup recorded');
     }
 
     public function getEmptyStateDescription(): ?string
     {
-        return 'Rode `php artisan backup:run` ou verifique o agendamento.';
+        return __('Run `php artisan backup:run` or check the schedule.');
     }
 
     public function getEmptyStateIcon(): string
@@ -80,7 +81,7 @@ class UltimoBackup extends MetricWidget
             ->icon($sucesso ? 'heroicon-o-shield-check' : 'heroicon-o-shield-exclamation')
             ->color($sucesso ? 'success' : 'danger')
             ->description($this->descrever($ultimo, $sucesso))
-            ->tooltip($momento?->format('d/m/Y H:i:s'));
+            ->tooltip($momento?->format(Formatos::dataHoraComSegundos()));
     }
 
     private function momentoDe(BackupRun $execucao): ?Carbon

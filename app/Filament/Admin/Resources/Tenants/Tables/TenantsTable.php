@@ -3,6 +3,7 @@
 namespace App\Filament\Admin\Resources\Tenants\Tables;
 
 use App\Models\Tenant;
+use App\Support\Formatos;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Support\Enums\IconPosition;
@@ -43,7 +44,7 @@ class TenantsTable
                     ->disk('public')
                     ->imageSize(40)
                     ->simpleLightbox(),
-                TextColumn::make('nome')->label('Nome')->searchable(['nome', 'slug'])->sortable(),
+                TextColumn::make('nome')->label(__('Name'))->searchable(['nome', 'slug'])->sortable(),
                 TextColumn::make('slug')->label('Slug')->badge()->color('gray')->searchable(),
                 /*
                  * O acesso direto ao painel da organização — RQ-01/RQ-04 da wiki
@@ -65,24 +66,24 @@ class TenantsTable
                  * EXTERNO ao resource, então não há `Page::getDefaultActionUrl()` para resolvê-lo.
                  */
                 TextColumn::make('url_do_painel')
-                    ->label('Painel')
+                    ->label(__('Panel'))
                     ->state(fn (Tenant $record): ?string => $record->urlDoPainel())
                     ->url(fn (Tenant $record): ?string => $record->urlDoPainel())
                     ->openUrlInNewTab()
                     ->color('primary')
                     ->icon(Heroicon::OutlinedArrowTopRightOnSquare)
                     ->iconPosition(IconPosition::After),
-                IconColumn::make('ativo')->label('Ativo')->boolean(),
+                IconColumn::make('ativo')->label(__('Active'))->boolean(),
                 TextColumn::make('users_count')
                     ->label(__('Users'))
                     ->counts('users')
                     ->badge()
                     ->color('gray'),
-                TextColumn::make('created_at')->label(__('Created at'))->dateTime('d/m/Y H:i')
+                TextColumn::make('created_at')->label(__('Created at'))->dateTime(Formatos::dataHora())
                     ->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                TernaryFilter::make('ativo')->label('Ativo'),
+                TernaryFilter::make('ativo')->label(__('Active')),
             ])
             ->recordActions([
                 // Sem `->url()` nos dois: com as páginas `view` e `edit` registradas, o
@@ -93,7 +94,7 @@ class TenantsTable
                 ViewAction::make(),
                 EditAction::make(),
             ])
-            ->emptyStateHeading('Nenhum registro cadastrado')
-            ->emptyStateDescription('Cadastre o primeiro para liberar o acesso ao painel de negócio.');
+            ->emptyStateHeading(__('No records yet'))
+            ->emptyStateDescription(__('Register the first one to unlock access to the business panel.'));
     }
 }

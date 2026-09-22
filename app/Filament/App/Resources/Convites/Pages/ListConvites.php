@@ -43,7 +43,7 @@ class ListConvites extends ListRecords
 
             $this->acaoDeConvidarEmMassa(
                 Select::make('role_id')
-                    ->label('Papel')
+                    ->label(__('Role'))
                     // Barreira de UX: só papéis do painel app aparecem.
                     ->relationship('papel', 'name', fn (Builder $query): Builder => $query->where('painel', 'app'))
                     ->getOptionLabelFromRecordUsing(fn (Role $record): string => Papeis::rotulo($record->name))
@@ -58,7 +58,7 @@ class ListConvites extends ListRecords
                      */
                     ->rule(fn (): object => Rule::exists(config('permission.table_names.roles', 'roles'), 'id')
                         ->where('painel', 'app'))
-                    ->helperText('Só papéis do painel de negócio.'),
+                    ->helperText(__('Only business panel roles.')),
                 // Sem campo de organização: ela vem do painel, sempre. É o que faz o trait ler
                 // `Filament::getTenant()` e falhar fechado sem organização corrente.
                 escolheOrganizacao: false,
@@ -82,13 +82,13 @@ class ListConvites extends ListRecords
     public function getTabs(): array
     {
         return [
-            'todos' => Tab::make('Todos'),
+            'todos' => Tab::make(__('All')),
 
-            'pendentes' => Tab::make('Pendentes')
+            'pendentes' => Tab::make(__('Pending'))
                 ->icon(Heroicon::OutlinedClock)
                 ->modifyQueryUsing(Convite::recorteDePendentes(...)),
 
-            'aceitos' => Tab::make('Aceitos')
+            'aceitos' => Tab::make(__('Accepted'))
                 ->icon(Heroicon::OutlinedCheckBadge)
                 ->modifyQueryUsing(Convite::recorteDeAceitos(...)),
         ];

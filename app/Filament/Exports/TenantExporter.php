@@ -28,13 +28,13 @@ class TenantExporter extends ExportadorDoKit
     {
         return [
             ExportColumn::make('nome')
-                ->label('Nome'),
+                ->label(__('Name')),
             ExportColumn::make('slug')
                 ->label('Slug'),
             ExportColumn::make('ativo')
                 ->label('Ativa'),
             ExportColumn::make('created_at')
-                ->label('Criada em'),
+                ->label(__('Created at')),
         ];
     }
 

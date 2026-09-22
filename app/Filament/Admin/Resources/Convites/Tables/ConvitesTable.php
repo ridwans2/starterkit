@@ -3,6 +3,7 @@
 namespace App\Filament\Admin\Resources\Convites\Tables;
 
 use App\Models\Convite;
+use App\Support\Formatos;
 use App\Support\Papeis;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
@@ -28,7 +29,7 @@ class ConvitesTable
             ->columns([
                 TextColumn::make('email')->label(__('Email'))->searchable()->sortable(),
 
-                TextColumn::make('papel.name')->label('Papel')->badge()
+                TextColumn::make('papel.name')->label(__('Role'))->badge()
                     ->formatStateUsing(fn (?string $state): string => Papeis::rotulo($state)),
 
                 TextColumn::make('tenant.nome')
@@ -48,17 +49,17 @@ class ConvitesTable
                         'Expirado' => 'danger',
                         default    => 'warning',
                     })
-                    ->state(fn (Convite $record): string => $record->situacao()),
+                    ->state(fn (Convite $record): string => $record->rotuloDaSituacao()),
 
-                TextColumn::make('expira_em')->label(__('Expires at'))->dateTime('d/m/Y H:i')->sortable(),
+                TextColumn::make('expira_em')->label(__('Expires at'))->dateTime(Formatos::dataHora())->sortable(),
 
                 TextColumn::make('convidadoPor.name')
-                    ->label('Convidado por')
+                    ->label(__('Invited by'))
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 TernaryFilter::make('pendente')
-                    ->label('Pendente')
+                    ->label(__('Awaiting approval'))
                     // Os dois recortes vêm do model: as abas desta tela e as do /app usam
                     // os mesmos, e o ramo em branco continua devolvendo a listagem inteira.
                     ->queries(
@@ -85,10 +86,10 @@ class ConvitesTable
                      */
                     ->authorize('Reenviar:Convite')
                     ->requiresConfirmation()
-                    ->modalDescription('O link anterior deixa de funcionar e um novo é enviado.')
+                    ->modalDescription(__('The previous link stops working and a new one is sent.'))
                     ->visible(fn (Convite $record): bool => $record->situacao() === 'Pendente' || $record->situacao() === 'Expirado')
                     ->action(fn (Convite $record) => $record->enviar())
-                    ->successNotificationTitle('Convite reenviado'),
+                    ->successNotificationTitle(__('Invitation resent')),
 
                 // Revogar é o DeleteAction nativo relabelado: a linha some e o link para
                 // de valer no mesmo instante, porque `Convite::valido()` não acha mais
@@ -96,8 +97,8 @@ class ConvitesTable
                 // o hash — `token` está fora do $fillable.
                 DeleteAction::make()
                     ->label('Revogar')
-                    ->modalHeading('Revogar convite')
-                    ->modalDescription('O link para de funcionar imediatamente. A revogação fica na auditoria.')
+                    ->modalHeading(__('Revoke invitation'))
+                    ->modalDescription(__('The link stops working immediately. The revocation is kept in the audit trail.'))
                     ->after(fn (Convite $record) => Log::channel('autenticacao')->warning(
                         "[ConvitesTable@revogar] Convite revogado | convite: {$record->id}",
                         [
@@ -110,6 +111,6 @@ class ConvitesTable
                     )),
             ])
             ->emptyStateHeading(__('No invitations sent'))
-            ->emptyStateDescription('Convide alguém para que ela crie a própria senha e nasça com o papel certo.');
+            ->emptyStateDescription(__('Invite someone so they set their own password and start with the right role.'));
     }
 }

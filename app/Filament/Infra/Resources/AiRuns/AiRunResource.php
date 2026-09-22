@@ -7,6 +7,7 @@ use App\Filament\Infra\Resources\AiRuns\Pages\ListAiRuns;
 use App\Filament\Infra\Resources\AiRuns\Pages\ViewAiRun;
 use App\Filament\Infra\Resources\AiRuns\Schemas\AiRunInfolist;
 use App\Filament\Infra\Resources\AiRuns\Tables\AiRunsTable;
+use App\Support\Formatos;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -36,7 +37,12 @@ class AiRunResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCpuChip;
 
-    protected static string|UnitEnum|null $navigationGroup = 'IA';
+    public static function getNavigationGroup(): string|UnitEnum|null
+    {
+
+        return 'AI';
+
+    }
 
     public static function getNavigationLabel(): string
     {
@@ -81,9 +87,11 @@ class AiRunResource extends Resource
     public static function getGlobalSearchResultDetails(Model $record): array
     {
         return array_filter([
-            'Status' => $record->getAttribute('status'),
-            'Modelo' => $record->getAttribute('model'),
-            'Quando' => $record->getAttribute('created_at')?->format('d/m/Y H:i'),
+            // Aqui a CHAVE é o texto que a busca global mostra — não é identificador,
+            // nem chave de array de dados.
+            'Status'    => $record->getAttribute('status'),
+            __('Model') => $record->getAttribute('model'),
+            __('When')  => $record->getAttribute('created_at')?->format(Formatos::dataHora()),
         ]);
     }
 

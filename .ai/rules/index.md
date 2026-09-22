@@ -22,3 +22,4 @@ Before planning or editing, find the row whose globs match the file's path and r
 | tests/Browser/**, tests/BrowserTenancy/** | .ai/rules/testes-browser.md |
 | tests/** | .ai/rules/testes.md |
 | resources/views/** | .ai/rules/views.md |
+| app/**, lang/**, config/localization.php, resources/views/** | .ai/rules/idioma.md |

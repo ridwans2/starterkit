@@ -33,10 +33,10 @@ trait ConvidaEmMassa
     protected function acaoDeConvidarEmMassa(Select $papel, bool $escolheOrganizacao = false): Action
     {
         $limite = (int) config('kit.convites.limite_do_lote', 100);
-        $rotulo = mb_strtolower((string) config('kit.tenancy.label', 'Organização'));
+        $rotulo = mb_strtolower(__((string) config('kit.tenancy.label', 'Organization')));
 
         return Action::make('convidarEmMassa')
-            ->label('Convidar em massa')
+            ->label(__('Bulk invite'))
             ->icon(Heroicon::OutlinedUserGroup)
             /*
              * Esconde E recusa para quem não tem Create:Convite. Sem esta linha a ação
@@ -45,9 +45,9 @@ trait ConvidaEmMassa
              * `canCreate()` sozinho; um `Action::make()` cru não consulta nada.
              */
             ->authorize('create', Convite::class)
-            ->modalHeading('Convidar em massa')
-            ->modalDescription('Um papel e uma '.$rotulo.' para o lote inteiro. Um endereço com problema não impede os outros.')
-            ->modalSubmitActionLabel('Enviar convites')
+            ->modalHeading(__('Bulk invite'))
+            ->modalDescription(__('One role and one :organization for the whole batch. One bad address does not stop the others.', ['organization' => $rotulo]))
+            ->modalSubmitActionLabel(__('Send invitations'))
             ->schema([
                 /*
                  * SEM `->email()` e SEM `->nestedRecursiveRules(['email'])`, e não é
@@ -56,7 +56,7 @@ trait ConvidaEmMassa
                  * decidido endereço por endereço dentro de `Convite::convidarEmMassa()`.
                  */
                 Textarea::make('emails')
-                    ->label('E-mails')
+                    ->label(__('Emails'))
                     ->required()
                     ->rows(8)
                     ->helperText("Um por linha, ou separados por vírgula. Até {$limite} por lote. Endereços repetidos são ignorados.")
@@ -67,7 +67,7 @@ trait ConvidaEmMassa
                 // Só no /admin, e só com tenancy — o mesmo par de condições do ConviteForm.
                 ...($escolheOrganizacao ? [
                     Select::make('tenant_id')
-                        ->label(config('kit.tenancy.label', 'Organização'))
+                        ->label((string) config('kit.tenancy.label', 'Organization'))
                         ->relationship('tenant', 'nome')
                         ->preload()
                         ->searchable()
@@ -86,8 +86,8 @@ trait ConvidaEmMassa
                  */
                 if ($emails->count() > $limite) {
                     Notification::make()
-                        ->title('Lote acima do limite')
-                        ->body("Você informou {$emails->count()} endereços e o limite é {$limite}. Nenhum convite foi enviado.")
+                        ->title(__('Batch over the limit'))
+                        ->body(__('You entered :entered addresses and the limit is :limit. No invitation was sent.', ['entered' => $emails->count(), 'limit' => $limite]))
                         ->danger()
                         ->persistent()
                         ->send();
@@ -112,8 +112,8 @@ trait ConvidaEmMassa
                     );
 
                     Notification::make()
-                        ->title('Sem '.$rotulo.' corrente')
-                        ->body('Nenhum convite foi enviado. Entre por uma '.$rotulo.' e tente de novo.')
+                        ->title(__('No :organization in the current context', ['organization' => $rotulo]))
+                        ->body(__('No invitation was sent. Enter through an :organization and try again.', ['organization' => $rotulo]))
                         ->danger()
                         ->persistent()
                         ->send();
@@ -152,8 +152,8 @@ trait ConvidaEmMassa
 
         $notificacao = Notification::make()
             ->title($falhas === 0
-                ? "{$enviados} convite(s) enviado(s)"
-                : "{$enviados} convite(s) enviado(s), {$falhas} não enviado(s)")
+                ? __(':count invitation(s) sent', ['count' => $enviados])
+                : __(':count invitation(s) sent, :failed not sent', ['count' => $enviados, 'failed' => $falhas]))
             ->body(collect($resultado->falhas)
                 ->map(fn (FalhaDoConviteData $falha): string => $falha->email.' — '.$this->motivoLegivel($falha->motivo))
                 ->implode("\n"))
@@ -163,7 +163,7 @@ trait ConvidaEmMassa
     }
 
     /**
-     * Os cinco motivos, em pt-BR, num lugar só.
+     * Os cinco motivos, num lugar só.
      *
      * Este `match` é o motivo de não existir Enum: a string só é traduzida aqui, e o `default`
      * cobre `erro_no_envio` e qualquer motivo futuro sem quebrar a tela.
@@ -171,11 +171,11 @@ trait ConvidaEmMassa
     private function motivoLegivel(string $motivo): string
     {
         return match ($motivo) {
-            'formato_invalido' => 'endereço inválido',
-            'convite_pendente' => 'já tem convite pendente',
-            'recusou_antes'    => 'recusou o convite anterior',
-            'ja_e_membro'      => 'já faz parte desta '.mb_strtolower((string) config('kit.tenancy.label', 'Organização')),
-            default            => 'falha no envio — veja o log de autenticação',
+            'formato_invalido' => __('invalid address'),
+            'convite_pendente' => __('already has a pending invite'),
+            'recusou_antes'    => __('declined a previous invite'),
+            'ja_e_membro'      => __('already a member of this :organization', ['organization' => mb_strtolower(__((string) config('kit.tenancy.label', 'Organization')))]),
+            default            => __('send failed — check the authentication log'),
         };
     }
 }

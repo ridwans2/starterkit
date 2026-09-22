@@ -24,7 +24,10 @@ class AgentesIaStats extends StatsOverviewWidget
 
     protected int|string|array $columnSpan = 'full';
 
-    protected ?string $heading = 'Agentes de IA';
+    protected function getHeading(): ?string
+    {
+        return __('AI agents');
+    }
 
     /**
      * @return array<int, StatPlus>
@@ -35,19 +38,19 @@ class AgentesIaStats extends StatsOverviewWidget
         $ativos = AgenteIa::query()->where('ativo', true)->count();
 
         return [
-            StatPlus::make('Agentes cadastrados', $total)
+            StatPlus::make(__('Agents registered'), $total)
                 ->icon('heroicon-o-cpu-chip')
                 ->iconColor('primary')
                 ->accentColor('primary')
                 ->description(__('Full catalog, active and inactive')),
 
-            StatPlus::make('Ativos', $ativos)
+            StatPlus::make(__('Currently active'), $ativos)
                 ->icon('heroicon-o-bolt')
                 ->iconColor('success')
                 ->accentColor('success')
                 ->description(__('Available for execution')),
 
-            StatPlus::make('Inativos', $total - $ativos)
+            StatPlus::make(__('Turned off'), $total - $ativos)
                 ->icon('heroicon-o-pause-circle')
                 ->iconColor('gray')
                 ->accentColor('gray')

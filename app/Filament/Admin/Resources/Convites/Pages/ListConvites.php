@@ -43,7 +43,7 @@ class ListConvites extends ListRecords
                 // O mesmo Select do ConviteForm, sem o `->live()`: aqui nenhum campo depende
                 // do painel do papel escolhido.
                 Select::make('role_id')
-                    ->label('Papel')
+                    ->label(__('Role'))
                     ->relationship('papel', 'name', fn (Builder $query): Builder => AdministradorDaInstalacao::recortarConcessao($query))
                     ->required()
                     ->preload()
@@ -57,7 +57,7 @@ class ListConvites extends ListRecords
 
                         return Papeis::rotulo((string) $record->getAttribute('name')).' — '.(is_string($painel) ? "/{$painel}" : 'sem painel');
                     })
-                    ->helperText('Todos os endereços do lote nascem com este papel.'),
+                    ->helperText(__('Every address in the batch starts with this role.')),
                 escolheOrganizacao: true,
             ),
         ];
@@ -79,13 +79,13 @@ class ListConvites extends ListRecords
     public function getTabs(): array
     {
         return [
-            'todos' => Tab::make('Todos'),
+            'todos' => Tab::make(__('All')),
 
-            'pendentes' => Tab::make('Pendentes')
+            'pendentes' => Tab::make(__('Pending'))
                 ->icon(Heroicon::OutlinedClock)
                 ->modifyQueryUsing(Convite::recorteDePendentes(...)),
 
-            'aceitos' => Tab::make('Aceitos')
+            'aceitos' => Tab::make(__('Accepted'))
                 ->icon(Heroicon::OutlinedCheckBadge)
                 ->modifyQueryUsing(Convite::recorteDeAceitos(...)),
         ];

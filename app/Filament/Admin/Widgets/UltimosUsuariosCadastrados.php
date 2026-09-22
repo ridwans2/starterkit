@@ -98,7 +98,7 @@ class UltimosUsuariosCadastrados extends RecentItemsWidget
             ->map(fn (mixed $nome): string => Papeis::rotulo((string) $nome))
             ->all();
 
-        return $papeis === [] ? 'sem papel' : implode(', ', $papeis);
+        return $papeis === [] ? __('No role assigned') : implode(', ', $papeis);
     }
 
     private function urlDeEdicao(User $usuario): ?string

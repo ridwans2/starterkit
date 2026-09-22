@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Support\Formatos;
 use App\Support\ProvedorSocial;
 use Filament\Facades\Filament;
 use Illuminate\Bus\Queueable;
@@ -41,11 +42,11 @@ class PrimeiroAcessoSocial extends Notification implements ShouldQueue
 
         return (new MailMessage)
             ->subject("Sua conta no {$app} foi acessada pelo {$rotulo} pela primeira vez")
-            ->greeting('Olá!')
-            ->line("Alguém acabou de entrar na sua conta do {$app} usando uma conta do {$rotulo} com o mesmo e-mail — e foi a primeira vez que esse caminho foi usado.")
-            ->line('Quando: '.now()->format('d/m/Y H:i').' · IP: '.$this->ip)
-            ->line('Se foi você, não há nada a fazer: nas próximas vezes essa conta do '.$rotulo.' entra direto.')
-            ->line('Se NÃO foi você, troque a sua senha agora (ou defina uma, pelo bloco "Definir senha por e-mail" do seu perfil) e avise quem administra o sistema.')
+            ->greeting(__('Hello!'))
+            ->line(__('Someone just signed in to your account on :app using a :provider account with the same e-mail — and it was the first time this path was used.', ['app' => $app, 'provider' => $rotulo]))
+            ->line(__('When: :at · IP: :ip', ['at' => now()->format(Formatos::dataHora()), 'ip' => $this->ip]))
+            ->line(__('If that was you, there is nothing to do: from now on that :provider account signs in directly.', ['provider' => $rotulo]))
+            ->line(__('If that was NOT you, change your password now (or set one, using the "Set password by e-mail" block on your profile) and tell whoever administers the system.'))
             ->action('Abrir o painel', Filament::getPanel('app')->getUrl())
             ->salutation('Atenciosamente, '.$app);
     }

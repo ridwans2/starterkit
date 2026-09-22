@@ -27,21 +27,21 @@ class AgenteIaExporter extends ExportadorDoKit
             ExportColumn::make('slug')
                 ->label('Slug'),
             ExportColumn::make('nome')
-                ->label('Nome'),
+                ->label(__('Name')),
             ExportColumn::make('descricao')
-                ->label('Descrição'),
+                ->label(__('Description')),
             ExportColumn::make('ativo')
-                ->label('Ativo'),
+                ->label(__('Active')),
             ExportColumn::make('provider')
                 ->label('Provider'),
             ExportColumn::make('modelo')
-                ->label('Modelo'),
+                ->label(__('Model')),
             ExportColumn::make('temperatura')
-                ->label('Temperatura'),
+                ->label(__('Temperature')),
             ExportColumn::make('max_tokens')
-                ->label('Máximo de tokens'),
+                ->label(__('Maximum tokens')),
             ExportColumn::make('versao')
-                ->label('Versão'),
+                ->label(__('Version')),
             ExportColumn::make('created_at')
                 ->label(__('Created at')),
         ];

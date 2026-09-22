@@ -25,7 +25,10 @@ class IaStats extends StatsOverviewWidget
 
     protected int|string|array $columnSpan = 'full';
 
-    protected ?string $heading = 'Execuções de IA';
+    protected function getHeading(): ?string
+    {
+        return __('AI runs');
+    }
 
     protected static function fonteDeDadosDisponivel(): bool
     {
@@ -51,13 +54,13 @@ class IaStats extends StatsOverviewWidget
         $custo  = (float) AiRun::query()->sum('cost');
 
         return [
-            StatPlus::make('Execuções', $total)
+            StatPlus::make(__('Runs'), $total)
                 ->icon('heroicon-o-cpu-chip')
                 ->iconColor('primary')
                 ->accentColor('primary')
-                ->description('Total registrado no ledger'),
+                ->description(__('Total recorded in the ledger')),
 
-            StatPlus::make('Com erro', $comErro)
+            StatPlus::make(__('With error'), $comErro)
                 ->icon('heroicon-o-exclamation-circle')
                 ->iconColor($comErro > 0 ? 'danger' : 'gray')
                 ->accentColor($comErro > 0 ? 'danger' : 'gray')
@@ -69,16 +72,16 @@ class IaStats extends StatsOverviewWidget
                 ->accentColor('info')
                 // Entrada + saída num número só: é assim que o provedor cobra,
                 // e separar os dois aqui só ocuparia espaço sem mudar decisão.
-                ->description('Entrada + saída, todas as execuções'),
+                ->description(__('Input + output, all executions')),
 
-            StatPlus::make('Custo total', $custo)
+            StatPlus::make(__('Total cost'), $custo)
                 ->icon('heroicon-o-banknotes')
                 ->iconColor('warning')
                 ->accentColor('warning')
                 // O ledger grava `cost` com 8 casas decimais: arredondar em 2
                 // esconderia execuções baratas somando um total relevante.
                 ->format(['style' => 'currency', 'currency' => 'USD', 'maximumFractionDigits' => 4])
-                ->description('Somatório de `cost` gravado pelo driver'),
+                ->description(__('Sum of `cost` recorded by the driver')),
         ];
     }
 

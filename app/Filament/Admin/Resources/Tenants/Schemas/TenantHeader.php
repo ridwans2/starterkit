@@ -4,6 +4,7 @@ namespace App\Filament\Admin\Resources\Tenants\Schemas;
 
 use App\Models\Tenant;
 use App\Support\CorPrimaria;
+use App\Support\Formatos;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Filament\Support\Colors\Color;
@@ -67,9 +68,9 @@ class TenantHeader
                         ->fieldIcon(Heroicon::OutlinedUserGroup)
                         ->state(fn (Tenant $record): int => $record->users()->count()),
                     MetadataEntry::make('created_at')
-                        ->label('Criada em')
+                        ->label(__('Created at'))
                         ->fieldIcon(Heroicon::OutlinedCalendar)
-                        ->dateTime('d/m/Y'),
+                        ->dateTime(Formatos::data()),
                 ]),
         ]);
     }

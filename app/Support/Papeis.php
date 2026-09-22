@@ -30,8 +30,13 @@ final class Papeis
     /**
      * Rótulos que o Title Case não acerta sozinho.
      *
-     * `Str::headline('panel_user')` devolve "Panel User" — inglês, e sem dizer o que o
-     * papel faz. Quem o tem opera o painel de negócio, então é isso que a tela mostra.
+     * `Str::headline('panel_user')` devolve "Panel User" — inglês correto, mas não diz o
+     * que o papel faz. Quem o tem opera o painel de negócio, então é isso que a tela mostra.
+     *
+     * Aqui o literal é Inglês (fonte de verdade do projeto) e o português volta pelo overlay
+     * `lang/pt_BR.json` — é o que mantém `Kit/ExibicaoDePapeisTest` e `Kit/TelaDePapeisTest`
+     * verdes: eles afirmam "Painel App"/"Administrador App"/"Administrador Geral" na suíte,
+     * que roda em pt_BR.
      *
      * Só entram aqui os papéis do kit cujo nome em inglês vazaria para a interface. O
      * resto continua derivado da chave, e um papel SEU criado em `/admin` não precisa
@@ -40,19 +45,19 @@ final class Papeis
      * @var array<string, string>
      */
     private const ROTULOS = [
-        'panel_user'    => 'Painel App',
-        'admin_app'     => 'Administrador App',
-        'master_global' => 'Administrador Geral',
+        'panel_user'    => 'App Panel',
+        'admin_app'     => 'App Administrator',
+        'master_global' => 'General Administrator',
     ];
 
-    /** `master_global` → "Administrador Geral"; `gerente_de_contas` → "Gerente De Contas". */
+    /** `master_global` → "General Administrator"; `gerente_de_contas` → "Gerente De Contas". */
     public static function rotulo(?string $nome): string
     {
         if (blank($nome)) {
             return '—';
         }
 
-        return self::ROTULOS[$nome] ?? Str::headline($nome);
+        return isset(self::ROTULOS[$nome]) ? __(self::ROTULOS[$nome]) : Str::headline($nome);
     }
 
     /**

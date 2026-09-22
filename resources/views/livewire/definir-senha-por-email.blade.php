@@ -5,17 +5,17 @@
 --}}
 <x-filament::section
     :aside="true"
-    heading="Definir senha por e-mail"
-    description="Não tem senha ou não lembra a atual — quem entrou por login social, por exemplo. Enviamos um link para o seu e-mail; ao abri-lo você define uma senha nova. Com ela dá para trocar a senha aqui, ligar a autenticação de 2 fatores e desbloquear a sessão."
+    :heading="__('Set password by e-mail')"
+    :description="__('No password yet, or you do not remember the current one — anyone who signed in through social login, for example. We send a link to your e-mail; opening it lets you set a new password. With one you can change it here, turn on two-factor authentication, and unlock the session.')"
 >
     <form wire:submit.prevent="enviar" class="space-y-6">
         <p class="text-sm text-gray-600 dark:text-gray-400">
-            Ao pedir o link a sua sessão termina, porque a página que define a senha só abre para quem está fora.
+            {{ __('Requesting the link ends your session, because the page that sets the password only opens for people who are signed out.') }}
         </p>
 
         <div class="text-right">
             <x-filament::button type="submit" color="gray" wire:loading.attr="disabled">
-                Receber link por e-mail
+                {{ __('Receive link by e-mail') }}
             </x-filament::button>
         </div>
     </form>

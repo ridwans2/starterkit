@@ -7,6 +7,7 @@ namespace App\Filament\Admin\Resources\Tenants\Widgets;
 use App\Filament\Admin\Resources\Tenants\TenantResource;
 use App\Models\Tenant;
 use App\Models\User;
+use App\Support\Formatos;
 use Filament\Widgets\StatsOverviewWidget;
 use Gsferro\FilamentStatPlusEasy\Widgets\StatPlus;
 use Illuminate\Support\Facades\DB;
@@ -37,7 +38,10 @@ class OrganizacoesStats extends StatsOverviewWidget
 
     protected int|string|array $columnSpan = 'full';
 
-    protected ?string $heading = 'Visão geral';
+    protected function getHeading(): ?string
+    {
+        return __('Overview');
+    }
 
     public static function canView(): bool
     {
@@ -55,33 +59,33 @@ class OrganizacoesStats extends StatsOverviewWidget
         $ativos     = $this->usuariosVinculadosComAcesso();
 
         return [
-            StatPlus::make('Organizações ativas', $ativas)
+            StatPlus::make(__('Active organizations'), $ativas)
                 ->icon('heroicon-o-building-office-2')
                 ->iconColor('primary')
                 ->accentColor('primary')
                 ->description($total === $ativas
-                    ? 'Todas as cadastradas estão ativas'
+                    ? __('All registered ones are active')
                     : $total.' cadastradas, incluindo as inativas'),
 
-            StatPlus::make('Usuários vinculados', $vinculados)
+            StatPlus::make(__('Linked users'), $vinculados)
                 ->icon('heroicon-o-users')
                 ->iconColor('info')
                 ->accentColor('info')
-                ->description('Pessoas distintas com vínculo a alguma organização'),
+                ->description(__('Distinct people linked to some organization')),
 
             StatPlus::make('Ativos em '.TenantResource::DIAS_DE_INSIGHT.' dias', $ativos)
                 ->icon('heroicon-o-arrow-right-on-rectangle')
                 ->iconColor('success')
                 ->accentColor('success')
-                ->description('Vinculados que entraram desde '.now()->subDays(TenantResource::DIAS_DE_INSIGHT)->translatedFormat('d/m/Y')),
+                ->description((string) __('Linked people who signed in since :date', ['date' => now()->subDays(TenantResource::DIAS_DE_INSIGHT)->translatedFormat(Formatos::data())])),
 
-            StatPlus::make('Taxa de ativação', $this->taxaDeAtivacao($ativos, $vinculados))
+            StatPlus::make(__('Activation rate'), $this->taxaDeAtivacao($ativos, $vinculados))
                 ->icon('heroicon-o-chart-bar')
                 ->iconColor('gray')
                 ->accentColor('gray')
                 ->description($vinculados === 0
-                    ? 'Nenhum usuário vinculado ainda'
-                    : 'Percentual dos vinculados que usaram o sistema'),
+                    ? __('No user linked yet')
+                    : __('Percentage of linked people who used the system')),
         ];
     }
 

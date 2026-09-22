@@ -30,7 +30,7 @@ class UserExporter extends ExportadorDoKit
     {
         return [
             ExportColumn::make('name')
-                ->label('Nome'),
+                ->label(__('Name')),
             ExportColumn::make('email')
                 ->label(__('Email')),
             ExportColumn::make('email_verified_at')

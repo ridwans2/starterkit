@@ -117,6 +117,33 @@ class RoleResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
+    /*
+     * Tiga getter ini MENUTUPI nilai yang diinjeksikan `FilamentShieldPlugin` dari
+     * provider (`->modelLabel('Role')` dan kawannya). Provider berjalan di boot,
+     * jadi nilai yang masuk ke sana beku pada locale konfigurasi — `__()`, `en`,
+     * apa pun yang ditulis di situ. Yang benar adalah label dirender per-request:
+     * literal English sebagai sumber, overlay `lang/pt_BR.json` yang mengembalikan
+     * "Papel"/"Papéis" saat suíte rodar di pt_BR.
+     *
+     * Medido: `tests/Kit/TelaDePapeisTest.php:113` afirma `getRecordTitle(null) ===
+     * 'Papel'`, e cai para 'Role' assim que o getter é removido. É o alarme deste
+     * parágrafo — não apagar sem rodar aquela suíte.
+     */
+    public static function getModelLabel(): string
+    {
+        return __('Role');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Roles');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Roles');
+    }
+
     #[Override]
     public static function form(Schema $schema): Schema
     {
@@ -188,10 +215,10 @@ class RoleResource extends Resource
                                     ->native(false),
 
                                 Select::make('painel')
-                                    ->label('Acesso ao painel')
+                                    ->label(__('Panel access'))
                                     ->options(Paineis::opcoes())
-                                    ->placeholder('Nenhum — o papel não abre painel')
-                                    ->helperText('É este campo que dá acesso ao painel. Papel sem painel só carrega permissões: quem o tiver sozinho não entra em lugar nenhum.')
+                                    ->placeholder(__('None — the role opens no panel'))
+                                    ->helperText(__('This is the field that grants panel access. A role without a panel only carries permissions: having it alone gets you nowhere.'))
                                     ->native(false),
 
                                 Select::make(config('permission.column_names.team_foreign_key'))
@@ -231,7 +258,7 @@ class RoleResource extends Resource
                     ->color('warning')
                     ->label(__('filament-shield::filament-shield.column.guard_name')),
                 TextColumn::make('painel')
-                    ->label('Acesso ao painel')
+                    ->label(__('Panel access'))
                     ->badge()
                     ->color(fn (?string $state): string => $state === null ? 'gray' : 'success')
                     ->formatStateUsing(fn (?string $state): string => Papeis::rotuloDoPainel($state))
@@ -334,7 +361,7 @@ class RoleResource extends Resource
         $tabs = collect(Paineis::resources())
             ->reject(fn (array $entidades): bool => $entidades === [])
             ->map(fn (array $entidades, string $painel): Tab => Tab::make('painel-'.$painel)
-                ->label('Painel '.$opcoes[$painel])
+                ->label((string) __('Panel :panel', ['panel' => $opcoes[$painel]]))
                 ->icon(Heroicon::OutlinedRectangleGroup)
                 ->badge(fn (Get $get): string => self::selecionadas($get, $entidades).'/'.self::totalDe($entidades))
                 ->badgeColor(fn (Get $get): string => self::selecionadas($get, $entidades) === 0 ? 'gray' : 'primary')
@@ -425,13 +452,13 @@ class RoleResource extends Resource
     private static function acaoDeUsuarios(): Action
     {
         return Action::make('usuarios')
-            ->label('Ver usuários')
+            ->label(__('View users'))
             ->icon(Heroicon::OutlinedUsers)
             ->color('gray')
             ->authorize('view')
             ->slideOver()
-            ->modalHeading(fn (Model $record): string => 'Usuários com o papel '.Papeis::rotulo((string) $record->getAttribute('name')))
-            ->modalDescription('Somente leitura. O vínculo se altera no cadastro do usuário.')
+            ->modalHeading(fn (Model $record): string => (string) __('Users with the role :role', ['role' => Papeis::rotulo((string) $record->getAttribute('name'))]))
+            ->modalDescription(__('Read only. The link is changed on the user record.'))
             ->modalSubmitAction(false)
             ->modalCancelActionLabel(__('Close'))
             /*
@@ -461,8 +488,13 @@ class RoleResource extends Resource
                     ->hiddenLabel()
                     ->state(self::usuariosDoPapel(...))
                     ->table([
-                        TableColumn::make('Nome'),
-                        TableColumn::make('E-mail'),
+                        // `TableColumn::make($label)` do RepeatableEntry não tem
+                        // `label()` — o argumento É o cabeçalho, e os dados vêm do
+                        // `->schema()` abaixo (`name`/`email`). Traduzir aqui não toca
+                        // em chave nenhuma; `->label(__('Name'))` foi a tentativa
+                        // errada e o PHPStan derrubou na hora (método inexistente).
+                        TableColumn::make(__('Name')),
+                        TableColumn::make(__('Email')),
                     ])
                     ->schema([
                         TextEntry::make('name')->hiddenLabel(),
@@ -475,9 +507,9 @@ class RoleResource extends Resource
                 // `assertSee` do texto não alcança. E é a visibilidade que importa aqui — ela é
                 // complementar à da tabela acima, e um erro de sinal num dos dois deixa os dois
                 // visíveis ou nenhum.
-                EmptyState::make('Nenhum usuário tem este papel')
+                EmptyState::make(__('No user has this role'))
                     ->key('semUsuarios')
-                    ->description('Papel sem ninguém vinculado não concede acesso a ninguém.')
+                    ->description(__('A role with nobody attached grants access to nobody.'))
                     ->icon(Heroicon::OutlinedUsers)
                     ->visible(fn (Model $record): bool => self::usuariosDoPapel($record) === []),
             ]);

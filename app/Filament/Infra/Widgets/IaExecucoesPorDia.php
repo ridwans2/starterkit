@@ -98,7 +98,7 @@ class IaExecucoesPorDia extends ApexChartWidget
                 'toolbar' => ['show' => false],
             ],
             'series' => [[
-                'name' => 'Execuções',
+                'name' => __('Runs'),
                 'data' => array_values($quantidades),
             ]],
             'xaxis' => [

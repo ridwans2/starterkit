@@ -25,7 +25,10 @@ class AutenticacaoStats extends StatsOverviewWidget
 
     protected int|string|array $columnSpan = 'full';
 
-    protected ?string $heading = 'Acessos nas últimas 24 horas';
+    protected function getHeading(): ?string
+    {
+        return __('Sign-ins in the last 24 hours');
+    }
 
     protected static function fonteDeDadosDisponivel(): bool
     {
@@ -66,19 +69,19 @@ class AutenticacaoStats extends StatsOverviewWidget
                 ->icon('heroicon-o-arrow-right-on-rectangle')
                 ->iconColor('success')
                 ->accentColor('success')
-                ->description('Entradas confirmadas nas últimas 24h'),
+                ->description(__('Confirmed sign-ins in the last 24h')),
 
             StatPlus::make('Tentativas falhas', $falhas)
                 ->icon('heroicon-o-lock-closed')
                 ->iconColor($this->corDasFalhas($falhas, $sucessos))
                 ->accentColor($this->corDasFalhas($falhas, $sucessos))
-                ->description('Senha errada, conta inexistente ou 2FA recusado'),
+                ->description(__('Wrong password, missing account or 2FA declined')),
 
-            StatPlus::make('Sessões sem logout', $sessoesAbertas)
+            StatPlus::make(__('Sessions without logout'), $sessoesAbertas)
                 ->icon('heroicon-o-computer-desktop')
                 ->iconColor('gray')
                 ->accentColor('gray')
-                ->description('Acumulado — inclui sessões já expiradas'),
+                ->description(__('Cumulative — includes sessions already expired')),
         ];
     }
 

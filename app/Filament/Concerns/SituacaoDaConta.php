@@ -45,7 +45,7 @@ trait SituacaoDaConta
     protected static function filtroDeInativos(): Filter
     {
         return Filter::make('inativos')
-            ->label('Somente inativos')
+            ->label(__('Only inactive'))
             ->query(fn (Builder $query): Builder => $query->where('ativo', false));
     }
 
@@ -60,7 +60,7 @@ trait SituacaoDaConta
     protected static function acaoDeDesativar(): Action
     {
         return Action::make('desativar')
-            ->label('Desativar')
+            ->label(__('Deactivate'))
             ->icon(Heroicon::OutlinedNoSymbol)
             ->color('danger')
             ->authorize('desativar')
@@ -68,9 +68,9 @@ trait SituacaoDaConta
                 && ! $record->trashed()
                 && $record->motivoParaNaoDesativar() === null)
             ->requiresConfirmation()
-            ->modalHeading('Desativar este usuário?')
-            ->modalDescription('A pessoa deixa de entrar em qualquer painel até ser reativada. Nada é apagado.')
-            ->successNotificationTitle('Usuário desativado')
+            ->modalHeading(__('Deactivate this user?'))
+            ->modalDescription(__('The person stops signing in to any panel until reactivated. Nothing is deleted.'))
+            ->successNotificationTitle(__('User deactivated'))
             ->action(function (User $record): void {
                 $record->desativar();
             });
@@ -79,15 +79,15 @@ trait SituacaoDaConta
     protected static function acaoDeReativar(): Action
     {
         return Action::make('reativar')
-            ->label('Reativar')
+            ->label(__('Reactivate'))
             ->icon(Heroicon::OutlinedCheckCircle)
             ->color('success')
             ->authorize('reativar')
             ->visible(fn (User $record): bool => ! $record->ativo && ! $record->trashed())
             ->requiresConfirmation()
-            ->modalHeading('Reativar este usuário?')
-            ->modalDescription('A pessoa volta a entrar nos painéis do papel dela.')
-            ->successNotificationTitle('Usuário reativado')
+            ->modalHeading(__('Reactivate this user?'))
+            ->modalDescription(__('The person can sign in again to the panels of their role.'))
+            ->successNotificationTitle(__('User reactivated'))
             ->action(function (User $record): void {
                 $record->reativar();
             });

@@ -6,6 +6,7 @@ use App\Filament\App\Resources\Projetos\Pages\ListProjetos;
 use App\Filament\Concerns\BadgeContagemNavegacao;
 use App\Models\Projeto;
 use App\Models\Tenant;
+use App\Support\Formatos;
 use App\Support\TetoDeUpload;
 use BackedEnum;
 use Closure;
@@ -113,7 +114,7 @@ class ProjetoResource extends Resource
     {
         return $schema->components([
             TextInput::make('nome')
-                ->label('Nome')
+                ->label(__('Name'))
                 ->required()
                 ->maxLength(120)
                 // scopedUnique, não unique: a regra do Laravel ignora o tenant.
@@ -188,7 +189,7 @@ class ProjetoResource extends Resource
                         $falhar('SVG não é aceito: o formato carrega script e o anexo é servido pela própria aplicação.');
                     }
                 })
-                ->helperText('Até '.TetoDeUpload::emMb().' MB por arquivo, e SVG não é aceito. Os anexos pertencem a este projeto e só são vistos por quem alcança a organização dele.')
+                ->helperText((string) __('Up to :max MB per file, and SVG is not accepted. Attachments belong to this project and are only seen by people who reach its organization.', ['max' => TetoDeUpload::emMb()]))
                 ->columnSpanFull(),
         ]);
     }
@@ -198,7 +199,7 @@ class ProjetoResource extends Resource
         return $table
             ->defaultSort('nome')
             ->columns([
-                TextColumn::make('nome')->label('Nome')->searchable()->sortable(),
+                TextColumn::make('nome')->label(__('Name'))->searchable()->sortable(),
 
                 /*
                  * `simpleLightbox()` é macro do solution-forest/filament-simplelightbox,
@@ -216,7 +217,7 @@ class ProjetoResource extends Resource
                     ->limit(3)
                     ->simpleLightbox(),
 
-                TextColumn::make('created_at')->label(__('Created at'))->dateTime('d/m/Y H:i')->sortable(),
+                TextColumn::make('created_at')->label(__('Created at'))->dateTime(Formatos::dataHora())->sortable(),
             ])
             ->recordActions([
                 EditAction::make(),
@@ -232,7 +233,7 @@ class ProjetoResource extends Resource
                 DeleteAction::make(),
             ])
             ->emptyStateHeading(__('No projects here'))
-            ->emptyStateDescription('Cada registro pertence ao tenant selecionado no topo — troque de tenant e a lista muda.');
+            ->emptyStateDescription(__('Each record belongs to the tenant selected at the top — switch tenant and the list changes.'));
     }
 
     /**

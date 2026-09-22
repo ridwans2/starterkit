@@ -39,9 +39,9 @@ class DemoTenancySeeder extends Seeder
         $acme   = $this->tenant('Acme', 'acme');
         $globex = $this->tenant('Globex', 'globex');
 
-        $ana   = $this->usuario('Ana (só Acme)', 'ana@example.com');
-        $bruno = $this->usuario('Bruno (só Globex)', 'bruno@example.com');
-        $carla = $this->usuario('Carla (Acme e Globex)', 'carla@example.com');
+        $ana   = $this->usuario('Ana (Acme only)', 'ana@example.com');
+        $bruno = $this->usuario('Bruno (Globex only)', 'bruno@example.com');
+        $carla = $this->usuario('Carla (Acme and Globex)', 'carla@example.com');
 
         $ana->tenants()->syncWithoutDetaching([$acme->id]);
         $bruno->tenants()->syncWithoutDetaching([$globex->id]);
@@ -65,10 +65,10 @@ class DemoTenancySeeder extends Seeder
 
         // tenant_id explícito: fora de um request de painel não há
         // `Filament::getTenant()`, então a trait não tem o que preencher.
-        $this->projeto($acme, 'Portal do cliente');
-        $this->projeto($acme, 'Migração de dados');
-        $this->projeto($globex, 'App de vendas');
-        $this->projeto($globex, 'Integração fiscal');
+        $this->projeto($acme, 'Client portal');
+        $this->projeto($acme, 'Data migration');
+        $this->projeto($globex, 'Sales app');
+        $this->projeto($globex, 'Tax integration');
 
         $this->command->info('Demo criada: /app/acme e /app/globex — entre como carla@example.com (senha: password).');
     }

@@ -3,6 +3,7 @@
 namespace App\Filament\Concerns;
 
 use App\Models\User;
+use App\Support\Formatos;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Support\Icons\Heroicon;
 use MortalKiller\FilamentPageHeader\Components\Header;
@@ -70,7 +71,7 @@ trait CabecalhoDeUsuario
                 MetadataEntry::make('created_at')
                     ->label(__('Registered at'))
                     ->fieldIcon(Heroicon::OutlinedCalendar)
-                    ->dateTime('d/m/Y'),
+                    ->dateTime(Formatos::data()),
             ]);
     }
 }

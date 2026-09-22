@@ -39,22 +39,22 @@ class SaudeAplicacaoPorStatus extends SegmentBarWidget
 
     public function getHeading(): ?string
     {
-        return 'Verificações por status';
+        return __('Checks by status');
     }
 
     public function getHeadingDescription(): ?string
     {
-        return 'Composição da última rodada de health checks';
+        return __('Composition of the last health check round');
     }
 
     public function getEmptyStateHeading(): string
     {
-        return 'Nenhuma verificação registrada';
+        return __('No check recorded');
     }
 
     public function getEmptyStateDescription(): ?string
     {
-        return 'Rode `php artisan health:check` para popular o histórico.';
+        return __('Run `php artisan health:check` to populate the history.');
     }
 
     public function getEmptyStateIcon(): string

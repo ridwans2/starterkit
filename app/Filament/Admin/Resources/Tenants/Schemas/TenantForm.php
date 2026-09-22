@@ -32,12 +32,12 @@ class TenantForm
     {
         return $schema
             ->components([
-                Section::make('Identificação')
-                    ->description('O slug vira o endereço do painel de negócio: /app/{slug}.')
+                Section::make(__('Identifier'))
+                    ->description(__('The slug becomes the business panel address: /app/{slug}.'))
                     ->columns(2)
                     ->components([
                         TextInput::make('nome')
-                            ->label('Nome')
+                            ->label(__('Name'))
                             ->required()
                             ->maxLength(120)
                             // onBlur, e não a cada tecla: sugerir slug a cada
@@ -47,7 +47,7 @@ class TenantForm
 
                         TextInput::make('slug')
                             ->label('Slug')
-                            ->helperText('Endereço no painel de negócio. Mudar invalida os links já compartilhados.')
+                            ->helperText(__('Address in the business panel. Changing it invalidates links already shared.'))
                             ->required()
                             ->maxLength(120)
                             ->alphaDash()
@@ -72,17 +72,17 @@ class TenantForm
                          * tela de administração.
                          */
                         TextEntry::make('url_do_painel')
-                            ->label('Painel da organização')
+                            ->label(__('Organization panel'))
                             ->state(fn (?Tenant $record): ?string => $record?->urlDoPainel())
                             ->url(fn (?Tenant $record): ?string => $record?->urlDoPainel())
                             ->openUrlInNewTab()
                             ->visible(fn (?Tenant $record): bool => $record !== null)
-                            ->helperText('Abre em nova aba. Quem não tem papel do painel de negócio recebe 403; quem tem papel mas não está vinculado a esta organização recebe 404.')
+                            ->helperText(__('Opens in a new tab. Anyone without a business-panel role gets 403; anyone with a role but not linked to this organization gets 404.'))
                             ->columnSpanFull(),
 
                         Toggle::make('ativo')
-                            ->label('Ativo')
-                            ->helperText('Inativo some do seletor de todos os usuários, sem perder dados.')
+                            ->label(__('Active'))
+                            ->helperText(__('Inactive disappears from every user selector without losing data.'))
                             ->default(true)
                             ->columnSpanFull(),
 
@@ -98,7 +98,7 @@ class TenantForm
                          * ausente: ele promete um controle que não existe.
                          */
                         Toggle::make('registro_habilitado')
-                            ->label('Aceita cadastro público')
+                            ->label(__('Accepts public registration'))
                             // O endereço muda com a página única de login (`/cadastro?org=`), então
                             // sai de `RegistroAberto::urlDoCadastro()` em vez de estar escrito aqui:
                             // helperText que promete uma URL que a instalação não usa é pior que
@@ -132,8 +132,8 @@ class TenantForm
                  * tela de bloqueio usa a mídia base da aplicação. Nada quebra, nada precisa ser
                  * preenchido.
                  */
-                Section::make('Identidade visual')
-                    ->description('Aplicadas no painel de negócio desta organização. As demais não são afetadas.')
+                Section::make(__('Visual identity'))
+                    ->description(__('Applied in the business panel of this organization. The others are unaffected.'))
                     ->columns(2)
                     ->components([
                         /*
@@ -144,15 +144,15 @@ class TenantForm
                          * kit (`CorPrimaria::resolver()`): o hexadecimal vence quando preenchido.
                          */
                         Select::make('cor_primaria_nome')
-                            ->label('Cor primária (paleta do Filament)')
+                            ->label(__('Primary color (Filament palette)'))
                             ->options(array_combine(CustomizadorDaInstalacao::CORES, CustomizadorDaInstalacao::CORES))
-                            ->placeholder('Cor da aplicação (padrão)')
+                            ->placeholder(__('Application color (default)'))
                             ->native(false)
                             ->searchable()
-                            ->helperText('A mesma lista do settings do kit. Em branco, a organização usa a cor da aplicação. A cor livre ao lado VENCE quando preenchida.'),
+                            ->helperText(__('The same list as in the kit settings. When blank, the organization uses the application color. The free color next to it WINS when filled in.')),
 
                         ColorPicker::make('cor_primaria')
-                            ->label('Cor primária livre')
+                            ->label(__('Free primary color'))
                             ->hex()
                             // `hex()` NÃO valida: ele só troca o formato do picker
                             // (vendor/filament/forms/src/Components/ColorPicker.php:31-36). Sem a
@@ -166,9 +166,9 @@ class TenantForm
                             // `maxLength()`; o regex cobre os dois problemas de uma vez.)
                             ->regex('/^#[0-9A-Fa-f]{6}$/')
                             ->validationMessages([
-                                'regex' => 'Informe uma cor no formato #RRGGBB.',
+                                'regex' => __('Enter a color in #RRGGBB format.'),
                             ])
-                            ->helperText('Cor de marca em hexadecimal. VENCE a paleta escolhida ao lado quando preenchida. O Filament deriva as 11 tonalidades e escolhe a legível por contraste.'),
+                            ->helperText(__('Brand color in hexadecimal. WINS over the palette chosen next to it when filled in. Filament derives the 11 shades and picks the legible one by contrast.')),
 
                         FileUpload::make('logo')
                             ->label('Logo')
@@ -203,9 +203,9 @@ class TenantForm
                             // divide o tamanho do arquivo por 1024.
                             ->maxSize(TetoDeUpload::emKb())
                             ->validationMessages([
-                                'max' => 'O arquivo passa de '.TetoDeUpload::emMb().' MB.',
+                                'max' => __('The file is over :max MB.', ['max' => TetoDeUpload::emMb()]),
                             ])
-                            ->helperText('Exibida na tela de bloqueio de sessão do painel de negócio. Em branco, usa a imagem padrão. Até '.TetoDeUpload::emMb().' MB, e SVG não é aceito.')
+                            ->helperText((string) __('Shown on the business panel lock screen. When blank, the default image is used. Up to :max MB, and SVG is not accepted.', ['max' => TetoDeUpload::emMb()]))
                             // Linha inteira: com os dois campos de cor na primeira linha, a logo
                             // espremida ao lado de um vazio ficava feia.
                             ->columnSpanFull(),

@@ -256,8 +256,8 @@ final class Paineis
     {
         return [
             'app'   => (string) config('app.name'),
-            'admin' => 'Administração',
-            'infra' => 'Infraestrutura',
+            'admin' => __('Administration'),
+            'infra' => __('Infrastructure'),
         ];
     }
 
@@ -317,9 +317,9 @@ final class Paineis
     public static function cartoes(): array
     {
         $descricoes = [
-            'app'   => ['primary', 'Onde o seu produto vive. Multi-organização, convites e o cadastro do dia a dia.'],
-            'admin' => ['info', 'Usuários, papéis e permissões, convites, organizações e agentes de IA.'],
-            'infra' => ['gray', 'Filas, logs, exceções, backups, saúde da aplicação e o Pulse.'],
+            'app'   => ['primary', (string) __('Where your product lives. Multi-organization, invitations and day-to-day sign-up.')],
+            'admin' => ['info', (string) __('Users, roles and permissions, invitations, organizations and AI agents.')],
+            'infra' => ['gray', (string) __('Queues, logs, exceptions, backups, application health and Pulse.')],
         ];
 
         return collect(Filament::getPanels())

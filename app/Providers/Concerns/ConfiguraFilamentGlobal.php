@@ -2,6 +2,7 @@
 
 namespace App\Providers\Concerns;
 
+use App\Support\Formatos;
 use App\Support\Paineis;
 use BezhanSalleh\LanguageSwitch\LanguageSwitch;
 use BezhanSalleh\PanelSwitch\PanelSwitch;
@@ -275,7 +276,23 @@ trait ConfiguraFilamentGlobal
             ->deselectAllRecordsWhenFiltered(false)
 
             ->defaultPaginationPageOption((int) config('kit.tabelas.paginacao', 10))
-            ->extremePaginationLinks();
+            ->extremePaginationLinks()
+
+            /*
+             * A máscara de data e o locale de número SEGUEM O IDIOMA da tela, em um lugar
+             * só. `config/localization.php` é a dona dos valores; `App\Support\Formatos` é
+             * quem lê. O que isto cobre é mais do que os recursos do kit: coluna nova,
+             * tabela de plugin de terceiro, e — o que importa para o `kit:update` — uma
+             * tabela do upstream que volte ao format() sem argumento.
+             *
+             * Avaliado aqui, dentro do `configureUsing()`, e não no boot: é o mesmo erro
+             * que derrubou `TelaDePapeisTest` quando `__()` foi chamado em registrador de
+             * provider — em boot o locale ainda é o da config, não o da request.
+             */
+            ->defaultDateDisplayFormat(Formatos::data())
+            ->defaultDateTimeDisplayFormat(Formatos::dataHora())
+            ->defaultTimeDisplayFormat(Formatos::hora())
+            ->defaultNumberLocale(app()->getLocale());
 
         return $this->aplicaMacrosDeColuna($table);
     }

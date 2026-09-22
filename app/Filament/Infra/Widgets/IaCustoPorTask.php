@@ -37,12 +37,12 @@ class IaCustoPorTask extends BreakdownWidget
 
     public function getHeading(): ?string
     {
-        return 'Custo de IA por task';
+        return __('AI cost by task');
     }
 
     public function getHeadingDescription(): ?string
     {
-        return 'Somatório de `cost` em dólares, por nome de task';
+        return __('Sum of `cost` in dollars, by task name');
     }
 
     public function getEmptyStateHeading(): string
@@ -52,7 +52,7 @@ class IaCustoPorTask extends BreakdownWidget
 
     public function getEmptyStateDescription(): ?string
     {
-        return 'O driver só grava `cost` quando o provedor devolve o consumo.';
+        return __('The driver only records `cost` when the provider returns usage.');
     }
 
     public function getEmptyStateIcon(): string

@@ -14,6 +14,7 @@ use App\Models\Tenant;
 use App\Models\User;
 use App\Support\AdministradorDaInstalacao;
 use App\Support\ContextoDePapeis;
+use App\Support\Formatos;
 use App\Support\Papeis;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -64,7 +65,7 @@ class UserResource extends Resource
     {
         return $schema->components([
             TextInput::make('name')
-                ->label('Nome')
+                ->label(__('Name'))
                 ->required()
                 ->maxLength(255),
             TextInput::make('email')
@@ -73,7 +74,7 @@ class UserResource extends Resource
                 ->required()
                 ->unique(),
             TextInput::make('password')
-                ->label('Senha')
+                ->label(__('Password'))
                 ->password()
                 ->revealable()
                 ->required(fn (string $operation): bool => $operation === 'create')
@@ -116,7 +117,7 @@ class UserResource extends Resource
                 // Obrigatório, MENOS para cadastro pendente de aprovação, que não tem papel por
                 // desenho. Ver `AprovacaoDeCadastro::papelObrigatorioNaEdicao()`.
                 ->required(self::papelObrigatorioNaEdicao())
-                ->helperText('O acesso aos painéis vem do papel — o painel de cada um aparece ao lado do nome.')
+                ->helperText(__('Access to the panels comes from the role — each person\'s panel appears next to the name.'))
                 // O painel no rótulo da opção, e não um select agrupado: agrupar exigiria
                 // abandonar o ->relationship(), que é quem hidrata o estado na edição e
                 // mantém a chave fora do update() do model.
@@ -168,7 +169,7 @@ class UserResource extends Resource
                 ->searchable()
                 ->required()
                 ->visible(fn (): bool => (bool) config('kit.tenancy.enabled'))
-                ->helperText('Sem vínculo o usuário entra no painel e não vê organização nenhuma.'),
+                ->helperText(__('Without a link the user signs in to the panel and sees no organization.')),
         ]);
     }
 
@@ -196,7 +197,7 @@ class UserResource extends Resource
                     ->disk('public')
                     ->circular()
                     ->simpleLightbox(),
-                TextColumn::make('name')->label('Nome')->searchable()->sortable(),
+                TextColumn::make('name')->label(__('Name'))->searchable()->sortable(),
                 TextColumn::make('email')->label(__('Email'))->searchable()->sortable(),
                 TextColumn::make('roles.name')->label(__('Roles'))->badge()
                     ->formatStateUsing(fn (?string $state): string => Papeis::rotulo($state)),
@@ -209,7 +210,7 @@ class UserResource extends Resource
                     ->color(fn (User $record): string => ($record->origem ?? User::ORIGEM_INTERNO) === User::ORIGEM_INTERNO ? 'gray' : 'info')
                     ->sortable()
                     ->toggleable(),
-                TextColumn::make('created_at')->label(__('Created at'))->dateTime('d/m/Y H:i')->sortable(),
+                TextColumn::make('created_at')->label(__('Created at'))->dateTime(Formatos::dataHora())->sortable(),
                 self::colunaDeSituacao(),
             ])
             ->filters([

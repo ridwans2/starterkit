@@ -83,14 +83,14 @@ class UsersRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('name')
             ->columns([
-                TextColumn::make('name')->label('Nome')->searchable()->sortable(),
+                TextColumn::make('name')->label(__('Name'))->searchable()->sortable(),
                 TextColumn::make('email')->label(__('Email'))->searchable()->sortable(),
                 TextColumn::make('roles.name')->label(__('Roles'))->badge()->color('gray')
                     ->formatStateUsing(fn (?string $state): string => Papeis::rotulo($state)),
             ])
             ->headerActions([
                 AttachAction::make()
-                    ->label('Vincular usuário')
+                    ->label(__('Link user'))
                     // Action NATIVA e ainda assim sem autorização nenhuma: em RelationManager,
                     // `AttachAction` e `DetachAction` só checam `isReadOnly()`. Ver o docblock da
                     // classe.
@@ -106,8 +106,8 @@ class UsersRelationManager extends RelationManager
                     ->authorize('DesvincularUsuario:Tenant')
                     ->after(fn (User $record): null => $this->registrar('desvinculado', $record)),
             ])
-            ->emptyStateHeading('Nenhum usuário vinculado')
-            ->emptyStateDescription('Sem vínculo, ninguém abre o painel de negócio deste registro.');
+            ->emptyStateHeading(__('No user linked'))
+            ->emptyStateDescription(__('Without a link, nobody opens the business panel of this record.'));
     }
 
     /**
@@ -126,7 +126,7 @@ class UsersRelationManager extends RelationManager
     private function acaoDePapeis(): Action
     {
         return Action::make('papeisNaOrganizacao')
-            ->label('Papéis nesta organização')
+            ->label(__('Roles in this organization'))
             ->icon(Heroicon::OutlinedShieldCheck)
             // Atribuir papel é o ato mais sensível desta tela — é aqui que nasce o primeiro
             // `admin_app` de uma organização. O filtro `where('painel','app')` abaixo continua
@@ -150,7 +150,7 @@ class UsersRelationManager extends RelationManager
                             $papel->getKey() => Papeis::rotulo((string) $papel->getAttribute('name')),
                         ])
                         ->all())
-                    ->helperText('Só papéis do painel /app. Papel de instalação (admin, infra) se dá no cadastro do usuário.'),
+                    ->helperText(__('Only /app panel roles. Installation roles (admin, infra) are given on the user record.')),
             ])
             ->fillForm(fn (User $record): array => ['roles' => $this->papeisNoTenant($record)])
             ->action(function (User $record, array $data): void {
@@ -173,7 +173,7 @@ class UsersRelationManager extends RelationManager
                     ],
                 );
             })
-            ->successNotificationTitle('Papéis atualizados nesta organização');
+            ->successNotificationTitle(__('Roles updated in this organization'));
     }
 
     /**

@@ -43,12 +43,12 @@ class UltimosAcessos extends RecentItemsWidget
 
     public function getHeading(): ?string
     {
-        return 'Últimos acessos';
+        return __('Recent accesses');
     }
 
     public function getEmptyStateHeading(): string
     {
-        return 'Nenhum acesso registrado';
+        return __('No access recorded');
     }
 
     public function getEmptyStateIcon(): string
@@ -77,7 +77,7 @@ class UltimosAcessos extends RecentItemsWidget
                 )
                     ->icon($sucesso ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle')
                     ->color($sucesso ? 'success' : 'danger')
-                    ->badge($sucesso ? 'sucesso' : 'falha')
+                    ->badge($sucesso ? 'sucesso' : __('failure'))
                     ->badgeColor($sucesso ? 'success' : 'danger')
                     ->meta($this->momentoDe($acesso)?->diffForHumans());
             })

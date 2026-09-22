@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\Convite;
+use App\Support\Formatos;
 use Filament\Facades\Filament;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -83,10 +84,10 @@ class ConviteDeAcesso extends Notification implements ShouldQueue
         }
 
         return $mensagem
-            ->action($jaTemConta ? 'Entrar e aceitar' : 'Aceitar convite', $this->url())
-            ->line('Este convite expira em '.$this->convite->expira_em?->format('d/m/Y H:i').'.')
-            ->line('Se você não esperava este convite, ignore esta mensagem.')
-            ->salutation('Atenciosamente, '.config('app.name'));
+            ->action($jaTemConta ? __('Sign in and accept') : __('Accept invitation'), $this->url())
+            ->line(__('This invitation expires at :date.', ['date' => $this->convite->expira_em?->format(Formatos::dataHora())]))
+            ->line(__('If you were not expecting this invitation, ignore this message.'))
+            ->salutation(__('Best regards,').' '.config('app.name'));
     }
 
     /**

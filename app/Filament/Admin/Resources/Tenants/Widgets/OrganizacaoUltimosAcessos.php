@@ -46,12 +46,12 @@ class OrganizacaoUltimosAcessos extends RecentItemsWidget
 
     public function getHeading(): ?string
     {
-        return 'Últimos acessos desta organização';
+        return __('Last sign-ins of this organization');
     }
 
     public function getEmptyStateHeading(): string
     {
-        return 'Nenhum acesso registrado';
+        return __('No access recorded');
     }
 
     public function getEmptyStateIcon(): string
@@ -82,7 +82,7 @@ class OrganizacaoUltimosAcessos extends RecentItemsWidget
                 return RecentItem::make($this->identificar($acesso), $this->descrever($acesso))
                     ->icon($sucesso ? 'heroicon-o-check-circle' : 'heroicon-o-x-circle')
                     ->color($sucesso ? 'success' : 'danger')
-                    ->badge($sucesso ? 'sucesso' : 'falha')
+                    ->badge($sucesso ? 'sucesso' : __('failure'))
                     ->badgeColor($sucesso ? 'success' : 'danger')
                     ->meta($this->momentoDe($acesso)?->diffForHumans());
             })
@@ -94,7 +94,7 @@ class OrganizacaoUltimosAcessos extends RecentItemsWidget
         $autenticavel = $acesso->authenticatable;
 
         if (! $autenticavel instanceof Model) {
-            return 'Origem não identificada';
+            return __('Unknown origin');
         }
 
         $nome = $autenticavel->getAttribute('name') ?? $autenticavel->getAttribute('email');

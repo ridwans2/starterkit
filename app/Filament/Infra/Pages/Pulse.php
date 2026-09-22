@@ -47,7 +47,12 @@ class Pulse extends Dashboard
 
     protected static ?string $navigationLabel = 'Pulse';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Observabilidade';
+    public static function getNavigationGroup(): string|UnitEnum|null
+    {
+
+        return 'Observability';
+
+    }
 
     protected static ?int $navigationSort = 240;
 

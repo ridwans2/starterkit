@@ -30,7 +30,10 @@ class FilasStats extends StatsOverviewWidget
 
     protected int|string|array $columnSpan = 'full';
 
-    protected ?string $heading = 'Filas e jobs';
+    protected function getHeading(): ?string
+    {
+        return __('Queues and jobs');
+    }
 
     protected static function fonteDeDadosDisponivel(): bool
     {
@@ -55,13 +58,13 @@ class FilasStats extends StatsOverviewWidget
         $processados = $concluidos + $falhados;
 
         return [
-            StatPlus::make('Jobs concluídos', $concluidos)
+            StatPlus::make(__('Completed jobs'), $concluidos)
                 ->icon('heroicon-o-check-circle')
                 ->iconColor('success')
                 ->accentColor('success')
-                ->description('Terminaram sem exceção'),
+                ->description(__('Finished without exception')),
 
-            StatPlus::make('Jobs falhados', $falhados)
+            StatPlus::make(__('Failed jobs'), $falhados)
                 ->icon('heroicon-o-x-circle')
                 ->iconColor($falhados > 0 ? 'danger' : 'gray')
                 ->accentColor($falhados > 0 ? 'danger' : 'gray')
@@ -74,7 +77,7 @@ class FilasStats extends StatsOverviewWidget
                 // Sem `finished_at` o job ou está rodando ou morreu sem
                 // registrar o fim — nos dois casos é o número que precisa de
                 // olho quando não desce.
-                ->description('Iniciados e ainda sem registro de fim'),
+                ->description(__('Started and still without an end record')),
         ];
     }
 

@@ -24,33 +24,33 @@ class AgenteIaForm
     {
         return $schema
             ->components([
-                Section::make('Identificação')
-                    ->description('Como o agente é reconhecido pelo sistema e por quem o mantém.')
+                Section::make(__('Identifier'))
+                    ->description(__('How the agent is recognized by the system and by the people maintaining it.'))
                     ->columns(2)
                     ->components([
                         TextInput::make('nome')
-                            ->label('Nome')
+                            ->label(__('Name'))
                             ->required()
                             ->maxLength(120),
                         TextInput::make('slug')
                             ->label('Slug')
-                            ->helperText('Chave estável lida pela classe do agente (ex.: assistente). Mudar quebra o vínculo com o código.')
+                            ->helperText(__('Stable key read by the agent class (e.g. assistente). Changing it breaks the link with the code.'))
                             ->required()
                             ->maxLength(120)
                             ->unique(),
                         Textarea::make('descricao')
-                            ->label('Descrição')
+                            ->label(__('Description'))
                             ->rows(2)
                             ->columnSpanFull(),
                         Toggle::make('ativo')
-                            ->label('Ativo')
-                            ->helperText('Desligar é a "exclusão" do agente — o consumidor degrada com mensagem honesta.')
+                            ->label(__('Active'))
+                            ->helperText(__('Turning it off is the agent\'s "deletion" — the consumer degrades with an honest message.'))
                             ->default(true)
                             ->columnSpanFull(),
                     ]),
 
-                Section::make('Modelo e execução')
-                    ->description('Parâmetros de runtime. Vazio = default de config/ai.php (env AI_PROVIDER).')
+                Section::make(__('Model and execution'))
+                    ->description(__('Runtime parameters. Empty = the default in config/ai.php (env AI_PROVIDER).'))
                     ->columns(3)
                     ->components([
                         Select::make('provider')
@@ -65,13 +65,13 @@ class AgenteIaForm
                                 ->mapWithKeys(fn (int|string $chave): array => [(string) $chave => (string) $chave])
                                 ->all())
                             ->searchable()
-                            ->placeholder('Default da aplicação'),
+                            ->placeholder(__('Application default')),
                         TextInput::make('modelo')
-                            ->label('Modelo')
-                            ->helperText('Vazio = default do provider.')
+                            ->label(__('Model'))
+                            ->helperText(__('Empty = the provider default.'))
                             ->maxLength(120),
                         TextInput::make('temperatura')
-                            ->label('Temperatura')
+                            ->label(__('Temperature'))
                             ->numeric()
                             ->minValue(0)
                             ->maxValue(2)
@@ -82,8 +82,8 @@ class AgenteIaForm
                             ->integer()
                             ->minValue(1),
                         TextInput::make('versao')
-                            ->label('Versão do paper')
-                            ->helperText('Incremente a cada mudança nas instruções — é o que aparece na auditoria.')
+                            ->label(__('Paper version'))
+                            ->helperText(__('Increment on every change to the instructions — it is what shows up in the audit trail.'))
                             ->numeric()
                             ->integer()
                             ->minValue(1)
@@ -92,11 +92,11 @@ class AgenteIaForm
                     ]),
 
                 Section::make('Comportamento')
-                    ->description('O que o agente pode fazer e o que o contém. Sem guardrail o agente não sobe.')
+                    ->description(__('What the agent may do and what contains it. Without a guardrail the agent does not come up.'))
                     ->columns(2)
                     ->components([
                         Textarea::make('instrucoes')
-                            ->label('Instruções (system prompt)')
+                            ->label(__('Instructions (system prompt)'))
                             ->rows(14)
                             ->required()
                             ->columnSpanFull(),
@@ -105,7 +105,7 @@ class AgenteIaForm
                             // Texto livre de propósito: as chaves são definidas no mapa de
                             // fábricas do agente (App\Ai\Agents\Assistente::tools()), que é
                             // código do projeto, não do kit.
-                            ->helperText('Chaves das tools liberadas, conforme o mapa de fábricas do agente.'),
+                            ->helperText(__('Keys of the enabled tools, following the agent factory map.')),
                         Select::make('guardrails')
                             ->label('Guardrails')
                             ->multiple()
@@ -114,7 +114,7 @@ class AgenteIaForm
                             ->options(fn (): array => collect(array_keys(GuardrailRegistry::MAPA))
                                 ->mapWithKeys(fn (string $chave): array => [$chave => $chave])
                                 ->all())
-                            ->helperText('Obrigatório: agente sem guardrail é bloqueado na subida. A ordem da lista é a ordem de execução.'),
+                            ->helperText(__('Required: an agent without a guardrail is blocked on start-up. The list order is the execution order.')),
                     ]),
             ]);
     }

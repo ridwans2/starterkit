@@ -45,17 +45,17 @@ class AuditoriaPorEvento extends BreakdownWidget
 
     public function getHeading(): ?string
     {
-        return 'Auditoria por evento';
+        return __('Audit by event');
     }
 
     public function getHeadingDescription(): ?string
     {
-        return 'Tudo que foi criado, alterado ou apagado';
+        return __('Everything created, changed or deleted');
     }
 
     public function getEmptyStateHeading(): string
     {
-        return 'Nenhuma alteração auditada';
+        return __('No audited change');
     }
 
     public function getEmptyStateIcon(): string

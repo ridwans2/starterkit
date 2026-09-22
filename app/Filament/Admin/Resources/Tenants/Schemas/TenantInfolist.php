@@ -3,6 +3,7 @@
 namespace App\Filament\Admin\Resources\Tenants\Schemas;
 
 use App\Models\Tenant;
+use App\Support\Formatos;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
@@ -38,10 +39,10 @@ class TenantInfolist
         return $schema
             ->columns(1)
             ->components([
-                Section::make('Identificação')
+                Section::make(__('Identifier'))
                     ->columns(2)
                     ->schema([
-                        TextEntry::make('nome')->label('Nome'),
+                        TextEntry::make('nome')->label(__('Name')),
                         TextEntry::make('slug')->label('Identificador')->copyable(),
                         /*
                          * O atalho para o painel da organização — RQ-01/RQ-03 da wiki
@@ -50,7 +51,7 @@ class TenantInfolist
                          * leva". Nova aba (ADR-04).
                          */
                         TextEntry::make('url_do_painel')
-                            ->label('Painel da organização')
+                            ->label(__('Organization panel'))
                             ->state(fn (Tenant $record): ?string => $record->urlDoPainel())
                             ->url(fn (Tenant $record): ?string => $record->urlDoPainel())
                             ->openUrlInNewTab()
@@ -75,14 +76,14 @@ class TenantInfolist
                             ->state(fn (Tenant $record): string => $record->ativo ? 'Ativa' : 'Inativa')
                             ->color(fn (Tenant $record): string => $record->ativo ? 'success' : 'danger'),
                         TextEntry::make('registro_habilitado')
-                            ->label('Registro aberto')
+                            ->label(__('Open signup'))
                             ->badge()
                             ->state(fn (Tenant $record): string => $record->registro_habilitado ? 'Sim' : 'Não')
                             ->color(fn (Tenant $record): string => $record->registro_habilitado ? 'info' : 'gray'),
-                        TextEntry::make('created_at')->label('Criada em')->dateTime('d/m/Y H:i'),
-                        TextEntry::make('updated_at')->label('Atualizada em')->dateTime('d/m/Y H:i'),
+                        TextEntry::make('created_at')->label(__('Created at'))->dateTime(Formatos::dataHora()),
+                        TextEntry::make('updated_at')->label(__('Updated at'))->dateTime(Formatos::dataHora()),
                     ]),
-                Section::make('Identidade visual')
+                Section::make(__('Visual identity'))
                     ->columns(2)
                     ->schema([
                         /*
@@ -94,14 +95,14 @@ class TenantInfolist
                         ImageEntry::make('logo')
                             ->label('Logo')
                             ->state(fn (Tenant $record): ?string => $record->urlDaLogo())
-                            ->placeholder('Sem logo'),
+                            ->placeholder(__('No logo')),
                         TextEntry::make('cor_primaria_nome')
-                            ->label('Cor da paleta')
-                            ->placeholder('Cor da aplicação (padrão)'),
+                            ->label(__('Palette color'))
+                            ->placeholder(__('Application color (default)')),
                         TextEntry::make('cor_primaria')
-                            ->label('Cor livre')
+                            ->label(__('Free color'))
                             ->placeholder('—')
-                            ->helperText('Quando preenchida, vence o nome da paleta.'),
+                            ->helperText(__('When filled in, it beats the palette name.')),
                     ]),
             ]);
     }

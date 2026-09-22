@@ -21,8 +21,8 @@ class AssistenteSeeder extends Seeder
         AgenteIa::updateOrCreate(
             ['slug' => 'assistente'],
             [
-                'nome'      => 'Assistente',
-                'descricao' => 'Assistente conversacional interno, embarcado no painel.',
+                'nome'      => 'Assistant',
+                'descricao' => 'Internal conversational assistant, embedded in the panel.',
                 'ativo'     => true,
                 // null = default de config/ai.php (env AI_PROVIDER). Fixar o provider aqui
                 // amarraria o paper ao ambiente — o kit prefere que o env decida.

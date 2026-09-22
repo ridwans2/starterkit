@@ -30,13 +30,13 @@ class ProjetoExporter extends ExportadorDoKit
     {
         return [
             ExportColumn::make('nome')
-                ->label('Nome'),
+                ->label(__('Name')),
             ExportColumn::make('tenant.nome')
                 ->label(__('Organization')),
             ExportColumn::make('created_at')
                 ->label(__('Created at')),
             ExportColumn::make('updated_at')
-                ->label('Atualizado em'),
+                ->label(__('Updated at')),
         ];
     }
 

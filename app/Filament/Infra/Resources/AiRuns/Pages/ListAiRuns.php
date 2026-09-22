@@ -30,7 +30,7 @@ class ListAiRuns extends ListRecords
              * infalsificável. Ver QA-02 em `wikis/specs/feat/permissoes-de-telas-e-acoes/`.
              */
             Action::make('dashboardAiTasks')
-                ->label('Dashboard de estatísticas')
+                ->label(__('Statistics dashboard'))
                 ->icon('heroicon-o-chart-bar')
                 ->url(fn (): string => route('ai-tasks.index'))
                 ->openUrlInNewTab(),

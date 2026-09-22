@@ -5,6 +5,7 @@ namespace App\Filament\App\Pages;
 use App\Filament\Concerns\ExigePermissaoDaTela;
 use App\Models\Convite;
 use App\Models\User;
+use App\Support\Formatos;
 use App\Support\Papeis;
 use BackedEnum;
 use Filament\Actions\Action;
@@ -91,14 +92,14 @@ class ConvitesRecebidos extends Page implements HasTable
                 TextColumn::make('tenant.nome')
                     ->label(config('kit.tenancy.label', 'Organização'))
                     ->placeholder('—'),
-                TextColumn::make('papel.name')->label('Papel')->badge()
+                TextColumn::make('papel.name')->label(__('Role'))->badge()
                     ->formatStateUsing(fn (?string $state): string => Papeis::rotulo($state)),
-                TextColumn::make('convidadoPor.name')->label('Convidado por')->placeholder('—'),
-                TextColumn::make('expira_em')->label(__('Expires at'))->dateTime('d/m/Y H:i')->sortable(),
+                TextColumn::make('convidadoPor.name')->label(__('Invited by'))->placeholder('—'),
+                TextColumn::make('expira_em')->label(__('Expires at'))->dateTime(Formatos::dataHora())->sortable(),
             ])
             ->recordActions([
                 Action::make('aceitar')
-                    ->label('Aceitar')
+                    ->label(__('Accept'))
                     ->icon(Heroicon::OutlinedCheck)
                     ->color('success')
                     /*
@@ -121,16 +122,17 @@ class ConvitesRecebidos extends Page implements HasTable
                     // coluna já mostrava "Painel App". Escapou da varredura original porque o
                     // acesso é `$record->papel?->getAttribute('name')`, que nenhum grep por
                     // `papel.name` alcança.
-                    ->modalDescription(fn (Convite $record): string => 'Você passa a fazer parte de '
-                        .($record->tenant->nome ?? config('app.name')).' com o papel '
-                        .Papeis::rotulo((string) $record->papel?->getAttribute('name')).'.')
+                    ->modalDescription(fn (Convite $record): string => (string) __('You become part of :organization with the role :role.', [
+                        'organization' => $record->tenant->nome ?? config('app.name'),
+                        'role'         => Papeis::rotulo((string) $record->papel?->getAttribute('name')),
+                    ]))
                     ->action(function (Convite $record): void {
                         $record->aceitarComoUsuarioExistente($this->usuario());
                     })
-                    ->successNotificationTitle('Convite aceito'),
+                    ->successNotificationTitle(__('Invitation accepted')),
 
                 Action::make('recusar')
-                    ->label('Recusar')
+                    ->label(__('Decline'))
                     ->icon(Heroicon::OutlinedXMark)
                     ->color('danger')
                     // Permissão própria, e não a de aceitar: são verbos irmãos, e verbo irmão não
@@ -139,15 +141,15 @@ class ConvitesRecebidos extends Page implements HasTable
                     ->authorize('Recusar:Convite')
                     ->requiresConfirmation()
                     ->modalHeading(__('Decline invitation'))
-                    ->modalDescription('A recusa fica registrada e este convite deixa de valer. Quem convidou pode enviar outro.')
+                    ->modalDescription(__('The decline is recorded and this invitation stops being valid. Whoever invited you can send another one.'))
                     ->action(function (Convite $record): void {
                         $record->recusar($this->usuario());
                     })
-                    ->successNotificationTitle('Convite recusado'),
+                    ->successNotificationTitle(__('Invitation declined')),
             ])
             ->emptyStateHeading(__('No pending invitations'))
-            ->emptyStateDescription('Quando alguém convidar você para uma '
-                .mb_strtolower((string) config('kit.tenancy.label', 'Organização')).', o convite aparece aqui.');
+            ->emptyStateDescription(__('When someone invites you to a ')
+                .mb_strtolower((string) config('kit.tenancy.label', 'Organização')).__(', the invitation shows up here.'));
     }
 
     /**
