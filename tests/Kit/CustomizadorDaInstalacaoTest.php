@@ -130,7 +130,7 @@ it('substitui a chave já preenchida sem tocar no resto do arquivo', function ()
     customizadorNoTemp()->aplicar(respostasDeCustomizacao(['nome' => 'Loja do Ferro']));
 
     expect(valorNoEnv('APP_NAME'))->toBe('Loja do Ferro')
-        ->and(envDoTeste())->toContain('# SQLite por padrão')
+        ->and(envDoTeste())->toContain('# SQLite by default')
         ->and(substr_count(envDoTeste(), "\n"))->toBe($linhasAntes);
 })->group('kit');
 

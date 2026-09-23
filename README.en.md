@@ -13,10 +13,13 @@
 A ready-to-use **Laravel 13 + Filament 5** starter kit. One command creates the project, installs everything, migrates, seeds the database and hands you three working panels: **business**, **administration** and **infrastructure**.
 
 ```bash
-composer create-project gsferro/starter-kit-easy my-project
+composer create-project ridwans2/filament-starterkit my-project \
+  --repository='{"type":"vcs","url":"https://github.com/ridwans2/starterkit.git"}'
 cd my-project
 composer dev
 ```
+
+The `--repository` flag is required: this kit is distributed straight from GitHub, not from Packagist.
 
 There is no manual step: `create-project` already creates the `.env`, generates the `APP_KEY`, creates the database, runs the migrations, seeds roles/permissions/user, publishes the Filament assets and builds the front-end. At the end it prints the URLs and the initial login.
 

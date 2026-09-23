@@ -6,39 +6,39 @@
 *.md diff=markdown
 *.php diff=php
 
-# O CI e o changelog são do kit, não do projeto que nasce dele: ficam fora do
-# pacote distribuído. Tudo o mais (tests, docker, .env.docker) segue junto de
-# propósito — é material de trabalho de quem instala.
+# The CI and the changelog belong to the kit, not to the project that grows out of
+# it: they stay out of the distributed package. Everything else (tests, docker, .env.docker)
+# ships on purpose — it is working material for whoever installs the kit.
 /.github export-ignore
 CHANGELOG.md export-ignore
 .styleci.yml export-ignore
 
-# `wikis/specs/` é o histórico de planejamento DO KIT — 250 arquivos com as ADRs das
-# features que construíram o próprio kit. É o mesmo critério do `.github` acima, e a
-# mesma decisão que `KitUpdate::CAMINHOS_DO_KIT` já toma do outro lado: ele entrega os
-# onze documentos de topo de `wikis/` um a um e nunca a `specs/`. Sem esta linha o
-# `create-project` entregava o que o `kit:update` recusa entregar — e o agente do
-# projeto instalado varre 250 wikis alheias antes de escrever a primeira dele.
-# `wikis/*.md` NÃO entra aqui: a wiki de referência é material de trabalho de quem
-# instala, e o README a trata como tal.
+# `wikis/specs/` is the kit's OWN planning history — 250 files holding the ADRs of the
+# features that built the kit itself. It is the same criterion as `.github` above, and the
+# same decision `KitUpdate::CAMINHOS_DO_KIT` already makes on the other side: it delivers the
+# eleven top-level documents of `wikis/` one by one and never `specs/`. Without this line the
+# `create-project` used to hand over what `kit:update` refuses to hand over — and the installed
+# project's agent would sweep 250 foreign wikis before writing its first one.
+# `wikis/*.md` does NOT go here: the reference wiki is working material for whoever
+# installs, and the README treats it as such.
 /wikis/specs export-ignore
 
-# `docs/` é o SITE do kit — a documentação que hoje vive nos READMEs, publicada em
-# GitHub Pages. Mesmo critério de `/wikis/specs` e `/.github` acima: é material do
-# kit, não do projeto que nasce dele. Sem esta linha, todo projeto instalado
-# receberia dezenas de páginas sobre um kit que já virou o código dele.
-# Os READMEs NÃO entram aqui: eles encolhem, mas continuam no dist — são a
-# apresentação do pacote, e é o que o Packagist mostra.
+# `docs/` is the kit's SITE — the documentation that today lives in the READMEs, published on
+# GitHub Pages. Same criterion as `/wikis/specs` and `/.github` above: it is kit
+# material, not the project that grows out of it. Without this line, every installed
+# project would receive dozens of pages about a kit that already became its own code.
+# The READMEs do NOT go here: they shrink, but they stay in the dist — they are the
+# package's presentation, and it is what Packagist shows.
 /docs export-ignore
 
-# `site/` é o TOOLCHAIN do site — o projeto Astro que gera o que `docs/` descreve. Mesmo critério
-# de `/docs` acima, e o mesmo motivo: é material do kit, não do projeto que nasce dele. Sem esta
-# linha, todo projeto instalado receberia um `package.json` de documentação que ele nunca roda,
-# ao lado do `package.json` dele — que é exatamente o que a ADR-02 da wiki do site proíbe.
+# `site/` is the site's TOOLCHAIN — the Astro project that generates what `docs/` describes. Same criterion
+# as `/docs` above, and the same reason: it is kit material, not the project that grows out of it. Without this
+# line, every installed project would receive a documentation `package.json` it never runs,
+# next to its own `package.json` — which is exactly what ADR-02 of the site wiki forbids.
 /site export-ignore
 /site-vitepress export-ignore
 
-# `phpstan.neon`, `phpunit.xml` e `pint.json` NÃO entram aqui: os scripts `lint`,
-# `types:check` e `test` do composer.json seguem no dist e sem esses arquivos
-# nenhum deles roda no projeto instalado. Os três estão em
-# KitUpdate::CAMINHOS_DO_KIT, e tests/Kit/KitUpdateTest.php falha se voltarem.
+# `phpstan.neon`, `phpunit.xml` and `pint.json` do NOT go here: the composer.json `lint`,
+# `types:check` and `test` scripts still ship in the dist and without these files
+# none of them runs in the installed project. All three are in
+# KitUpdate::CAMINHOS_DO_KIT, and tests/Kit/KitUpdateTest.php fails if they come back.
