@@ -1,432 +1,423 @@
-<img alt="Starter Kit Easy" class="filament-hidden" src="https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbnail.png"/>
+ 
 
-[![Packagist](https://img.shields.io/packagist/v/gsferro/starter-kit-easy.svg?style=flat-square)](https://packagist.org/packages/gsferro/starter-kit-easy)
-[![Downloads](https://img.shields.io/packagist/dt/gsferro/starter-kit-easy.svg?style=flat-square)](https://packagist.org/packages/gsferro/starter-kit-easy)
-[![Plumb](https://plumbphp.dev/badges/gsferro/starter-kit-easy/composite.svg)](https://plumbphp.dev/gsferro/starter-kit-easy)
-[![Testes](https://img.shields.io/github/actions/workflow/status/gsferro/filament-starter-kit-easy/ci.yml?branch=main&style=flat-square&label=testes)](https://github.com/gsferro/filament-starter-kit-easy/actions/workflows/ci.yml)
-[![PHP](https://img.shields.io/packagist/php-v/gsferro/starter-kit-easy.svg?style=flat-square)](https://packagist.org/packages/gsferro/starter-kit-easy)
-[![Filament](https://img.shields.io/badge/Filament-5.x-FFAA00?style=flat-square)](https://filamentphp.com)
-[![License](https://img.shields.io/packagist/l/gsferro/starter-kit-easy.svg?style=flat-square)](LICENSE)
-
-> 🇧🇷 Português · 🇺🇸 [English](https://github.com/gsferro/filament-starter-kit-easy/blob/main/README.en.md)
-
-Starter kit **Laravel 13 + Filament 5** pronto para uso. Um comando cria o projeto, instala tudo, migra, popula o banco e entrega três painéis funcionando: **negócio**, **administração** e **infraestrutura**.
+A ready-to-use **Laravel 13 + Filament 5** starter kit. One command creates the project, installs everything, migrates, seeds the database and hands you three working panels: **business**, **administration** and **infrastructure**.
 
 ```bash
-composer create-project ridwans2/filament-starterkit meu-projeto \
+composer create-project ridwans2/filament-starterkit my-project \
   --repository='{"type":"vcs","url":"https://github.com/ridwans2/starterkit.git"}'
-cd meu-projeto
+cd my-project
 composer dev
 ```
 
-O `--repository` é obrigatório: este kit é distribuído direto do GitHub, e não do Packagist.
+The `--repository` flag is required: this kit is distributed straight from GitHub, not from Packagist.
 
-Não há passo manual: o `create-project` já cria o `.env`, gera a `APP_KEY`, cria o banco, roda as migrations, semeia papéis/permissões/usuário, publica os assets do Filament e faz o build do front-end. Ao final ele imprime as URLs e o login inicial.
+There is no manual step: `create-project` already creates the `.env`, generates the `APP_KEY`, creates the database, runs the migrations, seeds roles/permissions/user, publishes the Filament assets and builds the front-end. At the end it prints the URLs and the initial login.
 
-Antes de tocar no banco, ele **pergunta cinco coisas** — como o `laravel new` faz:
+Before touching the database, it **asks five questions** — the same way `laravel new` does:
 
-| | Pergunta | Padrão |
+| | Question | Default |
 |---|---|---|
-| 1 | Nome do projeto | o nome da pasta |
-| 2 | Banco de dados | SQLite · **PostgreSQL** (recomendado: é o único com `pgvector`, exigido pelas funções de IA local) · MySQL |
-| 3 | E-mail e senha do administrador | `admin@example.com` / `password` |
-| 4 | Cor primária dos painéis | o padrão do Filament |
-| 5 | Multi-organização (multi-tenancy) | desligada |
+| 1 | Project name | the folder name |
+| 2 | Database | SQLite · **PostgreSQL** (recommended: the only one with `pgvector`, required by the local AI features) · MySQL |
+| 3 | Administrator e-mail and password | `admin@example.com` / `password` |
+| 4 | Primary color of the panels | the Filament default |
+| 5 | Multi-tenancy | off |
 
-**Enter em tudo instala exatamente como antes** — nenhuma pergunta é obrigatória, e a primeira delas é "personalizar agora?", que pula todas de uma vez. Sem terminal (CI, Docker, `--no-interaction`) nada é perguntado. Ao final o instalador mostra o resumo do que mudou, o que continua sendo editado à mão, e oferece rodar os testes do kit.
+**Hitting Enter on everything installs exactly as before** — no question is mandatory, and the first one is "customize now?", which skips them all at once. With no terminal (CI, Docker, `--no-interaction`) nothing is asked. At the end the installer prints a summary of what changed, what is still edited by hand, and offers to run the kit's test suite.
 
-> **No Windows as perguntas não aparecem, e isso não é bug do kit.** Medido nos dois shells,
-> PowerShell e Git Bash: o Composer nunca liga TTY em Windows — `ProcessExecutor::runProcess()`
-> descarta o modo TTY quando `Platform::isWindows()`, porque o `symfony/process` lançaria
-> `TTY mode is not supported on Windows platform`. O `artisan` recebe pipes, e o instalador se
-> pula pelo próprio guarda de terminal, avisando na tela.
+> **On Windows the questions don't show up, and that is not a kit bug.** Measured in both shells,
+> PowerShell and Git Bash: Composer never enables TTY on Windows — `ProcessExecutor::runProcess()`
+> drops TTY mode when `Platform::isWindows()`, because `symfony/process` would throw
+> `TTY mode is not supported on Windows platform`. `artisan` receives pipes, and the installer skips
+> itself through its own terminal guard, saying so on screen.
 >
-> **O que fazer**, e a ordem importa:
+> **What to do**, and the order matters:
 >
 > ```bash
-> php artisan kit:install --force    # as cinco perguntas — RECRIA o banco
+> php artisan kit:install --force    # the five questions — RECREATES the database
 > ```
 >
-> Rode **logo depois de instalar**, com o banco ainda só com os dados de seed: aí o `--force` é
-> inócuo. Mais tarde ele é destrutivo, porque apaga o SQLite antes de perguntar.
+> Run it **right after installing**, while the database holds nothing but seed data: there the
+> `--force` is harmless. Later on it is destructive, because it deletes the SQLite file before asking.
 >
-> Se já tem dado no banco e quer só o nome e a cor:
+> If the database already has data and you only want the name and the colour:
 >
 > ```bash
-> php artisan kit:install --custom   # nome e cor, sem tocar em nada
+> php artisan kit:install --custom   # name and colour, touching nothing else
 > ```
 >
-> As outras três perguntas não têm versão não destrutiva, e o comando explica por quê: banco e
-> multi-organização exigem recriar (as tabelas de permissão só nascem com a coluna de contexto
-> antes do `migrate`), e as credenciais do administrador **não são sincronizadas pelo seeder** —
-> ele garante que exista um administrador, e não que ele espelhe o `.env`, porque roda em todo
-> `db:seed` e sobrescrever ali reverteria a senha trocada à mão.
+> The other three questions have no non-destructive version, and the command explains why: database
+> and multi-tenancy require recreating (the permission tables only get the tenant column before
+> `migrate`), and the administrator credentials **are not synced by the seeder** — it guarantees that
+> an administrator exists, not that it mirrors `.env`, because it runs on every `db:seed` and
+> overwriting there would revert a password changed by hand.
 >
-> Para trocar e-mail ou senha do administrador, o caminho é deliberado:
+> To change the administrator's e-mail or password, the path is deliberate:
 >
 > ```bash
 > php artisan kit:admin
-> php artisan kit:admin --email=novo@example.com --senha=segredo --force   # sem perguntas — evite: a senha fica no histórico do shell
+> php artisan kit:admin --email=new@example.com --senha=secret --force   # no prompts — avoid it: the password lands in the shell history
 > ```
 >
-> Ele pede confirmação, nunca ecoa a senha, recusa e-mail que já pertence a outra conta e **para**
-> se houver mais de um `master_global` — em vez de escolher um por ordenação. A tela de perfil do
-> painel também serve.
+> It asks for confirmation, never echoes the password, refuses an e-mail that already belongs to
+> another account and **stops** if there is more than one `master_global` — instead of picking one by
+> ordering. The panel's profile screen works too.
 >
-> Em Linux, macOS e WSL as perguntas aparecem no `create-project` e nada disso é necessário.
+> On Linux, macOS and WSL the questions show up during `create-project` and none of this is needed.
 
-> A multi-organização é o item que mais compensa decidir agora: ligada na instalação, ela custa zero; ligada depois, o `kit:tenancy` **recria o banco** (as tabelas de permissão só nascem com a coluna de contexto se a flag estiver ativa antes do migrate).
+> Multi-tenancy is the item that pays off most to decide now: switched on during installation it costs nothing; switched on later, `kit:tenancy` **recreates the database** (the permission tables only get the tenant column if the flag is active before the migration).
 
-![Instalação do starter-kit-easy em um comando](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/install.gif)
+![Installing starter-kit-easy in a single command](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/install.gif)
 
-Prefere clonar? O mesmo instalador roda sozinho:
+Prefer to clone? The same installer runs on its own:
 
 ```bash
-git clone https://github.com/gsferro/filament-starter-kit-easy.git meu-projeto
-cd meu-projeto && rm -rf .git && git init   # descarta o histórico do kit
+git clone https://github.com/gsferro/filament-starter-kit-easy.git my-project
+cd my-project && rm -rf .git && git init   # drop the kit's history
 composer setup
 ```
 
-## Acesso de demonstração
+## Demo access
 
-O seeder cria um usuário master que já entra nos três painéis:
+The seeder creates a master user that already gets into all three panels:
 
 | | |
 |---|---|
-| **Usuário** | `admin@example.com` |
-| **Senha** | `password` |
-| **Papel** | `master_global` (vence qualquer permissão via `Gate::before`) |
+| **User** | `admin@example.com` |
+| **Password** | `password` |
+| **Role** | `master_global` (beats any permission through `Gate::before`) |
 
-Entre por `/app`, `/admin` ou `/infra` — a mesma sessão vale para os três, e o menu do usuário troca de painel.
+Sign in at `/app`, `/admin` or `/infra` — the same session works for all three, and the user menu switches panels.
 
-> ⚠️ **Troque a senha antes de expor o ambiente.** Para nascer com outra credencial, defina `KIT_ADMIN_EMAIL`, `KIT_ADMIN_PASSWORD` e `KIT_ADMIN_NAME` no `.env` **antes** de rodar a instalação (os valores ficam em `config/kit.php`). Num projeto já instalado, troque pelo próprio painel em `/admin/users` ou em **Meu perfil**.
+> ⚠️ **Change the password before exposing the environment.** To be born with different credentials, set `KIT_ADMIN_EMAIL`, `KIT_ADMIN_PASSWORD` and `KIT_ADMIN_NAME` in `.env` **before** running the installation (the values live in `config/kit.php`). On an already-installed project, change it from the panel itself at `/admin/users` or under **My profile**.
 
-Para testar o recorte de acesso, crie um usuário só com o papel `admin` ou `infra`: ele entra no painel correspondente e toma 403 no outro.
+To see the access boundary in action, create a user with only the `admin` or `infra` role: they get into the matching panel and take a 403 on the other.
 
-## Os três painéis
+## The three panels
 
-| Painel | URL | Para quê | Quem entra |
+| Panel | URL | What for | Who gets in |
 |---|---|---|---|
-| **App** | `/app` | A operação do negócio. **Vem vazio de propósito** — é aqui que seu projeto nasce | `master_global`, `panel_user`, `admin_app` (com tenancy) |
-| **Admin** | `/admin` | Usuários, papéis e permissões (Shield), catálogo de agentes de IA, autoria de onboarding | `master_global`, `admin` |
-| **Infra** | `/infra` | Health checks, backups, filas, logs, exceções, trilha de e-mails, lixeira, auditoria, caches, comandos, Pulse, custos de IA | `master_global`, `infra` |
+| **App** | `/app` | The business operation. **Intentionally empty** — this is where your project is born | `master_global`, `panel_user`, `admin_app` (with tenancy) |
+| **Admin** | `/admin` | Users, roles and permissions (Shield), AI agent catalog, onboarding authoring | `master_global`, `admin` |
+| **Infra** | `/infra` | Health checks, backups, queues, logs, exceptions, mail trail, recycle bin, auditing, caches, commands, Pulse, AI costs | `master_global`, `infra` |
 
-**Quem entra vem do papel, não de uma lista no código.** Cada papel declara em qual painel vale, na coluna `roles.painel` — é o campo **Painel** na tela `/admin` → Papéis. `App\Models\User::canAccessPanel()` compara essa coluna com o painel que está sendo aberto. Criar um papel e escolher o painel dele **é** o ato de dar acesso.
+**Who gets in comes from the role, not from a list in the code.** Each role declares which panel it is good for, in the `roles.painel` column — the **Painel** field on the `/admin` → Roles screen. `App\Models\User::canAccessPanel()` compares that column against the panel being opened. Creating a role and picking its panel **is** the act of granting access.
 
-Nulo **não** é coringa: papel sem painel só carrega permissões e não abre painel algum. O papel `master_global` entra nos três de outro jeito — ele vence qualquer gate via `Gate::before` (`App\Providers\KitServiceProvider`), sem precisar de permissions no banco, e o `canAccessPanel()` o libera antes de olhar a coluna.
+Null is **not** a wildcard: a role with no panel only carries permissions and opens no panel at all. The `master_global` role gets into all three another way — it beats any gate through `Gate::before` (`App\Providers\KitServiceProvider`), with no permissions in the database, and `canAccessPanel()` lets it through before it ever looks at the column.
 
-Nos painéis **sem** tenancy (`/admin`, `/infra`) o papel precisa estar atribuído no contexto global: ser `admin` dentro de uma organização não é credencial para administrar a instalação. No `/app` vale o papel em qualquer organização — qual delas você abre é decidido depois, por `canAccessTenant()`.
+On panels **without** tenancy (`/admin`, `/infra`) the role must be assigned in the global context: being an `admin` inside one organization is not a credential to administer the installation. On `/app` the role counts in any organization — which one you open is decided later, by `canAccessTenant()`.
 
-**O badge do menu do usuário mostra o papel da organização ABERTA.** Quem pertence a mais de uma pode ter papéis diferentes em cada — `panel_user` numa, `admin_app` noutra —, e o badge acompanha a troca de organização. Sem papel na organização aberta, não há badge: entrar no painel não depende da organização (é o parágrafo acima), mas a exibição sim. Nos painéis sem tenancy nada muda, porque lá não há organização corrente.
+**The user-menu badge shows the role for the OPEN organization.** Someone who belongs to more than one may hold different roles in each — `panel_user` in one, `admin_app` in another — and the badge follows the organization switch. With no role in the open organization there is no badge: entering the panel does not depend on the organization (that is the paragraph above), but the display does. Nothing changes on panels without tenancy, since there is no current organization there.
 
-> Com o [modo multi-tenant](https://gsferro.github.io/filament-starter-kit-easy/pt/recursos/multi-tenancy.html) ligado, o **App** vira `/app/{tenant}` e passa a mostrar só os dados do tenant selecionado. Admin e Infra seguem globais.
+> With [multi-tenancy](https://gsferro.github.io/filament-starter-kit-easy/en/recursos/multi-tenancy.html) turned on, **App** becomes `/app/{tenant}` and shows only the selected tenant's data. Admin and Infra stay global.
 
-Separar admin de infra é o ponto do kit: quem administra usuários não precisa (nem deve) enxergar logs, filas e comandos operacionais, e vice-versa.
+Separating admin from infra is the whole point of the kit: whoever administers users doesn't need (and shouldn't) see logs, queues and operational commands, and vice versa.
 
-### Como cada um se parece
+### What each one looks like
 
-| Login | Administração |
+| Login | Administration |
 |---|---|
-| [![Tela de login](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/login.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/login.png) | [![Painel admin](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/panel-admin.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/panel-admin.png) |
-| Auth Designer em duas colunas — a arte mostra o nome da aplicação | Usuários, papéis, agentes de IA e indicadores de administração |
+| [![Login screen](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/login.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/login.png) | [![Admin panel](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/panel-admin.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/panel-admin.png) |
+| Two-column Auth Designer — the artwork shows the application name | Users, roles, AI agents and administration indicators |
 
-| Infraestrutura | Negócio |
+| Infrastructure | Business |
 |---|---|
-| [![Painel infra](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/panel-infra.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/panel-infra.png) | [![Painel app](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/panel-app.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/panel-app.png) |
-| Saúde, filas, trilhas, comandos e custos de IA — agrupados em Observabilidade, IA, Trilhas e Sistema | Vazio de propósito: é onde o seu projeto nasce |
+| [![Infra panel](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/panel-infra.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/panel-infra.png) | [![App panel](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/panel-app.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/panel-app.png) |
+| Health, queues, audit trails, commands and AI costs — grouped under Observability, AI, Trails and System | Intentionally empty: it's where your project is born |
 
-Mais telas: [saúde da aplicação](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/infra-health.png) · [usuários](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/admin-users.png) · [permissões (Shield)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/admin-roles.png) · [catálogo de agentes de IA](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/admin-agentes-ia.png) · [central de comandos](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/infra-comandos.png) · [busca ⌘K](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/spotlight.png) · [acesso negado](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/erro-403.png)
+More screens: [application health](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/infra-health.png) · [users](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/admin-users.png) · [permissions (Shield)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/admin-roles.png) · [AI agent catalog](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/admin-agentes-ia.png) · [command center](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/infra-comandos.png) · [⌘K search](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/spotlight.png) · [access denied](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/erro-403.png)
 
-## Nossos números
+## Our numbers
 
-Não é vitrine: é o inventário de tudo que já existe, e o que você não vai precisar escrever.
+Not a showcase: it's the inventory of everything that already exists, and of what you won't have to write.
 
 | | `/app` | `/admin` | `/infra` | **Total** |
 |---|---:|---:|---:|---:|
-| **Telas navegáveis** | 14 | 31 | 28 | **73** |
+| **Navigable screens** | 14 | 31 | 28 | **73** |
 | Resources | 4 | 8 | 8 | **20** |
-| Páginas próprias | 5 | 5 | 13 | **23** |
+| Standalone pages | 5 | 5 | 13 | **23** |
 | Widgets | 1 | 9 | 19 | **29** |
-| Rotas `GET` | 23 | 38 | 34 | **95** |
+| `GET` routes | 23 | 38 | 34 | **95** |
 
-O `/app` é o menor de propósito — ele nasce **vazio**, porque é onde o seu projeto entra. Os outros
-dois já vêm completos.
+`/app` is the smallest on purpose — it is born **empty**, because that's where your business comes in.
+The other two already come complete.
 
-> **O critério de cada linha, para que os números sejam auditáveis.** *Tela navegável* é rota `GET`
-> do painel **com nome de rota**, descontadas as de autenticação, os endpoints que devolvem JSON e
-> os redirects. *Páginas próprias* é `$painel->getPages()`, sem exclusão. *Rotas `GET`* conta tudo
-> sob o caminho do painel, inclusive autenticação e redirect. *Widgets* é `$painel->getWidgets()` —
-> widget de **painel**; os 6 widgets de resource de `Tenants/Widgets/` não entram, e por isso um
-> `ls` dá um número maior. Medido com `kit.tenancy.enabled = false`; com tenancy ligada as rotas do
-> `/app` ganham o prefixo da organização.
+> **The criterion for each row, so the numbers can be audited.** A *navigable screen* is a panel
+> `GET` route **with a route name**, excluding authentication routes, JSON endpoints and redirects.
+> *Standalone pages* is `$panel->getPages()`, with no exclusions. *`GET` routes* counts everything
+> under the panel path, including authentication and redirects. *Widgets* is `$panel->getWidgets()` —
+> **panel** widgets; the 6 resource widgets in `Tenants/Widgets/` are not included, which is why an
+> `ls` returns a larger number. Measured with `kit.tenancy.enabled = false`; with tenancy on, `/app`
+> routes gain the organisation prefix.
 >
-> Até a v0.36.1 a linha *Telas navegáveis* não tinha critério declarado e **não era falsificável** —
-> ela ficou parada em `12 / 28 / 27` desde 18/08/2026 e atravessou um fact-check inteiro sem ser
-> corrigida, porque não havia como conferi-la. Agora as cinco linhas são travadas por
+> Until v0.36.1 the *Navigable screens* row had no declared criterion and **was not falsifiable** —
+> it sat at `12 / 28 / 27` since 2026-08-18 and survived a whole fact-check uncorrected, because
+> there was no way to check it. All five rows are now locked by
 > `tests/Kit/SiteDeDocumentacaoTest.php`.
 
-| Fundação | |
+| Foundation | |
 |---|---:|
-| Pacotes de produção | **58** |
-| Pacotes de desenvolvimento | **19** |
+| Production packages | **58** |
+| Development packages | **19** |
 | Migrations | **61** |
 | Policies | **16** |
-| Comandos `kit:*` | **8** |
+| `kit:*` commands | **8** |
 
-| Qualidade | |
+| Quality | |
 |---|---:|
-| Casos de teste (`Kit` + `Tenancy`, medidos em 2026-09-08) | **2.226**, com **7.428 asserções** |
-| Telas varridas em navegador real | **55** |
-| Arquivos de teste | **151** em `Kit` + `Tenancy` (**184** no total) |
-| PHPStan | **level 7**, zero erros |
-| FilaCheck | **17** regras, todas passando |
+| Test cases (`Kit` + `Tenancy`, measured on 2026-09-08) | **2,226**, with **7,428 assertions** |
+| Screens swept in a real browser | **55** |
+| Test files | **151** in `Kit` + `Tenancy` (**184** in total) |
+| PHPStan | **level 7**, zero errors |
+| FilaCheck | **17** rules, all passing |
 
-| Documentação | |
+| Documentation | |
 |---|---:|
-| Documentos de referência (`wikis/`) | **10** |
-| Features especificadas (`wikis/specs/`) | **66** |
-| Project rules para agentes de IA (`.ai/rules/`, sem o índice) | **19** |
+| Reference documents (`wikis/`) | **10** |
+| Specified features (`wikis/specs/`) | **66** |
+| Project rules for AI agents (`.ai/rules/`, excluding the index) | **19** |
 
-> O detalhamento saiu daqui e está no site: **[Referência](https://gsferro.github.io/filament-starter-kit-easy/pt/referencia/)** e **[Começar](https://gsferro.github.io/filament-starter-kit-easy/pt/comecar/)**.
+> The details moved to the site: **[Reference](https://gsferro.github.io/filament-starter-kit-easy/en/referencia/)** and **[Getting started](https://gsferro.github.io/filament-starter-kit-easy/en/comecar/)**.
 
-## O que já vem pronto
+## What's already there
 
-**Porta de entrada**
-- **Página de boas-vindas na rota `/`**, no lugar da welcome padrão do Laravel: um cartão por
-  painel e as informações do que o `kit:install` personalizou ([detalhes](https://gsferro.github.io/filament-starter-kit-easy/pt/autenticacao/rota-publica.html))
+**Front door**
+- **Welcome page on the `/` route**, replacing Laravel's default welcome: one card per panel plus
+  what `kit:install` customised ([details](https://gsferro.github.io/filament-starter-kit-easy/en/autenticacao/rota-publica.html))
 
-**Administração e segurança**
-- Shield (papéis e permissões com UI) sobre spatie/laravel-permission
-- Breezy: perfil do usuário, avatar, 2FA e passkeys
-- **Ficha de usuário em tela cheia** (`/admin/users/{id}` e `/app/users/{id}`): conta, situação, origem e datas, com o botão de editar no topo. **Só no `/admin`** ela lista as organizações e os papéis da pessoa — no `/app` a omissão é a feature: contá-los ali diria a quem administra uma organização que aquela conta também é de outra ([detalhes](https://gsferro.github.io/filament-starter-kit-easy/pt/operacao/roteiro-de-features.html))
-- **Avatar desenhado aqui dentro**: sem foto, o provider padrão do Filament manda o navegador de cada pessoa pedir `ui-avatars.com` em toda tela — com as iniciais na query string e o `Referer` do painel junto. `App\Support\AvatarDeIniciais` devolve um SVG embutido nos três painéis: mesma aparência, nenhuma requisição externa
-- Auth Designer: tela de login em duas colunas — a arte **mostra o nome da aplicação**, lido de `APP_NAME` a cada carregamento; para usar a sua imagem, envie em `/admin/configuracoes-da-aplicacao`
-- **Registro aberto opcional** (desligado por default): cadastro sem convite no `/app`, com papel único, aprovação manual e validação de e-mail — cada um em sua chave ([detalhes](https://gsferro.github.io/filament-starter-kit-easy/pt/autenticacao/registro-aberto.html))
-- Lockscreen: bloqueio de sessão por inatividade (30 min), registrado nos 3 painéis — a tela de bloqueio usa o mesmo layout do login (Auth Designer), não o layout simples do Filament
-- Impersonate, log de autenticação, auditoria de alterações (owen-it)
-- Panel Switch: troca de painel pelo menu do usuário
-- **DTO com `spatie/laravel-data`**: todo dado estruturado que cruza fronteira de classe é objeto tipado, com guarda automático — credencial não entra em DTO, e consumo/resposta de API exige um ([detalhes](https://gsferro.github.io/filament-starter-kit-easy/pt/recursos/dto-com-laravel-data.html))
-- **Proteção anti-robô opcional** (desligada por default): reCAPTCHA v2/v3, Turnstile ou hCaptcha nas telas de login, recuperação de senha e registro, via `ddr/filament-captcha` ([detalhes](https://gsferro.github.io/filament-starter-kit-easy/pt/autenticacao/protecao-anti-robo.html))
-- **Página única de login** (desligada por default): `KIT_LOGIN_UNIFICADO=true` leva `/admin/login`, `/infra/login` e `/app/login` a `/login`; quem acessa um painel entra direto, quem acessa mais de um escolhe numa tela de cartões depois de entrar. **Atenção**: SSO externo (SAML/OIDC corporativo) ainda não é pré-configurado e não passa por essa regra — ver [a página de docs](https://gsferro.github.io/filament-starter-kit-easy/pt/autenticacao/login-unificado.html)
-- **Login social por painel**: cada provedor pode ser liberado separadamente em `/app`, `/admin` e `/infra`; botão, rota e destino respeitam o painel de origem
+**Administration and security**
+- Shield (roles and permissions with a UI) on top of spatie/laravel-permission
+- Breezy: user profile, avatar, 2FA and passkeys
+- **Full-screen user record page** (`/admin/users/{id}` and `/app/users/{id}`): account, status, origin and dates, with the edit button on top. **Only on `/admin`** does it list the person's organizations and roles — on `/app` the omission is the feature: telling them there would tell whoever administers one organization that the account also belongs to another ([details](https://gsferro.github.io/filament-starter-kit-easy/en/operacao/roteiro-de-features.html))
+- **Avatar drawn in here**: without a photo, Filament's default provider makes every person's browser request `ui-avatars.com` on every screen — carrying the initials in the query string and the panel's `Referer` along. `App\Support\AvatarDeIniciais` returns an inline SVG on all three panels: same looks, no external request
+- Auth Designer: two-column login screen — the artwork **shows the application name**, read from `APP_NAME` on every load; to use your own image, upload it at `/admin/configuracoes-da-aplicacao`
+- **Optional open sign-up** (off by default): registration without an invitation on `/app`, with a single role, manual approval and e-mail verification — each behind its own key ([details](https://gsferro.github.io/filament-starter-kit-easy/en/autenticacao/registro-aberto.html))
+- Lockscreen: session lock on inactivity (30 min), registered on all 3 panels — the lock screen wears the same layout as the login page (Auth Designer), not Filament's simple layout
+- Impersonate, authentication log, change auditing (owen-it)
+- Panel Switch: switch panels from the user menu
+- **DTOs with `spatie/laravel-data`**: every structured value crossing a class boundary is a typed object, with an automated guard — credentials never go into a DTO, and API consumption/responses require one ([details](https://gsferro.github.io/filament-starter-kit-easy/en/recursos/dto-com-laravel-data.html))
+- **Optional anti-robot protection** (off by default): reCAPTCHA v2/v3, Turnstile or hCaptcha on the login, password reset and register screens, via `ddr/filament-captcha` ([details](https://gsferro.github.io/filament-starter-kit-easy/en/autenticacao/protecao-anti-robo.html))
+- **Single login page** (off by default): `KIT_LOGIN_UNIFICADO=true` sends `/admin/login`, `/infra/login` and `/app/login` to `/login`; whoever can access one panel goes straight in, whoever can access more than one picks from a card screen after signing in. **Heads-up**: external SSO (SAML / corporate OIDC) is not pre-configured yet and does not go through that rule — see [the docs page](https://gsferro.github.io/filament-starter-kit-easy/en/autenticacao/login-unificado.html)
+- **Social login per panel**: each provider can be enabled separately for `/app`, `/admin` and `/infra`; button, route and destination respect the panel of origin
 
-**Observabilidade e manutenção (painel infra)**
-- Spatie Health com checks de banco, cache, filas, agendador, disco (exceto no Windows), debug mode, ambiente, app otimizado e IA local
-- Backup Monitor (spatie/laravel-backup), Jobs Monitor, Logs Explorer (sem botão de apagar — trilha é evidência)
-- **Exceções agrupadas** por tipo e frequência — o que Health, Pulse e arquivo de log não respondem
-- **Trilha de e-mails enviados**: separa "não foi enviado" de "foi enviado e caiu no spam"
-- **Lixeira**: restaura o que foi apagado com `SoftDeletes` ([detalhes](https://gsferro.github.io/filament-starter-kit-easy/pt/recursos/trilhas-de-infraestrutura.html))
-- Command Center: comandos Artisan pré-aprovados pela UI, com histórico
-- Laravel Pulse embutido como página do painel
-- Dependency Graph: mapa de models, relações, resources e painéis
-- Release Notifier: avisa quando há versão nova dos pacotes Composer
+**Observability and maintenance (infra panel)**
+- Spatie Health with checks for database, cache, queues, scheduler, disk (except on Windows), debug mode, environment, optimized app and local AI
+- Backup Monitor (spatie/laravel-backup), Jobs Monitor, Logs Explorer (no delete button — a trail is evidence)
+- **Grouped exceptions** by type and frequency — what Health, Pulse and the log file don't answer
+- **Sent-mail trail**: separates "it was never sent" from "it was sent and landed in spam"
+- **Recycle bin**: restores what was deleted with `SoftDeletes` ([details](https://gsferro.github.io/filament-starter-kit-easy/en/recursos/trilhas-de-infraestrutura.html))
+- Command Center: Artisan commands pre-approved for the UI, with history
+- Laravel Pulse embedded as a panel page
+- Dependency Graph: a map of models, relations, resources and panels
+- Release Notifier: warns you when there's a new version of the Composer packages
 
-**IA (opcional, local por padrão)**
-- `laravel/ai` com catálogo de agentes no banco: system prompt, provider, modelo, tools e guardrails são **dados**, editáveis no `/admin` sem deploy
-- Guardrails encadeados: budget, prompt injection, classificador local, redação de PII e filtro de saída sensível
-- Ledger de execuções (`ai_runs`) com custo e tokens no painel infra
-- Widget de chat com streaming
-- Inferência 100% local via llama.cpp (`docker compose --profile ai up -d`) ou qualquer provider SaaS trocando `AI_PROVIDER`
+**AI (optional, local by default)**
+- `laravel/ai` with an agent catalog in the database: system prompt, provider, model, tools and guardrails are **data**, editable in `/admin` with no deploy
+- Chained guardrails: budget, prompt injection, local classifier, PII redaction and sensitive-output filter
+- Execution ledger (`ai_runs`) with cost and tokens in the infra panel
+- Chat widget with streaming
+- 100% local inference through llama.cpp (`docker compose --profile ai up -d`) or any SaaS provider by switching `AI_PROVIDER`
 
-**Produtividade**
-- **Busca ⌘K** no lugar do campo nativo da topbar: encontra registros, telas, páginas e ações de criação — tudo recortado por permissão (detalhes abaixo)
-- Badges de contagem animados no menu, centro de notificações com abas, indicador de ambiente
-- **Dashboards já preenchidos** nos painéis admin e infra: 29 widgets (stat cards com contador animado, funis, metas, breakdowns, timelines) sobre os dados que os painéis já têm — incluindo logins de hoje com histórico de sete dias e, com tenancy, insights e acessos das organizações
-- Páginas de erro brandadas (Sentinel) em pt-BR — a de 403 só mostra o diagnóstico de permissão fora de produção
-- UI 100% em pt-BR, inclusive nos plugins que só trazem inglês (traduções em `lang/vendor/`)
-- **Seletor de idioma** nos três painéis e nas telas de login — dirigido por dado, não por flag (detalhes abaixo)
-- **Camada de mídia** (spatie/laravel-medialibrary) nos componentes do Filament: upload, coleções e conversões em formulário, tabela e infolist ([detalhes](https://gsferro.github.io/filament-starter-kit-easy/pt/recursos/anexos-e-midia.html))
-- **Cabeçalho rico** no topo das telas de ver e editar usuário e organização: avatar (ou as iniciais), nome, badge de situação e metadados copiáveis, no lugar do título de texto do Filament
-- **Aviso de alterações não salvas** ao sair de um formulário nos três painéis, e a **versão do seu sistema no rodapé** — os dois são interruptor em `/admin/configuracoes-da-aplicacao`, sem deploy ([detalhes](https://gsferro.github.io/filament-starter-kit-easy/pt/recursos/configuracoes-do-kit.html))
-- **Densidade do layout em três níveis**, na mesma tela de configurações: *confortável* (o padrão do Filament), *compacto* e *denso*. Aperta de uma vez os cartões de estatística, as tabelas, o menu lateral e os botões dos três painéis, e **vale no próximo F5** — sem tema Vite, sem `npm run build`, sem deploy. Medido no próprio kit: a linha da tabela cai **−17,1%** no compacto e **−23,4%** no denso ([detalhes](https://gsferro.github.io/filament-starter-kit-easy/pt/recursos/configuracoes-do-kit.html#densidade-do-layout))
-- **Link de acesso direto ao painel de cada organização** (com multi-tenancy) nas três telas do `/admin` — listagem, ficha e edição. Na listagem é uma coluna com o endereço visível, abrindo em nova aba: o destino é conhecido antes do clique ([detalhes](https://gsferro.github.io/filament-starter-kit-easy/pt/recursos/multi-tenancy.html))
+**Productivity**
+- **⌘K search** in place of the topbar's native field: finds records, screens, pages and creation actions — all scoped by permission (details below)
+- Animated count badges in the menu, notification center with tabs, environment indicator
+- **Dashboards already filled in** on the admin and infra panels: 29 widgets (stat cards with an animated counter, funnels, goals, breakdowns, timelines) over the data the panels already have — including today's logins with a seven-day history and, with tenancy, organization insights and accesses
+- Branded error pages (Sentinel) in Portuguese (pt-BR) — the 403 one only shows the permission diagnosis outside production
+- 100% pt-BR UI, including plugins that ship English only (translations in `lang/vendor/`)
+- **Language switcher** on all three panels and on the login screens — driven by data, not by a flag (details below)
+- **Media layer** (spatie/laravel-medialibrary) inside Filament's components: uploads, collections and conversions in form, table and infolist ([details](https://gsferro.github.io/filament-starter-kit-easy/en/recursos/anexos-e-midia.html))
+- **Rich header** on top of the view and edit screens for users and organizations: avatar (or the initials), name, status badge and copyable metadata, in place of Filament's plain text title
+- **Unsaved-changes warning** when leaving a form on any of the three panels, and **your system's version in the footer** — both are a switch at `/admin/configuracoes-da-aplicacao`, no deploy ([details](https://gsferro.github.io/filament-starter-kit-easy/en/recursos/configuracoes-do-kit.html))
+- **Layout density in three steps**, on the same settings screen: *confortável* (Filament's own default), *compacto* and *denso*. It tightens the stat cards, the tables, the sidebar and the buttons of all three panels at once, and **takes effect on the next refresh** — no Vite theme, no `npm run build`, no deploy. Measured on the kit itself: the table row drops **−17.1%** on compacto and **−23.4%** on denso ([details](https://gsferro.github.io/filament-starter-kit-easy/en/recursos/configuracoes-do-kit.html#densidade-do-layout))
+- **Direct link to each organization's panel** (with multi-tenancy) on all three `/admin` screens — list, view and edit. On the list it is a column with the address in plain sight, opening in a new tab: you know where it goes before clicking ([details](https://gsferro.github.io/filament-starter-kit-easy/en/recursos/multi-tenancy.html))
 
-### A densidade do layout, na mesma tela
+### Layout density, on the same screen
 
-| Confortável (padrão) | Compacto | Denso |
+| Confortável (default) | Compacto | Denso |
 |---|---|---|
-| [![Densidade confortável](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/densidade-confortavel.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/densidade-confortavel.png) | [![Densidade compacta](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/densidade-compacto.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/densidade-compacto.png) | [![Densidade densa](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/densidade-denso.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/densidade-denso.png) |
+| [![Comfortable density](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/densidade-confortavel.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/densidade-confortavel.png) | [![Compact density](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/densidade-compacto.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/densidade-compacto.png) | [![Dense density](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/densidade-denso.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/densidade-denso.png) |
 
-Repare na coluna de ações: no confortável ela é cortada em *"Edi…"*; no denso cabe inteira. Apertar
-não é só ganhar altura — é deixar de esconder conteúdo.
+Look at the actions column: on *confortável* it is clipped to *"Edi…"*; on *denso* it fits whole.
+Tightening is not only about height — it stops hiding content.
 
-## Documentação completa
+## Full documentation
 
-O que antes vivia aqui — e eram mais de duas mil linhas — agora tem site próprio, com busca e
-navegação: **[https://gsferro.github.io/filament-starter-kit-easy/pt/](https://gsferro.github.io/filament-starter-kit-easy/pt/)**
+What used to live here — over two thousand lines of it — now has its own site, with search and
+navigation: **[https://gsferro.github.io/filament-starter-kit-easy/en/](https://gsferro.github.io/filament-starter-kit-easy/en/)**
 
-| Grupo | O que tem lá |
+| Group | What you find there |
 |---|---|
-| [Começar](https://gsferro.github.io/filament-starter-kit-easy/pt/comecar/) | instalação avançada, banco, comandos, personalização, e como atualizar um projeto que já nasceu do kit |
-| [Autenticação](https://gsferro.github.io/filament-starter-kit-easy/pt/autenticacao/) | convites, registro aberto, login social, proteção anti-robô, estados do usuário |
-| [Recursos](https://gsferro.github.io/filament-starter-kit-easy/pt/recursos/) | multi-tenancy, anexos e mídia, import/export CSV, trilhas do `/infra`, configurações do kit, hub de cartões, DTO com Laravel Data |
-| [Operação](https://gsferro.github.io/filament-starter-kit-easy/pt/operacao/) | agentes de IA, roteiro completo de features, convenções, o que fazer depois de criar um Resource |
-| [Referência](https://gsferro.github.io/filament-starter-kit-easy/pt/referencia/) | qualidade de código, busca e idioma, os 77 pacotes instalados |
+| [Getting started](https://gsferro.github.io/filament-starter-kit-easy/en/comecar/) | advanced install, database, commands, customisation, and how to update a project born from the kit |
+| [Authentication](https://gsferro.github.io/filament-starter-kit-easy/en/autenticacao/) | invitations, open registration, social login, anti-robot protection, user states |
+| [Features](https://gsferro.github.io/filament-starter-kit-easy/en/recursos/) | multi-tenancy, attachments and media, CSV import/export, `/infra` trails, kit settings, card hub, DTOs with Laravel Data |
+| [Operations](https://gsferro.github.io/filament-starter-kit-easy/en/operacao/) | AI agents, the complete feature roadmap, conventions, what to do after creating a Resource |
+| [Reference](https://gsferro.github.io/filament-starter-kit-easy/en/referencia/) | code quality, search and language, the 77 installed packages |
 
-A versão em inglês fica em **[https://gsferro.github.io/filament-starter-kit-easy/en/](https://gsferro.github.io/filament-starter-kit-easy/en/)**.
+The Portuguese version lives at **[https://gsferro.github.io/filament-starter-kit-easy/pt/](https://gsferro.github.io/filament-starter-kit-easy/pt/)**.
 
-### Futuras melhorias
+### Future improvements
 
-O **[roadmap do kit](wikis/roadmap.md)** registra o que já foi olhado e **decidiu-se adiar**, com o
-motivo e, quando houve, a medição que sustentou a decisão: preferências de aparência por usuário, o
-tema compacto pago da Filament, e o gatilho que aposenta a implementação atual de densidade.
+The **[kit roadmap](wikis/roadmap.md)** records what has already been looked at and **deliberately
+deferred**, with the reason and, where there was one, the measurement behind the decision: per-user
+appearance preferences, Filament's paid compact theme, and the trigger that retires the current
+density implementation.
 
-Ele vem junto com o seu projeto de propósito — é o futuro **do kit**, não o do seu projeto, e serve
-para você não gastar uma tarde reavaliando do zero algo que já tem número registrado.
+It ships with your project on purpose — it is the **kit's** future, not your project's, and it
+exists so you don't spend an afternoon re-evaluating something that already has numbers on record.
 
-## Requisitos
+## Requirements
 
-- PHP 8.4+ e Composer 2
-- Node 20+ (opcional — sem ele a instalação segue e avisa como fazer o build depois)
-- Docker (opcional — só para Postgres/MySQL, Redis, IA local e e-mail)
+- PHP 8.4+ and Composer 2
+- Node 20+ (optional — without it the installation still goes through and tells you how to build later)
+- Docker (optional — only for Postgres/MySQL, Redis, local AI and e-mail)
 
-## Banco de dados
+## Database
 
-**A instalação pergunta** — SQLite, PostgreSQL ou MySQL. O padrão é **SQLite**, para não depender de nada.
+**The installation asks** — SQLite, PostgreSQL or MySQL. The default is **SQLite**, so it depends on nothing.
 
-**PostgreSQL é o recomendado**, e por um motivo funcional: ele é o único que traz `pgvector`, de que dependem as funções de IA local que usam busca semântica (embeddings). Com SQLite ou MySQL o resto do kit roda igual — só essas funções ficam indisponíveis.
+**PostgreSQL is the recommended one**, for a functional reason: it is the only one shipping `pgvector`, which the local AI features that use semantic search (embeddings) depend on. With SQLite or MySQL the rest of the kit runs the same — only those features are unavailable.
 
-**Postgres e MySQL têm container no kit** — o MySQL em profile próprio, porque a instalação escolhe um banco só. Os comandos estão na seção [Docker](#docker).
+**Postgres and MySQL both ship a container** — MySQL in its own profile, because the installation picks a single database. The commands are in the [Docker](#docker) section.
 
-Escolhendo Postgres na instalação, o `.env` já sai com o bloco que o `docker-compose.yml` lê, e falta só subir o container. Se ele não estiver de pé na hora da instalação, o kit avisa, **pula as migrations** e diz o comando para refazer:
+If you pick Postgres during installation, the `.env` already comes with the block `docker-compose.yml` reads. If the container is not up at that moment, the kit warns you, **skips the migrations** and prints the command to finish:
 
 ```bash
-docker compose up -d
+docker compose up -d              # pgsql (with pgvector) + redis
 php artisan migrate --seed
 ```
 
-Para trocar depois da instalação, suba os containers e copie as variáveis:
+To switch after the installation, bring the containers up and copy the variables:
 
 ```bash
-docker compose up -d              # pgsql (com pgvector) + redis
-# copie o bloco de banco de .env.docker para o seu .env
+docker compose up -d              # pgsql (with pgvector) + redis
+# copy the database block from .env.docker into your .env
 php artisan migrate --seed
 ```
 
 ## Docker
 
-Tudo é opt-in por profile. Um container por feature:
+Everything is opt-in per profile. One container per feature:
 
 ```bash
-docker compose up -d                            # pgsql + redis
-docker compose up -d mysql redis                # MySQL em vez do Postgres
-docker compose --profile ai up -d               # + llama.cpp (chat e embeddings)
+docker compose up -d                            # pgsql (with pgvector) + redis
+docker compose up -d mysql redis                # MySQL instead of Postgres
+docker compose --profile ai up -d               # + llama.cpp (chat and embeddings)
 docker compose --profile mail up -d             # + mailpit (1025 / 8025)
-docker compose --profile full up -d             # infra completa
-docker compose --profile app up -d --build      # a aplicação containerizada
+docker compose --profile full up -d             # the whole infrastructure
+docker compose --profile app up -d --build      # the containerized application
 docker compose --profile realtime up -d reverb pulse
 ```
 
-| Serviço | Porta | Profile |
+| Service | Port | Profile |
 |---|---|---|
 | PostgreSQL 17 + pgvector | 5432 | base |
 | MySQL 8 | 3306 | `mysql` |
-| Redis 7 (só cache) | 6379 | base |
+| Redis 7 (cache only) | 6379 | base |
 | llama.cpp (chat) | 8080 | `ai` |
 | llama.cpp (embeddings) | 8081 | `ai` |
 | Mailpit | 1025 / 8025 | `mail` |
 | App (nginx + php-fpm) | 8000 | `app` |
 | Reverb (WebSocket) | 8090 | `app`, `realtime` |
 
-O Reverb usa 8090 e não o default 8080 para não colidir com o llama.cpp.
+Reverb uses 8090 instead of the default 8080 so it doesn't collide with llama.cpp.
 
-Nenhum serviço tem `container_name` fixo: o prefixo vem de `COMPOSE_PROJECT_NAME`, que o `kit:install` grava com o nome do seu projeto. [Detalhes no site](https://gsferro.github.io/filament-starter-kit-easy/pt/comecar/instalacao-avancada.html).
+No service declares a fixed `container_name`: the prefix comes from `COMPOSE_PROJECT_NAME`, which `kit:install` writes with your project's name. [Details on the site](https://gsferro.github.io/filament-starter-kit-easy/en/comecar/instalacao-avancada.html).
 
-### Endereço local por nome, em vez de IP e porta
+### A local hostname, instead of IP and port
 
-Dá para abrir o projeto em `http://meu-projeto.test` no lugar de `http://127.0.0.1:8000`: custa uma linha no arquivo `hosts` da máquina e duas chaves no `.env`. Nenhum arquivo versionado muda, a adoção é individual e quem não fizer nada continua em `http://localhost:8000`. [Receita completa, com a armadilha de elevação no Windows](https://gsferro.github.io/filament-starter-kit-easy/pt/comecar/dominio-local.html).
+You can open the project at `http://my-project.test` rather than `http://127.0.0.1:8000`: it costs one line in the machine's `hosts` file and two keys in `.env`. No versioned file changes, adoption is individual, and anyone who does nothing stays on `http://localhost:8000`. [Full recipe, including the Windows elevation trap](https://gsferro.github.io/filament-starter-kit-easy/en/comecar/dominio-local.html).
 
-**O `kit:install` oferece fazer isso no fim da instalação**: ele sugere o domínio a partir do nome que você escolheu, escreve a linha no `hosts` (pedindo elevação no Windows) e ajusta a `APP_URL`. É opt-in, não depende de flag nenhuma, e recusar deixa tudo como sempre foi. Domínio fora dos sufixos reservados ao uso local (`.test`, `.localhost`, `.example`, `.invalid`) pede um sim a mais, porque apontar um domínio real para `127.0.0.1` derruba o acesso ao site de verdade nesta máquina.
+**`kit:install` offers to do this at the end of the installation**: it suggests the domain from the name you chose, writes the line into `hosts` (asking for elevation on Windows) and adjusts `APP_URL`. It is opt-in, depends on no flag, and declining leaves everything exactly as it always was. A domain outside the suffixes reserved for local use (`.test`, `.localhost`, `.example`, `.invalid`) takes one more yes, because pointing a real domain at `127.0.0.1` blocks access to the actual site on this machine.
 
-### Atualizando a stack na máquina que a hospeda
+### Updating the stack on the machine that hosts it
 
-`./deploy_docker_local.sh` roda **no host dos containers** (não na máquina de desenvolvimento) e faz a sequência inteira: `git pull`, rebuild da imagem, `--profile app up -d`, migrations, `optimize:clear`, health check em `/up` e sonda TCP do Reverb. A saída fica em `storage/logs/deploy_docker_local.log`.
+`./deploy_docker_local.sh` runs **on the container host** (not on your development machine) and does the whole sequence: `git pull`, image rebuild, `--profile app up -d`, migrations, `optimize:clear`, a health check on `/up` and a TCP probe of Reverb. Output is appended to `storage/logs/deploy_docker_local.log`.
 
 ```bash
 ./deploy_docker_local.sh
-./deploy_docker_local.sh --recreate   # quando o .env mudou
+./deploy_docker_local.sh --recreate   # when .env changed
 ```
 
-O rebuild vem **depois** do pull porque a imagem é self-contained (o código é assado nela) — rebuild antes reassa o código velho. E como ele recria `reverb` e `pulse`, que estão no mesmo profile `app`, não há comando de restart à parte: processo long-running não vê código novo sem reiniciar.
+The rebuild comes **after** the pull because the image is self-contained (the code is baked into it) — rebuilding first would bake the old code. And since it recreates `reverb` and `pulse`, both in the same `app` profile, there is no separate restart command: a long-running process won't see new code without restarting.
 
-`--recreate` acrescenta `--force-recreate`, e é necessário quando o `.env` mudou: o Compose lê o `env_file` na **criação** do container, então um container já existente mantém os valores antigos. Se o `.env.example` mudou no pull, o script avisa.
+`--recreate` adds `--force-recreate`, needed when `.env` changed: Compose reads `env_file` when the container is **created**, so an existing container keeps the old values. If `.env.example` changed in the pull, the script warns you.
 
-## Comandos
+## Commands
 
 ```bash
-composer dev          # servidor + fila + vite juntos
-composer test         # pint + phpstan + filacheck + a suíte inteira
-composer test:kit     # só os testes do kit (a fundação), em paralelo
-composer lint         # formata o código
-composer lint:check   # só verifica a formatação, sem alterar nada (o que a CI roda)
-composer filament:check   # só o lint específico de Filament (FilaCheck)
-composer refactor:preview # o que o Rector reescreveria (dry-run) — FORA do composer test
-composer refactor:apply   # aplica a reescrita do Rector — FORA do composer test
-composer upgrade:filament # roda o vendor/bin/filament-v5 (filament/upgrade já está no require-dev)
-php artisan kit:install --force   # reinstala do zero (APAGA o SQLite) e refaz as perguntas
-php artisan kit:install --custom   # refaz só nome e cor, sem tocar no banco
-php artisan kit:install --no-custom   # instala sem perguntar nada
-php artisan kit:install --no-npm      # pula a instalação e o build dos assets front-end
-php artisan kit:install --no-seed     # não popula o banco (papéis, usuário inicial, agentes de IA)
-php artisan kit:install --no-support  # pula o convite para dar uma estrela ao kit no GitHub
-#   --create-project é uso interno do post-create-project-cmd: apaga o que só serve ao repositório do kit
-php artisan kit:admin             # troca e-mail e senha do administrador (pede confirmação)
-php artisan kit:admin --email=x --senha=y --force   # sem perguntas — evite: a senha fica no histórico do shell
-php artisan kit:info              # mostra como o projeto está customizado e de onde cada valor vem
-php artisan kit:update            # traz melhorias de uma versão nova do kit
-php artisan kit:tenancy           # liga o modo multi-tenant (opt-in)
+composer dev          # server + queue + vite together
+composer test         # pint + phpstan + filacheck + the whole suite
+composer test:kit     # only the kit's tests (the foundation), in parallel
+composer lint         # formats the code
+composer lint:check   # only checks the formatting, changing nothing (what CI runs)
+composer filament:check   # only the Filament-specific lint (FilaCheck)
+composer refactor:preview # what Rector would rewrite (dry-run) — OUTSIDE composer test
+composer refactor:apply   # applies Rector's rewrite — OUTSIDE composer test
+composer upgrade:filament # runs vendor/bin/filament-v5 (filament/upgrade is already in require-dev)
+php artisan kit:install --force   # reinstalls from scratch (deletes the SQLite file) and asks again
+php artisan kit:install --custom   # redoes only name and colour, without touching the database
+php artisan kit:install --no-custom   # installs without asking anything
+php artisan kit:install --no-npm      # skips installing and building the front-end assets
+php artisan kit:install --no-seed     # doesn't seed the database (roles, initial user, AI agents)
+php artisan kit:install --no-support  # skips the invitation to star the kit on GitHub
+#   --create-project is internal to post-create-project-cmd: removes what only serves the kit's own repository
+php artisan kit:admin             # changes the administrator's e-mail and password (asks for confirmation)
+php artisan kit:admin --email=x --senha=y --force   # no prompts — avoid it: the password lands in the shell history
+php artisan kit:info              # shows how the project is customized and where each value comes from
+php artisan kit:update            # brings in improvements from a new kit version
+php artisan kit:tenancy           # turns on multi-tenancy (opt-in)
 ```
 
-## Personalize seu projeto
+## Customize your project
 
-**Os cinco primeiros o instalador já pergunta** — a lista abaixo é para mudar depois, ou para quem pulou as perguntas.
+**The installer already asks the first five** — the list below is for changing them later, or for whoever skipped the questions.
 
-| # | O quê | Onde | Perguntado na instalação? |
+| # | What | Where | Asked during installation? |
 |---|---|---|---|
-| 1 | **Nome** | `APP_NAME` no `.env` | ✅ |
-| 2 | **Banco de dados** | bloco `DB_*` no `.env` | ✅ |
-| 3 | **Credenciais do seeder** | `KIT_ADMIN_EMAIL` / `KIT_ADMIN_PASSWORD` no `.env` | ✅ |
-| 4 | **Cor primária** | `KIT_COR_PRIMARIA` no `.env` (nome de uma cor da paleta do Filament), ou `KIT_COR_PRIMARIA_HEX` com um hexadecimal livre — o hex vence o nome quando os dois estão preenchidos | ✅ |
-| 5 | **[Multi-tenancy](https://gsferro.github.io/filament-starter-kit-easy/pt/recursos/multi-tenancy.html)** | `php artisan kit:tenancy`, e o termo exibido em `config/kit.php` → `tenancy.label` | ✅ |
-| 6 | **Arte do login** | nenhuma: ela **mostra o nome da aplicação** (`APP_NAME`) sozinha. Para trocar por uma imagem sua, envie em `/admin/configuracoes-da-aplicacao` | ✅ (pelo nome) |
-| 7 | **Acesso aos painéis** | o papel de cada usuário (`/admin` → Papéis, campo *Painel*); a regra que o lê é `App\Models\User::canAccessPanel()` | — |
-| 8 | **Matriz de permissões** | `database/seeders/PapeisSeeder.php` | — |
+| 1 | **Name** | `APP_NAME` in `.env` | ✅ |
+| 2 | **Database** | the `DB_*` block in `.env` | ✅ |
+| 3 | **Seeder credentials** | `KIT_ADMIN_EMAIL` / `KIT_ADMIN_PASSWORD` in `.env` | ✅ |
+| 4 | **Primary color** | `KIT_COR_PRIMARIA` in `.env` (a color name from the Filament palette), or `KIT_COR_PRIMARIA_HEX` with a free hex value — the hex beats the name when both are filled | ✅ |
+| 5 | **[Multi-tenancy](https://gsferro.github.io/filament-starter-kit-easy/en/recursos/multi-tenancy.html)** | `php artisan kit:tenancy`, and the displayed term in `config/kit.php` → `tenancy.label` | ✅ |
+| 6 | **Login artwork** | none: it **shows the application name** (`APP_NAME`) on its own. To replace it with your own image, upload it at `/admin/configuracoes-da-aplicacao` | ✅ (via the name) |
+| 7 | **Panel access** | each user's role (`/admin` → Roles, the *Painel* field); the rule that reads it is `App\Models\User::canAccessPanel()` | — |
+| 8 | **Permission matrix** | `database/seeders/PapeisSeeder.php` | — |
 | 9 | **Health checks** | `KitServiceProvider::configureHealthChecks()` | — |
-| 10 | **Comandos da UI** | `config/command-center.php` | — |
-| 11 | **Backups** | destino e agenda em `config/backup.php` | — |
-| 12 | **Agente de IA** | `/admin` → Agentes de IA (ou `database/seeders/AssistenteSeeder.php`) | — |
-| 13 | **[Idiomas do painel](https://gsferro.github.io/filament-starter-kit-easy/pt/referencia/busca-e-idioma.html)** | `config/kit.php` → `idiomas` (lista de locales; com um só, o seletor não aparece) | — |
-| 14 | **[Retenção das trilhas](https://gsferro.github.io/filament-starter-kit-easy/pt/recursos/trilhas-de-infraestrutura.html)** | `KIT_RETENCAO_EXCECOES_DIAS` / `KIT_RETENCAO_EMAILS_DIAS` no `.env` | — |
-| 15 | **[Disco da mídia](https://gsferro.github.io/filament-starter-kit-easy/pt/recursos/anexos-e-midia.html)** | `MEDIA_DISK` no `.env` (`local` por padrão — privado, servido por URL assinada) | `php artisan kit:midia-privada` migra a mídia já gravada em disco público |
-| 16 | **[Import e export CSV](https://gsferro.github.io/filament-starter-kit-easy/pt/recursos/import-export-csv.html)** | a Action em cada `app/Filament/**/Pages/List*.php` (ligada ou comentada); a permissão em `config/filament-shield.php` → `policies.methods`; a retenção do histórico em `KIT_RETENCAO_IMPORTACOES_DIAS` / `KIT_RETENCAO_EXPORTACOES_DIAS` no `.env` | ressemeie `ShieldPermissionsSeeder` + `PapeisSeeder` depois de mexer no config |
+| 10 | **Commands in the UI** | `config/command-center.php` | — |
+| 11 | **Backups** | destination and schedule in `config/backup.php` | — |
+| 12 | **AI agent** | `/admin` → AI Agents (or `database/seeders/AssistenteSeeder.php`) | — |
+| 13 | **[Panel languages](https://gsferro.github.io/filament-starter-kit-easy/en/referencia/busca-e-idioma.html)** | `config/kit.php` → `idiomas` (a list of locales; with only one, the switcher doesn't show) | — |
+| 14 | **[Trail retention](https://gsferro.github.io/filament-starter-kit-easy/en/recursos/trilhas-de-infraestrutura.html)** | `KIT_RETENCAO_EXCECOES_DIAS` / `KIT_RETENCAO_EMAILS_DIAS` in `.env` | — |
+| 15 | **[Media disk](https://gsferro.github.io/filament-starter-kit-easy/en/recursos/anexos-e-midia.html)** | `MEDIA_DISK` in `.env` (`local` by default — private, served through a signed URL) | `php artisan kit:midia-privada` migrates media already written to a public disk |
+| 16 | **[CSV import and export](https://gsferro.github.io/filament-starter-kit-easy/en/recursos/import-export-csv.html)** | the Action in each `app/Filament/**/Pages/List*.php` (on or commented out); the permission in `config/filament-shield.php` → `policies.methods`; history retention in `KIT_RETENCAO_IMPORTACOES_DIAS` / `KIT_RETENCAO_EXPORTACOES_DIAS` in `.env` | reseed `ShieldPermissionsSeeder` + `PapeisSeeder` after touching the config |
 
-Os onze últimos não entram nas perguntas porque são **código ou dado de tela**, não um valor que caiba num prompt de terminal. O instalador os lista no resumo final, com o arquivo de cada um.
+The last eleven are not asked because they are **code or screen data**, not a value that fits in a terminal prompt. The installer lists them in the final summary, each with its file.
 
-> ⚠️ O item 5 é o único que **não** é "edite um arquivo" depois de instalado: o `kit:tenancy` roda `migrate:fresh --seed` e **apaga os dados**. Ele exige árvore git limpa e confirmação explícita. **Respondido na instalação, ele não apaga nada** — o banco ainda nem existe, e é essa a hora certa de decidir.
+> ⚠️ Item 5 is the only one that is **not** "edit a file" once installed: `kit:tenancy` runs `migrate:fresh --seed` and **deletes your data**. It requires a clean git tree and an explicit confirmation. **Answered during installation it deletes nothing** — the database does not exist yet, and that is the right moment to decide.
 
-> A cor primária vale para os três painéis. Com o [modo multi-tenant](https://gsferro.github.io/filament-starter-kit-easy/pt/recursos/multi-tenancy.html) ligado, a cor de cada organização **vence** esta dentro de `/app/{slug}` — o `/admin` e o `/infra` continuam com a do projeto. Para uma paleta completa, e não só a `primary`, o caminho continua sendo `->colors([...])` em cada `app/Providers/Filament/*PanelProvider.php`.
+> The primary color applies to all three panels. With [multi-tenancy](https://gsferro.github.io/filament-starter-kit-easy/en/recursos/multi-tenancy.html) on, each organization's color **wins** over it inside `/app/{slug}` — `/admin` and `/infra` keep the project's one. For a full palette, and not just `primary`, the way is still `->colors([...])` in each `app/Providers/Filament/*PanelProvider.php`.
 
-## Atualizando um projeto que já nasceu do kit
+## Updating a project born from the kit
 
-**O kit é um ponto de partida, não uma dependência.** Depois do `create-project` o projeto é seu: você renomeia painéis, muda `canAccessPanel()`, edita seeders. Por isso **não existe** um `kit:update` que sobrescreve arquivos — ele reescreveria justamente o que você personalizou, e um starter kit que estraga o projeto do usuário não serve para nada.
+**The kit is a starting point, not a dependency.** After `create-project` the project is yours: you rename panels, change `canAccessPanel()`, edit seeders. That's why there is **no** `kit:update` that overwrites files — it would rewrite exactly what you customized, and a starter kit that ruins the user's project is worth nothing.
 
-O que muda separa-se em três camadas, e cada uma tem um caminho próprio:
+What changes splits into three layers, and each one has its own path:
 
-| Camada | O que é | Como atualizar |
+| Layer | What it is | How to update |
 |---|---|---|
-| **Dependências** | Filament, plugins, Laravel | `composer update` — é a maior parte das melhorias e chega sozinha |
-| **Cola do kit** | providers, traits, widgets, views de erro | diff manual contra a tag nova (abaixo) |
-| **Seu negócio** | tudo que você escreveu | nunca é tocado |
+| **Dependencies** | Filament, plugins, Laravel | `composer update` — it's most of the improvements and it arrives on its own |
+| **The kit's glue** | providers, traits, widgets, error views | manual diff against the new tag (below) |
+| **Your business** | everything you wrote | never touched |
 
-## Solução de problemas
+## Troubleshooting
 
-- **403 em todos os painéis, logo depois de autenticar** — o usuário não tem papel nenhum, ou o papel dele está sem painel declarado (`roles.painel` vazio não é coringa: não abre nada). Dê o papel em `/admin` → Usuários, ou preencha o campo *Painel* em `/admin` → Papéis.
-- **`/infra` ou `/admin` dando 403** — seu usuário precisa de um papel cujo painel seja esse (`master_global`, `admin` ou `infra`), e com a tenancy ligada o papel tem de estar atribuído no contexto global. A tela de 403 mostra qual permissão faltou, mas **só fora de produção**: em produção ela não revela papéis nem permissões.
-- **Assets do Filament sumidos** — `php artisan filament:assets`.
-- **Pulse sem dados** — falta o daemon: `php artisan pulse:check` (ou o serviço `pulse` do compose).
-- **Sininho não atualiza em tempo real** — `BROADCAST_CONNECTION=reverb` exige o processo Reverb no ar; sem ele o kit cai para polling de 30s.
-- **Assistente de IA indisponível** — suba `docker compose --profile ai up -d` (o primeiro boot baixa ~4,5 GB de modelo) ou troque `AI_PROVIDER` para um provider SaaS com API key.
+- **403 on every panel, right after signing in** — the user has no role at all, or their role has no panel declared (an empty `roles.painel` is not a wildcard: it opens nothing). Give them a role at `/admin` → Users, or fill in the *Painel* field at `/admin` → Roles.
+- **`/infra` or `/admin` returning 403** — your user needs a role whose panel is that one (`master_global`, `admin` or `infra`), and with multi-tenancy on the role must be assigned in the global context. The 403 screen shows which permission was missing, but **only outside production**: in production it reveals neither roles nor permissions.
+- **Filament assets gone** — `php artisan filament:assets`.
+- **Pulse with no data** — the daemon is missing: `php artisan pulse:check` (or the compose `pulse` service).
+- **The bell doesn't update in real time** — `BROADCAST_CONNECTION=reverb` requires the Reverb process to be up; without it the kit falls back to 30s polling.
+- **AI assistant unavailable** — bring up `docker compose --profile ai up -d` (the first boot downloads ~4.5 GB of model) or switch `AI_PROVIDER` to a SaaS provider with an API key.
 
-## Licença
+## License
 
 MIT.
