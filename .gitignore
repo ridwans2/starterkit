@@ -32,17 +32,17 @@ Homestead.json
 Homestead.yaml
 Thumbs.db
 
-# Worktrees de sub-agentes: contêm cópia de vendor/ e node_modules, jamais versionar
+# Sub-agent worktrees: they carry a copy of vendor/ and node_modules — never commit
 /.claude/worktrees/
 
-# Artefatos de orquestração de agente: requisito capturado (a cópia que vale está no
-# `00-requisito.md` de cada wiki), script de setup de worktree e snapshots do
-# Playwright MCP. São rastro de processo, não do projeto.
+# Agent orchestration artifacts: the captured requirement (the copy that counts lives
+# in each wiki's `00-requisito.md`), the worktree setup script and Playwright MCP
+# snapshots. They are process residue, not part of the project.
 /.claude/requisitos/
 /.claude/setup-worktree.sh
 /.playwright-mcp/
 .solomd/
 
-# Scratch de fase (migrations copiados por `git archive HEAD` para simular banco de
-# produção antigo, ver plano English-first): rastro de verificação, nunca do projeto.
+# Phase scratch (migrations copied with `git archive HEAD` to simulate an old
+# production database, see the English-first plan): verification residue, never the project's.
 /.raja/
