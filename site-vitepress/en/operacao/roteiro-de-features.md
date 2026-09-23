@@ -29,7 +29,6 @@ Where the route has `{org}`, it is multi-tenant mode — without it, the path is
 | F-03c | E-mail verification (opt-in) | `/app/email-verification/prompt` | authenticated, with the requirement on (in the UI or in `.env`) | the route always exists — a kit middleware decides, per request; invited users are never blocked | 🟢 |
 | F-04 | Two-factor authentication | `/{panel}/two-factor-authentication` | authenticated | the screen opens and offers the QR | 🔵 |
 | F-05 | Passkeys | My profile | authenticated | key registration, in Breezy's profile | ⚪ |
-| F-06 | Session lock | user menu → *Lock session* | authenticated | locks without logging out; returns with the password **or** with social login (the same buttons as the login screen). Uses the login layout, not `SimplePage` | 🟢 |
 | F-07 | My profile, avatar and password | `/{panel}/my-profile` | authenticated | edits name, e-mail, password and avatar | 🔵 |
 | F-08 | Impersonate | `/admin/users` → row action | `master_global` | enters as another user and returns via the top banner | ⚪ |
 
@@ -73,7 +72,7 @@ Where the route has `{org}`, it is multi-tenant mode — without it, the path is
 | F-25 | `admin_app` | `/app/{org}` | the role | administers **one** organization: users and invitations scoped. Does not enter `/admin` | 🟢 |
 | F-26 | Scope by trait | your models | — | `BelongsToTenant` gives relationship, global scope and filling — works outside Filament too | 🟢 |
 | F-27 | **Visual identity: color** | organization → *Visual identity* | `admin` | choose the color and open `/app/{org}`: the whole panel wears its color, and `/admin` **does not** change | 🔵 |
-| F-28 | **Visual identity: logo** | same | `admin` | the logo appears on the `/app` lock screen instead of the base image | 🔵 |
+| F-28 | **Visual identity: logo** | same | `admin` | the logo appears in the organization header instead of the initials | 🔵 |
 | F-69 | **The `/app` record page does not tell where else the person is** | `/app{/org}/users/{id}` | `admin_app` | open a colleague's record page: it shows the account and **omits** the organizations and roles that the `/admin` one shows. Listing them there would tell whoever administers one organization that the account also belongs to another — the query scope guarantees you only see people FROM the current organization, not that you may see where else they are. The absence lives in `App\Filament\Concerns\FichaDeUsuario` | 🟢 |
 
 ## Administration

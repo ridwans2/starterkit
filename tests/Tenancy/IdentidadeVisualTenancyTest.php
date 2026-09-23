@@ -90,23 +90,12 @@ it('nao vaza a cor entre organizacoes e paineis', function (): void {
 });
 
 /**
- * CT-06 — a via pela qual a tela de bloqueio descobre a organização.
+ * CT-06 — o tenant corrente fica na sessão para quem não o recebe pela rota.
  *
- * A lock-screen é registrada em `/{painel}/screen/lock`, sem o segmento `{tenant}` e sem o
- * `tenantMiddleware` (`vendor/marjose123/filament-lockscreen/routes/web.php`), então
- * `Filament::getTenant()` é null lá. A sessão é a única fonte — ADR-03.
- *
- * ## Divergência conhecida com o texto do CT-06
- *
- * O caso desenhado pedia `session('tenant_corrente')` NULA depois do `/admin`. Isso não é o que a
- * implementação faz, e não por descuido: o `DefinirTenantDePermissoes` é `tenantMiddleware` do
- * painel `/app` e não roda no `/admin` — não existe ponto onde limpar a chave sem criar um
- * middleware novo nos outros dois painéis. ADR-03 assume isso explicitamente ("a chave ainda diz
- * acme") e paga com a guarda de PAINEL na `TelaBloqueio`.
- *
- * Então a segunda metade do caso afirma o que protege de verdade, que é mais forte do que a chave
- * nula: com a chave apontando para uma organização QUE TEM LOGO, a tela de bloqueio do `/admin`
- * continua sem exibi-la.
+ * O `DefinirTenantDePermissoes` é `tenantMiddleware` do painel `/app` e não roda no `/admin` —
+ * não existe ponto onde limpar a chave sem criar um middleware novo nos outros dois painéis.
+ * ADR-03 assume isso explicitamente ("a chave ainda diz acme") e paga com a guarda de PAINEL em
+ * quem lê a chave.
  */
 it('guarda o tenant corrente na sessao', function (): void {
     ['acme' => $acme, 'usuario' => $usuario] = duasOrganizacoes();
@@ -117,16 +106,13 @@ it('guarda o tenant corrente na sessao', function (): void {
 
     expect(session('tenant_corrente'))->toBe($acme->getKey());
 
-    fronteiraDeRequest();
-    session(['lockscreen' => true]);
-
-    $this->get(route('lockscreen.admin.page'))
-        ->assertOk()
-        ->assertDontSee('organizacoes/logos/acme.png');
-
     // A chave SOBREVIVE ao /admin — é o risco nomeado em ADR-03, e quem o neutraliza é a guarda
     // de painel, não a limpeza da sessão. Se um dia alguém limpar a chave, este `toBe` acusa e o
     // comentário acima explica por que a mudança precisa ser deliberada.
+    fronteiraDeRequest();
+
+    $this->actingAs($usuario)->get('/admin')->assertSuccessful();
+
     expect(session('tenant_corrente'))->toBe($acme->getKey());
 });
 

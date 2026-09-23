@@ -401,8 +401,8 @@ class RegistroPorConvite extends Register
      *
      * Sai por `HttpResponseException`, e não por `redirect()` solto: dentro de `mount()`
      * de página Livewire o `redirect()` devolve o Redirector do Livewire onde o Laravel
-     * espera um código HTTP, e o request morre em 500 — foi o bug de `TelaBloqueio` (ver
-     * a nota em `:74-85` dela). O `Register::mount()` do Filament faz exatamente isso em
+     * espera um código HTTP, e o request morre em 500 — foi o bug de uma tela de auth
+     * anterior. O `Register::mount()` do Filament faz exatamente isso em
      * `:60`; aqui não.
      *
      * Resposta ÚNICA para os três motivos: quem tem o link não descobre se o token não

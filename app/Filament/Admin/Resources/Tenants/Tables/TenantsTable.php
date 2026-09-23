@@ -35,8 +35,9 @@ class TenantsTable
                  * A coluna NÃO usa `Tenant::logoUrl()`, que confere `Storage::exists()`: isso
                  * seria uma ida ao disco por linha renderizada, a cada paginação, ordenação e
                  * busca. Registro cuja logo sumiu do disco mostra imagem quebrada aqui — o
-                 * comportamento padrão de qualquer ImageColumn. Onde a verificação importa (a
-                 * tela de bloqueio) o acessor continua sendo usado. Ver ADR-05 da wiki
+                 * comportamento padrão de qualquer ImageColumn. Onde a verificação importa (o
+                 * avatar do cabeçalho da organização, `Tenant::urlDaLogo()`) o acessor continua
+                 * sendo usado. Ver ADR-05 da wiki
                  * lightbox-em-imagens-e-documentos.
                  */
                 ImageColumn::make('logo')

@@ -53,8 +53,7 @@ session. That is why the profile (`/app/meu-perfil`, and the other two panels') 
 password by e-mail** block: it sends the same link as "Forgot your password?", ends the session —
 the page that sets the password only opens for someone logged out — and, once the password is set,
 all three work. Measured on a real install: it was the first stumble for whoever came in through
-Google. And whoever chooses to **live without a local password** is not stuck at the session lock
-screen: it offers the same buttons as the login, and coming back from the provider unlocks it.
+Google.
 
 ## Turning a provider on, in four steps
 
@@ -130,8 +129,8 @@ three Google keys in `.env`, `config:clear`, and no button — until the migrati
 |---|---|
 | [![Login with the social buttons](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/login-social.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/login-social.png) | [![Login tab of the kit settings](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/admin-configuracoes-login.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/admin-configuracoes-login.png) |
 | The login screen with **Sign in with Google** and **Sign in with GitHub**, and the Markdown footer | `/admin/configuracoes-da-aplicacao` → **Login**: one collapsed block per provider with the status icon, the linking switch and the footer |
-| [![Set a password by e-mail, on the profile](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/app-perfil-definir-senha.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/app-perfil-definir-senha.png) | [![Lock screen with social login](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/app-bloqueio-social.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/app-bloqueio-social.png) |
-| The profile: **Set a password by e-mail** above "Password" — whoever came through a provider has no current password | The session lock screen offers the same buttons; coming back from the provider unlocks it |
+| [![Set a password by e-mail, on the profile](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/app-perfil-definir-senha.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/app-perfil-definir-senha.png) | |
+| The profile: **Set a password by e-mail** above "Password" — whoever came through a provider has no current password | |
 | [![Users list with the Origin column](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/admin-users-origem.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/admin-users-origem.png) | |
 | `/admin/users`: the **Origin** column says which door each account came through (Google, GitHub, Invite, Open registration, Internal) | |
 

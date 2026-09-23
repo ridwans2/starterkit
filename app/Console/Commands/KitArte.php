@@ -71,7 +71,6 @@ class KitArte extends Command
         'login-social',
         'admin-configuracoes-login',
         'app-perfil-definir-senha',
-        'app-bloqueio-social',
         'admin-users-origem',
         'admin-papeis-import-export',
         'boas-vindas',

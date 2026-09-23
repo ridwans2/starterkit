@@ -10,7 +10,6 @@ Alguns pacotes resolvem o próprio plugin pelo painel CORRENTE, com o helper `fi
 
 Casos já medidos no kit:
 
-- `marjose123/filament-lockscreen` — o `routes/web.php` do pacote resolve no boot; painel sem o plugin estoura em todo request, e até `package:discover` morre.
 - `bezhansalleh/filament-exceptions` — o `ExceptionResource` chama `FilamentExceptionsPlugin::get()` nos métodos estáticos de navegação, e o `filament-shield` percorre `Filament::getPanels()` no boot **sem fixar o painel corrente**. A resolução cai no painel default (`app`) e estoura `LogicException: Plugin [filament-exceptions] is not registered for panel [app]` em TODO comando artisan — `migrate` e `inspire` inclusive.
 
 Saída: registrar nos três painéis, e desligar a navegação onde a tela não deve aparecer (`->registerNavigation(false)`).

@@ -3,7 +3,6 @@
 use App\Models\Tenant;
 use Database\Seeders\PapeisSeeder;
 use Database\Seeders\ShieldPermissionsSeeder;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * A identidade visual vista pelo navegador, com multi-tenancy ligada.
@@ -17,22 +16,11 @@ use Illuminate\Support\Facades\Storage;
  * Pasta separada de `tests/Browser` pela mesma razão que separa `tests/Tenancy` de `tests/Kit`:
  * `Tests\TenancyTestCase` fixa `permission.teams` antes das migrations, e o Pest não permite dois
  * TestCases na mesma pasta.
- *
- * O arquivo do fallback — sem organização nenhuma — é `tests/Browser/IdentidadeVisualPadraoTest`.
  */
 beforeEach(function (): void {
     // Mesmo par de tests/Kit/PaineisTest.php: papel sem a matriz do Shield abre painel e não
     // abre tela.
     $this->seed([ShieldPermissionsSeeder::class, PapeisSeeder::class]);
-});
-
-/**
- * O CT-B04 escreve no disk `public` DE VERDADE — `Storage::fake()` não serve, porque o navegador
- * faz request HTTP à URL da logo. A limpeza vive aqui, e não no fim do caso, para acontecer também
- * quando ele falha no meio; apagar arquivo que não existe é no-op.
- */
-afterEach(function (): void {
-    Storage::disk('public')->delete('organizacoes/logos/acme-teste-browser.png');
 });
 
 /**
@@ -133,48 +121,6 @@ it('nao vaza a cor da organizacao para o painel admin', function (): void {
 
     expect(trim((string) $doAdmin))->not->toBeEmpty()
         ->and($doAdmin)->not->toBe($daAcme);
-});
-
-/**
- * CT-B04 — a logo da organização na tela de bloqueio.
- *
- * `Storage::disk('public')` de verdade, e não `Storage::fake()`: o navegador faz request HTTP à
- * URL da logo, e disk fake não é servido por ninguém. O disk é o REAL, daí o nome do arquivo não
- * poder colidir com upload de ninguém — e a limpeza ficar no `afterEach`.
- *
- * A visita ao painel antes de travar não é cerimônia: é ela que faz o `DefinirTenantDePermissoes`
- * gravar `session('tenant_corrente')`, a única fonte de tenant que a lock-screen tem (ADR-03).
- */
-it('exibe a logo da organizacao na tela de bloqueio', function (): void {
-    ['acme' => $acme, 'usuario' => $usuario] = duasOrganizacoes();
-
-    // 1x1 transparente: o menor PNG válido. O que importa é a URL no `src`, não a imagem.
-    $caminho = 'organizacoes/logos/acme-teste-browser.png';
-    Storage::disk('public')->put($caminho, base64_decode(
-        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
-    ));
-
-    $acme->update(['logo' => $caminho]);
-
-    $this->actingAs($usuario);
-
-    visit('/app/acme')->assertSee('Painel de Controle');
-
-    // A trava pela rota do pacote — o mesmo POST que o item "Bloquear sessão" do menu dispara.
-    // Sai do processo do teste, e não do navegador, porque o servidor do plugin é in-process:
-    // é a MESMA sessão.
-    $this->post(route('lockscreen.app.lock-session'))->assertRedirect();
-
-    visit('/app/screen/lock')
-        ->assertPathIs('/app/screen/lock')
-        ->assertAttributeContains('.fi-auth-media', 'src', $caminho)
-        // A tela não veio vazia: o formulário de desbloqueio está lá.
-        ->assertSee('Desbloquear')
-        // E o alternador de tema sobreviveu. É a asserção que pega o erro de trocar a mídia com
-        // `setPageConfig()` — que SUBSTITUI o config inteiro e apagaria `themeToggle()` e
-        // `mediaPosition()` sem nenhum sinal. Ver ADR-04.
-        ->assertPresent('.fi-auth-theme-switcher-wrapper')
-        ->assertNoJavaScriptErrors();
 });
 
 /**

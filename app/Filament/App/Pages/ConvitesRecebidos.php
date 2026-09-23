@@ -155,7 +155,7 @@ class ConvitesRecebidos extends Page implements HasTable
     /**
      * O item no menu do usuário, com a contagem das ofertas pendentes.
      *
-     * Mesmo padrão de `TelaBloqueio::itemDeMenu()`. A contagem sai de
+     * A contagem sai de
      * `Convite::pendentesPara()` — a MESMA query da tabela acima, porque duas cópias
      * divergem e a que divergisse seria o contador dizendo "1" numa tela vazia.
      */

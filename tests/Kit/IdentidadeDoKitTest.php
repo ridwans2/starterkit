@@ -493,12 +493,12 @@ it('serve a arte com o nome em cada tela publica de autenticacao', function (str
 /**
  * CT-10 — as telas de autenticação com pré-condição servem a mesma arte.
  *
- * As duas últimas linhas são o achado da revisão adversarial do `04`, e são o
- * motivo de este caso existir separado de CT-09: a tela de bloqueio e o desafio
- * de 2FA NÃO têm `->media()` próprio. Cada uma declara uma chave (`login` e
- * `password-reset`) e HERDA a configuração da tela correspondente. Isso as torna
- * consumidoras da arte sem aparecer em nenhuma das dez chamadas — e uma matriz
- * fechada por "rota de autenticação" as deixaria de fora, com a arte quebrada e
+ * A última linha é o achado da revisão adversarial do `04`, e é o
+ * motivo de este caso existir separado de CT-09: o desafio de 2FA NÃO tem `->media()`
+ * próprio. Ele declara uma chave (`password-reset`) e HERDA a configuração da tela
+ * correspondente. Isso o torna consumidor da arte sem aparecer em nenhuma das dez
+ * chamadas — e uma matriz
+ * fechada por "rota de autenticação" o deixaria de fora, com a arte quebrada e
  * o conjunto verde.
  *
  * Os arranjos são inline de propósito: `exigenciaDeEmail()` e
@@ -532,14 +532,6 @@ it('serve a arte com o nome nas telas de autenticacao com pre-condicao', functio
         // chave `password-reset`, HERDADA — a tela não tem `media()` própria
         'desafio de 2FA' => $this->actingAs(usuarioDoKit('master_global'))
             ->get('/admin/two-factor-authentication'),
-
-        // chave `login`, HERDADA — a tela não tem `media()` própria
-        'bloqueio de sessão' => (function () {
-            $this->actingAs(usuarioDoKit('master_global'));
-            $this->post(route('lockscreen.admin.lock-session'));
-
-            return $this->get('/admin/screen/lock');
-        })(),
     };
 
     $resposta->assertSuccessful();
@@ -553,5 +545,4 @@ it('serve a arte com o nome nas telas de autenticacao com pre-condicao', functio
     'aceite de convite no /app'     => 'aceite de convite',
     'verificação de e-mail do /app' => 'verificação de e-mail',
     'desafio de 2FA do /admin'      => 'desafio de 2FA',
-    'bloqueio de sessão do /admin'  => 'bloqueio de sessão',
 ])->group('kit');

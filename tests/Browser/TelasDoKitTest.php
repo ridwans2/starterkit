@@ -65,9 +65,6 @@ it('renderiza o formulario de agente no chrome headless', function (): void {
  *
  * Ficam fora de `telasDoKit()` porque não são tela de painel: a reconciliação com
  * `getPages()` + `getResources()` não tem nada a dizer sobre elas.
- *
- * `/*​/screen/lock` fica fora: o Lockscreen exige sessão bloqueada, que é estado, não
- * rota pública.
  */
 it('abre as telas publicas dos tres paineis', function (): void {
     visit([

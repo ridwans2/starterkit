@@ -835,7 +835,7 @@ it('[CT-37] a marca da página única não anula o carimbo de um login feito na 
 
 /*
 |--------------------------------------------------------------------------
-| RQ-07 — lock screen e reset de senha continuam funcionando; e o layout de auth não vaza
+| RQ-07 — reset de senha continua funcionando; e o layout de auth não vaza
 |--------------------------------------------------------------------------
 */
 
@@ -846,19 +846,6 @@ it('[CT-38] o layout de autenticação da página única não veste as páginas 
 
     $this->actingAs(personaDoKit('admin'));
     $this->get('/admin')->assertOk()->assertDontSee('fi-auth-layout', false);
-})->group('kit');
-
-it('[CT-39] a tela de bloqueio continua dentro do painel, e sair dela termina em /login', function (): void {
-    ligarLoginUnificado();
-    $this->actingAs(personaDoKit('admin'));
-
-    $this->post('/admin/lock-session')->assertRedirect();
-    $this->get('/admin')->assertRedirect(route('lockscreen.admin.page'));
-    $this->get(route('lockscreen.admin.page'))->assertOk()->assertSee('fi-auth-layout', false);
-
-    $this->post('/admin/logout')->assertRedirect(Filament::getPanel('admin')->getLoginUrl());
-    $this->assertGuest();
-    $this->followingRedirects()->get('/admin/login')->assertSeeLivewire(TelaLoginUnificada::class);
 })->group('kit');
 
 it('[CT-57] sem tenancy, o link de cadastro segue a chave e só existe com o registro ligado', function (bool $registro, bool $chave, string $tela, ?string $href): void {

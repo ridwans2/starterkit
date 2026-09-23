@@ -30,7 +30,6 @@ Onde a rota tem `{org}`, é o modo multi-tenant — sem ele, o caminho é `/app`
 | F-03c | Validação de e-mail (opt-in) | `/app/email-verification/prompt` | autenticado, com a exigência ligada (na tela ou no `.env`) | a rota existe sempre — quem decide é um middleware do kit, por request; quem vem de convite nunca é barrado | 🟢 |
 | F-04 | Autenticação em dois fatores | `/{painel}/two-factor-authentication` | autenticado | a tela abre e oferece o QR | 🔵 |
 | F-05 | Passkeys | Meu perfil | autenticado | cadastro de chave, no perfil do Breezy | ⚪ |
-| F-06 | Bloqueio de sessão | menu do usuário → *Bloquear sessão* | autenticado | trava sem deslogar; volta com a senha **ou** com o login social (os mesmos botões do login). Usa o layout do login, não a `SimplePage` | 🟢 |
 | F-07 | Meu perfil, avatar e senha | `/{painel}/meu-perfil` | autenticado | edita nome, e-mail, senha e avatar | 🔵 |
 | F-08 | Impersonate | `/admin/users` → ação na linha | `master_global` | entra como outro usuário e volta pela faixa no topo | ⚪ |
 
@@ -74,7 +73,7 @@ Onde a rota tem `{org}`, é o modo multi-tenant — sem ele, o caminho é `/app`
 | F-25 | `admin_app` | `/app/{org}` | o papel | administra **uma** organização: usuários e convites recortados. Não entra no `/admin` | 🟢 |
 | F-26 | Escopo por trait | seus models | — | `BelongsToTenant` dá relação, escopo global e preenchimento — vale fora do Filament também | 🟢 |
 | F-27 | **Identidade visual: cor** | organização → *Identidade visual* | `admin` | escolha a cor e abra `/app/{org}`: o painel inteiro veste a cor dela, e o `/admin` **não** muda | 🔵 |
-| F-28 | **Identidade visual: logo** | idem | `admin` | a logo aparece na tela de bloqueio do `/app` no lugar da imagem base | 🔵 |
+| F-28 | **Identidade visual: logo** | idem | `admin` | a logo aparece no cabeçalho da organização no lugar das iniciais | 🔵 |
 | F-69 | **A ficha do `/app` não conta onde mais a pessoa está** | `/app{/org}/users/{id}` | `admin_app` | abra a ficha de um colega: ela mostra a conta e **omite** as organizações e os papéis que a ficha do `/admin` mostra. Listá-los ali contaria a quem administra uma organização que aquela conta também é de outra — o recorte da consulta garante que só se veja gente DA organização corrente, não que se possa ver onde mais ela está. A ausência mora em `App\Filament\Concerns\FichaDeUsuario` | 🟢 |
 
 ## Administração

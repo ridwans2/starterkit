@@ -3,7 +3,6 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Infra\Pages\Dashboard;
-use App\Filament\Pages\Auth\TelaBloqueio;
 use App\Filament\Pages\Auth\TelaDoisFatores;
 use App\Filament\Pages\Auth\TelaLogin;
 use App\Filament\Pages\Auth\TelaRecuperarSenha;
@@ -59,7 +58,6 @@ use LaBoiteACode\DependencyGraph\Filament\Pages\DependencyGraphPage;
 use LaBoiteACode\FilamentLogsExplorer\FilamentLogsExplorerPlugin;
 use LaBoiteACode\FilamentLogsExplorer\Pages\LogsExplorer;
 use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
-use lockscreen\FilamentLockscreen\Lockscreen;
 use MominAlZaraa\FilamentComposerReleaseNotifier\FilamentComposerReleaseNotifierPlugin;
 use Prodstarter\FilamentNotificationCenter\FilamentNotificationCenterPlugin;
 use Promethys\Revive\Pages\RecycleBin;
@@ -192,16 +190,9 @@ class InfraPanelProvider extends PanelProvider
                     ->url(fn (): string => route('ai-tasks.index'), shouldOpenInNewTab: true)
                     ->visible(fn (): bool => auth()->user()?->can('ver-ai-tasks') ?? false),
             ])
-            ->bootUsing(function (Panel $panel): void {
+            ->bootUsing(function (): void {
                 // Registra as sugestões "Criar X" no request, com auth já resolvido.
                 AcoesDeCriacao::registrar();
-
-                // "Bloquear sessão" logo abaixo do "Meu perfil" — ver
-                // TelaBloqueio::itemDeMenu(). A guarda espelha a do plugin: com o
-                // kill-switch desligado a rota não existe e o item estouraria no render.
-                if (config('lockscreen.enabled')) {
-                    $panel->userMenuItems([TelaBloqueio::itemDeMenu($panel->getId())]);
-                }
             })
             ->plugins([
                 FilamentSearchSpotlightPlugin::make()
@@ -251,8 +242,8 @@ class InfraPanelProvider extends PanelProvider
 
                 BreezyCore::make()
                     ->myProfile(shouldRegisterUserMenu: true, hasAvatars: true, slug: 'meu-perfil', userMenuLabel: 'My profile')
-                    // Quem entrou por login social não tem senha atual — e a troca de senha, o 2FA e o
-                    // desbloqueio da sessão pedem uma. O bloco manda o link de definição por e-mail.
+                    // Quem entrou por login social não tem senha atual — e a troca de senha e o 2FA
+                    // pedem uma. O bloco manda o link de definição por e-mail.
                     ->myProfileComponents(['definir_senha_por_email' => DefinirSenhaPorEmail::class])
                     /*
                      * A tela de perfil do KIT no lugar da do pacote, e o motivo e' so' um: a do
@@ -274,12 +265,6 @@ class InfraPanelProvider extends PanelProvider
                     // AppPanelProvider. `action:` nomeado de propósito: posicional cairia
                     // em `$condition`.
                     ->enableTwoFactorAuthentication(action: TelaDoisFatores::class),
-
-                // Obrigatório em todos os painéis — ver nota no AdminPanelProvider.
-                Lockscreen::make()
-                    ->enablePlugin((bool) config('lockscreen.enabled'))
-                    ->enableIdleTimeout((int) config('lockscreen.idle_timeout'))
-                    ->enableRateLimit(limit: 5, decayMinutes: 5, forceLogout: true),
 
                 // --- Observabilidade -------------------------------------------
 

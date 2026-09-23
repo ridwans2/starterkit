@@ -21,9 +21,9 @@ use Jeffgreco13\FilamentBreezy\Pages\TwoFactorPage;
  *
  * Quem põe esta classe na rota é o parâmetro `action:` de `enableTwoFactorAuthentication()` nos
  * três painéis — a rota do pacote pergunta ao plugin qual classe usar
- * (`vendor/jeffgreco13/filament-breezy/routes/web.php:24`). Diferente de `TelaBloqueio`, aqui
- * NÃO cabe bind no container: a rota recebe um class-string do plugin e nunca consulta o
- * container para escolher a classe. Ver ADR-01 da wiki `auth-designer-telas`.
+ * (`vendor/jeffgreco13/filament-breezy/routes/web.php:24`). Aqui NÃO cabe bind no container: a
+ * rota recebe um class-string do plugin e nunca consulta o container para escolher a classe. Ver
+ * ADR-01 da wiki `auth-designer-telas`.
  */
 class TelaDoisFatores extends TwoFactorPage
 {
@@ -44,8 +44,7 @@ class TelaDoisFatores extends TwoFactorPage
 
     /**
      * A chave `login` de propósito: o desafio de 2FA é a SEGUNDA ETAPA do mesmo login — mesma
-     * barreira, mesma arte, mesmo lado, mesmo alternador de tema. É a mesma escolha de
-     * `TelaBloqueio::getAuthDesignerPageKey()`, pelo mesmo motivo.
+     * barreira, mesma arte, mesmo lado, mesmo alternador de tema.
      *
      * Chave não configurada não estoura: o repositório devolve um `AuthPageConfig` vazio e a
      * tela sai vestida e VAZIA, sem mídia e sem alternador — sem erro nenhum. Ver ADR-02.

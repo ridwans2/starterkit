@@ -3,7 +3,6 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Admin\Pages\Dashboard;
-use App\Filament\Pages\Auth\TelaBloqueio;
 use App\Filament\Pages\Auth\TelaDoisFatores;
 use App\Filament\Pages\Auth\TelaLogin;
 use App\Filament\Pages\Auth\TelaRecuperarSenha;
@@ -46,7 +45,6 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Jeffgreco13\FilamentBreezy\BreezyCore;
 use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
-use lockscreen\FilamentLockscreen\Lockscreen;
 use MortalKiller\FilamentPageHeader\PageHeaderPlugin;
 use Prodstarter\FilamentNotificationCenter\FilamentNotificationCenterPlugin;
 use pxlrbt\FilamentEnvironmentIndicator\EnvironmentIndicatorPlugin;
@@ -94,12 +92,8 @@ class AdminPanelProvider extends PanelProvider
                 AccountWidget::class,
                 FilamentInfoWidget::class,
             ])
-            ->bootUsing(function (Panel $panel): void {
+            ->bootUsing(function (): void {
                 AcoesDeCriacao::registrar();
-
-                if (config('lockscreen.enabled')) {
-                    $panel->userMenuItems([TelaBloqueio::itemDeMenu($panel->getId())]);
-                }
             })
             ->plugins([
                 FilamentSearchSpotlightPlugin::make()
@@ -153,11 +147,6 @@ class AdminPanelProvider extends PanelProvider
                     ->customMyProfilePage(MyProfilePage::class)
 
                     ->enableTwoFactorAuthentication(action: TelaDoisFatores::class),
-
-                Lockscreen::make()
-                    ->enablePlugin((bool) config('lockscreen.enabled'))
-                    ->enableIdleTimeout((int) config('lockscreen.idle_timeout'))
-                    ->enableRateLimit(limit: 5, decayMinutes: 5, forceLogout: true),
 
                 FilamentOnboardingPlugin::make()
                     ->manageFlows((bool) config('filament-onboarding.enabled', true))

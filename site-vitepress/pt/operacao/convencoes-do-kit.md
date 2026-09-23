@@ -20,9 +20,6 @@ Coisas que custaram tempo para descobrir e que o kit já entrega prontas — se 
 
 | Onde | O quê |
 |---|---|
-| Lockscreen | precisa estar registrado nos **três** painéis: o `routes/web.php` do pacote resolve o plugin pelo painel corrente e estoura `LogicException` em todo request — até `artisan package:discover` morre |
-| Tela de bloqueio | é uma `SimplePage` e ignora o layout do Auth Designer. `App\Filament\Pages\Auth\TelaBloqueio` a veste com o layout do login (bind em `AppServiceProvider`), **redeclarando `$layout`** — a trait do pacote atribui a propriedade estática, e sem a redeclaração o layout de login vaza para toda página Filament do processo |
-| "Bloquear sessão" no menu | o item que o pacote registra nasce sem `sort` e cai depois do alternador de tema; o kit o substitui num `bootUsing()` com `sort(-1)` (no corpo de `panel()` não funciona: plugin boota antes, e quem registra por último vence) |
 | Command Center | **sem** `->cluster()`: com cluster a página raiz devolve 500 |
 | `databaseNotifications()` | declarado **depois** de `plugins()`, senão o Notification Center apaga o recorte, sem erro nenhum |
 | Dependency Graph | `canAccessUsing()` substitui a regra local-only do pacote (sem ele, 404 em homologação) |

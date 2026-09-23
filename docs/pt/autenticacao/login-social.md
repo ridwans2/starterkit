@@ -52,9 +52,7 @@ três coisas pedem a senha atual: trocar a senha, ligar o 2FA e desbloquear a se
 perfil (`/app/meu-perfil`, e o dos outros dois painéis) tem o bloco **Definir senha por e-mail**:
 ele envia o mesmo link do "Esqueceu a senha?", encerra a sessão — a página que define a senha só
 abre para quem está fora — e, com a senha definida, os três passam a funcionar. Medido numa
-instalação real: era o primeiro tropeço de quem entrava pelo Google. E quem escolhe **viver sem
-senha local** não fica preso na tela de bloqueio de sessão: ela oferece os mesmos botões do
-login, e a volta do provedor destrava.
+instalação real: era o primeiro tropeço de quem entrava pelo Google.
 
 ## Ligando um provedor, em quatro passos
 
@@ -129,8 +127,8 @@ três chaves do Google, `config:clear`, e nenhum botão — até a migration rel
 |---|---|
 | [![Login com os botões sociais](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/login-social.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/login-social.png) | [![Aba Login das configurações do kit](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/admin-configuracoes-login.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/admin-configuracoes-login.png) |
 | A tela de login com **Entrar com Google** e **Entrar com GitHub**, e o rodapé em Markdown | `/admin/configuracoes-da-aplicacao` → **Login**: um bloco fechado por provedor com o ícone de status, o interruptor do vínculo e o rodapé |
-| [![Definir senha por e-mail, no perfil](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/app-perfil-definir-senha.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/app-perfil-definir-senha.png) | [![Tela de bloqueio com login social](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/app-bloqueio-social.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/app-bloqueio-social.png) |
-| O perfil: **Definir senha por e-mail** acima de "Senha" — quem entrou pelo provedor não tem senha atual | A tela de bloqueio de sessão oferece os mesmos botões; a volta do provedor destrava |
+| [![Definir senha por e-mail, no perfil](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/app-perfil-definir-senha.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/app-perfil-definir-senha.png) | |
+| O perfil: **Definir senha por e-mail** acima de "Senha" — quem entrou pelo provedor não tem senha atual | |
 | [![Lista de usuários com a coluna Origem](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/thumbs/admin-users-origem.png)](https://raw.githubusercontent.com/gsferro/filament-starter-kit-easy/main/art/admin-users-origem.png) | |
 | `/admin/users`: a coluna **Origem** diz por qual porta cada conta entrou (Google, GitHub, Convite, Registro aberto, Interno) | |
 

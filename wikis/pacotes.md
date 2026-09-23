@@ -9,7 +9,6 @@
 | CRUD de papéis e permissões | `bezhansalleh/filament-shield` (`/admin`) — com o `RoleResource` **publicado no projeto**, ver abaixo |
 | Perfil, avatar, troca de senha, 2FA, passkeys | `jeffgreco13/filament-breezy` (`/meu-perfil`) |
 | Tela de login com arte | `caresome/filament-auth-designer` |
-| Bloqueio de sessão por inatividade | `marjose123/filament-lockscreen` |
 | "Entrar como" outro usuário | `stechstudio/filament-impersonate` |
 | Histórico de login, IP, dispositivo | `tapp/filament-authentication-log` |
 | Trilha de alterações de model | `owen-it/laravel-auditing` + `tapp/filament-auditing` (`/infra/audits`) |
@@ -84,7 +83,7 @@ Plugin do Filament é registrado no `PanelProvider` do painel em que aparece —
 
 O que **não** é plugin de painel (defaults de tabela, Panel Switch, gates, health, ledger de IA) mora no `KitServiceProvider` e na concern `ConfiguraFilamentGlobal`. Ver [arquitetura.md](arquitetura.md).
 
-Oito plugins estão registrados nos **três** painéis, de propósito: Spotlight, Auth Designer, Breezy, Lockscreen, Environment Indicator, Odometer, ResizedColumn e Notification Center. No caso do Lockscreen isso é **obrigatório** — ver a tabela de armadilhas em [convencoes.md](convencoes.md#armadilhas-já-resolvidas).
+Oito plugins estão registrados nos **três** painéis, de propósito: Spotlight, Auth Designer, Breezy, Environment Indicator, Odometer, ResizedColumn, Notification Center e Exceptions. No caso do Exceptions isso é **obrigatório** — ver a tabela de armadilhas em [convencoes.md](convencoes.md#armadilhas-já-resolvidas).
 
 ### Pacote não registrado ainda mexe nos seus models
 

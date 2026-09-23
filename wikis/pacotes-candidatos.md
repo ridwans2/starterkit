@@ -65,7 +65,7 @@ mapeamento *funcionalidade → pacote dono* (a tabela do "não escreva de novo")
 ### Autenticação, permissão e segurança
 
 `bezhansalleh/filament-shield` · `jeffgreco13/filament-breezy` (perfil + 2FA) ·
-`marjose123/filament-lockscreen` · `stechstudio/filament-impersonate` ·
+`stechstudio/filament-impersonate` ·
 `caresome/filament-auth-designer` · `anselmokossa/filament-sentinel` ·
 `tapp/filament-authentication-log`
 
@@ -415,7 +415,7 @@ Agrupados pelo que resolvem. Todos classificados `SIM` na varredura.
 | `afsakar/filament-otp-login` | OTP por e-mail/SMS | Sobrepõe o 2FA existente |
 | `l3aro/filament-cloudflare-turnstile` | anti-bot no login | O kit não tem registro público aberto — só convite |
 | `yebor974/filament-renew-password` | expiração periódica de senha | Exigência corporativa, não de kit genérico |
-| `eightcedars/filament-inactivity-guard` | logout por ociosidade | O lockscreen instalado já tem `idle_timeout` |
+| `eightcedars/filament-inactivity-guard` | logout por ociosidade | O kit hoje não tem guarda de ociosidade — é o candidato mais próximo do que saiu |
 | `jeffersongoncalves/filament-keyable` | API keys por model | Só faz sentido quando o kit expuser API |
 | Login attempts / User sessions (`smony`) | bloqueio de força bruta, sessões ativas | Complementam o `authentication-log`, que hoje só registra |
 
@@ -473,7 +473,7 @@ Registrado para que a próxima varredura não reavalie do zero.
 Todo plugin de: activity log · auditoria · Shield/permissões · busca global · sininho de notificação ·
 grade de cartões · barra de progresso · indicador de ambiente · botão de limpar cache · explorador de
 logs · monitor de backup · monitor de filas · odômetro · notificador de release do Composer ·
-onboarding · lockscreen · impersonate · dashboard dinâmico · lightbox · Pulse · Health.
+onboarding · impersonate · dashboard dinâmico · lightbox · Pulse · Health.
 
 > Antes de propor qualquer um destes, ler [`pacotes.md`](pacotes.md): a tabela lá diz qual pacote já
 > é dono da funcionalidade.

@@ -59,7 +59,6 @@
         "laravel/tinker": "^3.0",
         "leandrocfe/filament-apex-charts": "^5.0",
         "livewire/blaze": "^1.0",
-        "marjose123/filament-lockscreen": "^3.4",
         "mddev31/filament-dynamic-dashboard": "^1.0",
         "mike-bronner/laravel-model-caching": "^13.1",
         "mominalzaraa/filament-composer-release-notifier": "^1.0",

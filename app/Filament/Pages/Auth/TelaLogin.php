@@ -49,7 +49,7 @@ class TelaLogin extends Login
 
     /**
      * Com a página única ligada, as telas de login dos painéis não são mais a porta: quem chega
-     * aqui por qualquer caminho — `Authenticate`, lock screen, registro, logout, reset de senha,
+     * aqui por qualquer caminho — `Authenticate`, registro, logout, reset de senha,
      * todos passam por `getLoginUrl()` — é levado a `/login`. Um ponto cobre todos (ADR-03).
      *
      * `TelaLoginUnificada` ESTENDE esta classe e responde `ehAPaginaUnica()`: é isso que evita o

@@ -20,9 +20,9 @@ use SensitiveParameter;
  * Bloco do perfil: "Definir senha por e-mail".
  *
  * Existe porque a conta criada por login social tem uma senha aleatória que ninguém conhece
- * (`LoginSocialController::criarConta()` → `Str::password(32)`), e TRÊS coisas do kit exigem a
- * senha atual: a troca de senha do Breezy (`current_password`), ligar o 2FA
- * (`PasswordButtonAction`) e desbloquear a sessão (lockscreen). Medido no navegador do
+ * (`LoginSocialController::criarConta()` → `Str::password(32)`), e DUAS coisas do kit exigem a
+ * senha atual: a troca de senha do Breezy (`current_password`) e ligar o 2FA
+ * (`PasswordButtonAction`). Medido no navegador do
  * solicitante, numa instalação real: a pessoa entrava pelo Google, caía no perfil, e não
  * conseguia nenhuma das três.
  *

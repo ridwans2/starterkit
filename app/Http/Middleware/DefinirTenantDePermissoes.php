@@ -29,8 +29,8 @@ use Symfony\Component\HttpFoundation\Response;
  * ## Duas responsabilidades, e o nome só anuncia uma
  *
  * Além do contexto de papéis, ele grava o tenant corrente na sessão — porque este é o ponto do
- * kit em que o tenant do request é conhecido, e a tela de bloqueio precisa dele sem tê-lo na
- * rota. Um middleware separado só para uma chave de sessão, ao lado de um que já tem o valor em
+ * kit em que o tenant do request é conhecido, e nem toda tela o recebe pela rota. Um middleware
+ * separado só para uma chave de sessão, ao lado de um que já tem o valor em
  * mãos, é arquivo a mais sem ganho. Renomear a classe tocaria o `AppPanelProvider` e os testes
  * de tenancy por ganho cosmético. Ver ADR-03.
  */
@@ -48,16 +48,12 @@ class DefinirTenantDePermissoes
         );
 
         /*
-         * O tenant corrente, para quem NÃO o recebe pela rota.
+         * O tenant corrente em sessão, para quem precisa dele fora do contexto da rota.
          *
-         * A tela de bloqueio é o caso: o pacote registra `/{painel}/screen/lock` com
-         * `->prefix($panel->getPath())` e só o middleware base
-         * (vendor/marjose123/filament-lockscreen/routes/web.php), então ela não tem o segmento
-         * `{tenant}` nem o tenantMiddleware, e `Filament::getTenant()` é null lá. O Filament
-         * também não persiste tenant em sessão — `FilamentManager::$tenant` é propriedade de
-         * instância, preenchida só pelo `IdentifyTenant` a partir da rota.
-         *
-         * Esta linha é a única fonte. Ver ADR-03 da wiki `identidade-visual-da-organizacao`.
+         * A rota do painel entrega o tenant pelo segmento `{tenant}` + o `tenantMiddleware` do
+         * Filament, mas nem toda tela autenticada passa por lá — e `Filament::getTenant()` é
+         * null quando o caminho não carrega o segmento. Esta linha é a única fonte.
+         * Ver ADR-03 da wiki `identidade-visual-da-organizacao`.
          */
         session(['tenant_corrente' => $tenant?->getKey()]);
 

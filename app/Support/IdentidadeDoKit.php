@@ -18,9 +18,8 @@ use Illuminate\Support\Facades\Storage;
  * Repetida em dezesseis lugares, a guarda deixa de existir num deles, e o modo de
  * falhar é silencioso.
  *
- * Duas telas a mais herdam a arte sem `media()` próprio — o bloqueio de sessão
- * (herda a chave `login`) e o desafio de 2FA (herda `password-reset`) —, o que faz
- * doze superfícies vestidas por dez chamadas.
+ * Uma tela a mais herda a arte sem `media()` próprio — o desafio de 2FA (herda
+ * `password-reset`) —, o que faz onze superfícies vestidas por dez chamadas.
  *
  * O caso acontece de verdade: alguém apaga `storage/app/public/kit/`, ou clona o
  * repositório sem o `storage/` de quem enviou o arquivo.

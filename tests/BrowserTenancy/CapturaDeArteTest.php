@@ -563,18 +563,6 @@ it('captura o bloco Definir senha por e-mail no perfil', function (): void {
         ->screenshot(fullPage: false, filename: 'app-perfil-definir-senha');
 })->group('browser', 'art');
 
-it('captura a tela de bloqueio com o login social', function (): void {
-    ligarProvedor(ProvedorSocial::Google);
-    ligarProvedor(ProvedorSocial::Github);
-    arranjarPainelApp($this, $this->organizacao);
-    session(['lockscreen' => true, 'tenant_corrente' => $this->organizacao->getKey()]);
-
-    visit(route('lockscreen.app.page'))
-        ->resize(1400, 875)
-        ->assertSee('Entrar com Google')
-        ->screenshot(fullPage: false, filename: 'app-bloqueio-social');
-})->group('browser', 'art');
-
 it('captura a lista de usuários com a coluna Origem', function (): void {
     usuarioComPapel('panel_user', $this->organizacao, 'ana@example.com')->forceFill(['origem' => 'google'])->save();
     usuarioComPapel('panel_user', $this->organizacao, 'bruno@example.com')->forceFill(['origem' => 'github'])->save();

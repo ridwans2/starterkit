@@ -5,7 +5,6 @@ namespace App\Providers\Filament;
 use App\Filament\App\Pages\ConvitesRecebidos;
 use App\Filament\App\Pages\Dashboard;
 use App\Filament\Pages\Auth\RegistroPorConvite;
-use App\Filament\Pages\Auth\TelaBloqueio;
 use App\Filament\Pages\Auth\TelaDoisFatores;
 use App\Filament\Pages\Auth\TelaLogin;
 use App\Filament\Pages\Auth\TelaRecuperarSenha;
@@ -52,7 +51,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Jeffgreco13\FilamentBreezy\BreezyCore;
 use LaBoiteACode\FilamentDashboardWidgets\FilamentDashboardWidgetsPlugin;
-use lockscreen\FilamentLockscreen\Lockscreen;
 use MortalKiller\FilamentPageHeader\PageHeaderPlugin;
 use Prodstarter\FilamentNotificationCenter\FilamentNotificationCenterPlugin;
 use pxlrbt\FilamentEnvironmentIndicator\EnvironmentIndicatorPlugin;
@@ -218,13 +216,6 @@ class AppPanelProvider extends PanelProvider
                     return $paleta;
                 });
 
-                // "Bloquear sessão" logo abaixo do "Meu perfil" — ver
-                // TelaBloqueio::itemDeMenu(). A guarda espelha a do plugin: com o
-                // kill-switch desligado a rota não existe e o item estouraria no render.
-                if (config('lockscreen.enabled')) {
-                    $panel->userMenuItems([TelaBloqueio::itemDeMenu($panel->getId())]);
-                }
-
                 /*
                  * Convites recebidos, com a contagem das ofertas pendentes. Registrado
                  * aqui, e não em `->pages()`, porque o caminho é o menu do usuário: a
@@ -340,8 +331,8 @@ class AppPanelProvider extends PanelProvider
 
                 BreezyCore::make()
                     ->myProfile(shouldRegisterUserMenu: true, hasAvatars: true, slug: 'meu-perfil', userMenuLabel: 'My profile')
-                    // Quem entrou por login social não tem senha atual — e a troca de senha, o 2FA e o
-                    // desbloqueio da sessão pedem uma. O bloco manda o link de definição por e-mail.
+                    // Quem entrou por login social não tem senha atual — e a troca de senha e o 2FA
+                    // pedem uma. O bloco manda o link de definição por e-mail.
                     ->myProfileComponents(['definir_senha_por_email' => DefinirSenhaPorEmail::class])
                     /*
                      * A tela de perfil do KIT no lugar da do pacote, e o motivo e' so' um: a do
@@ -364,12 +355,6 @@ class AppPanelProvider extends PanelProvider
                     // troca o layout simples pelo do login. NOMEADO de propósito: `action`
                     // é o 3º parâmetro, e posicional cairia em `$condition`.
                     ->enableTwoFactorAuthentication(action: TelaDoisFatores::class),
-
-                // Obrigatório em todos os painéis — ver nota no AdminPanelProvider.
-                Lockscreen::make()
-                    ->enablePlugin((bool) config('lockscreen.enabled'))
-                    ->enableIdleTimeout((int) config('lockscreen.idle_timeout'))
-                    ->enableRateLimit(limit: 5, decayMinutes: 5, forceLogout: true),
 
                 // Bases prontas de widgets de dashboard (funil, timeline, metas,
                 // segment bar...) para os indicadores do seu negócio.
@@ -417,7 +402,7 @@ class AppPanelProvider extends PanelProvider
                  * registered for panel [app]` derruba TODO request e TODO comando artisan —
                  * `migrate` e `inspire` inclusive. Medido, não suposto.
                  *
-                 * Mesma armadilha do `Lockscreen` logo acima, mesma saída: registrar nos
+                 * Mesma armadilha dos plugins que resolvem o painel corrente: registrar nos
                  * três. A diferença é o `registerNavigation(false)`, porque aqui a tela não
                  * deve aparecer.
                  *

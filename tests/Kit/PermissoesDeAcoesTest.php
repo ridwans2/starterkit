@@ -573,14 +573,6 @@ function inventarioDeAutorizacao(): array
         'app/Providers/Filament/InfraPanelProvider.php::dashboard-ia'                => 'gate',
 
         /*
-         * Travar a PRÓPRIA sessão. Aberta por decisão, e não por esquecimento: uma permissão aqui
-         * significaria "você não pode bloquear a sua tela", que não protege nada e tranca a pessoa
-         * fora de um recurso de segurança dela mesma. A tela de destino é de autenticação e tem as
-         * guardas próprias dela (`TelaBloqueio::mount()`).
-         */
-        'app/Filament/Pages/Auth/TelaBloqueio.php::lockSession' => 'aberta-por-decisao',
-
-        /*
          * Sugestão "Criar X" do Spotlight. O nome é dinâmico (`'criar-'.$resource::getSlug()`), então
          * a varredura casa o prefixo literal. A autorização é do DESTINO: `AcoesDeCriacao::registrar()`
          * só registra o resource que passa em `canAccess()`, `canCreate()` e

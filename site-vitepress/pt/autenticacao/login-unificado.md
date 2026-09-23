@@ -93,7 +93,7 @@ cadastro recusa, e o link some em vez de levar à recusa. Ver [Registro aberto](
   duas chegam por link assinado ou já autenticadas, então não há o que unificar. O link do e-mail
   abre no painel **da própria pessoa** — quem só acessa o `/admin` recebe um link `/admin/...` e
   entra por ele.
-- **2FA (Breezy) e lock screen**: acontecem **dentro** do painel escolhido, como hoje. A tela de
+- **2FA (Breezy)**: acontece **dentro** do painel escolhido, como hoje. A tela de
   escolha aparece antes do desafio de segundo fator — ela só lista os painéis; ao entrar em um, o
   desafio é exigido normalmente.
 - **Login social**: com a chave ligada, o botão na página única não carrega painel de origem (o

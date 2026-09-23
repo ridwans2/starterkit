@@ -128,9 +128,9 @@ class TenantForm
                  *
                  * ## Os dois campos abaixo são inertes quando vazios
                  *
-                 * Sem cor, o painel `/app` da organização usa o default do Filament; sem logo, a
-                 * tela de bloqueio usa a mídia base da aplicação. Nada quebra, nada precisa ser
-                 * preenchido.
+                 * Sem cor, o painel `/app` da organização usa o default do Filament; sem logo, o
+                 * cabeçalho da organização cai nas iniciais e a tabela mostra imagem quebrada.
+                 * Nada quebra, nada precisa ser preenchido.
                  */
                 Section::make(__('Visual identity'))
                     ->description(__('Applied in the business panel of this organization. The others are unaffected.'))
@@ -205,7 +205,7 @@ class TenantForm
                             ->validationMessages([
                                 'max' => __('The file is over :max MB.', ['max' => TetoDeUpload::emMb()]),
                             ])
-                            ->helperText((string) __('Shown on the business panel lock screen. When blank, the default image is used. Up to :max MB, and SVG is not accepted.', ['max' => TetoDeUpload::emMb()]))
+                            ->helperText((string) __('Used in the organization header and the organizations table. When blank, the default image is used. Up to :max MB, and SVG is not accepted.', ['max' => TetoDeUpload::emMb()]))
                             // Linha inteira: com os dois campos de cor na primeira linha, a logo
                             // espremida ao lado de um vazio ficava feia.
                             ->columnSpanFull(),

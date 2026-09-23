@@ -8,9 +8,9 @@ paths:
 ## Página que usa o layout do Auth Designer precisa redeclarar $layout
 A trait `HasAuthDesignerLayout` faz `static::$layout = ...` no `boot()`. Se a subclasse não declarar a própria `protected static string $layout`, a atribuição cai no estático herdado de `Filament\Pages\Page` e o layout de login passa a vestir TODA página Filament do processo — a página de 2FA do Breezy morre em `getAuthDesignerConfig does not exist`.
 
-Ver `TelaBloqueio` (lock screen do marjose123, que é `SimplePage` e ignora o layout). Quem troca a classe do pacote pela nossa é o bind em `AppServiceProvider::register()`, porque a rota do pacote resolve `LockerScreen::class` pelo container.
+Ver `TelaDoisFatores` (o desafio de 2FA do Breezy, que é `SimplePage` e ignora o layout). Quem põe a nossa classe na rota é o parâmetro `action:` de `enableTwoFactorAuthentication()` nos três painéis — o Breezy aceita um class-string e não consulta o container.
 
-Cubra sempre em par: um caso assertando `fi-auth-layout` na tela nova, e outro assertando que uma página comum do painel NÃO tem `fi-auth-layout` depois dela — ver `tests/Kit/BloqueioDeSessaoTest.php`.
+Cubra sempre em par: um caso assertando `fi-auth-layout` na tela nova, e outro assertando que uma página comum do painel NÃO tem `fi-auth-layout` depois dela — ver `tests/Kit/TelasDeAutenticacaoTest.php`.
 
 ## Guarda de laço em mount() por método sobrescrevível, não request()->routeIs()
 Página de auth servida em duas rotas (a do painel e `/login`) decide "redireciono ou sirvo" em `mount()`. Não use `request()->routeIs('login')` nem `request()->route()`: em `Livewire::test()` e no `/livewire/update` a rota corrente não é a da página, a guarda devolve null e a página redireciona para si mesma (laço). O padrão é um método sobrescrevível — `TelaLogin::ehAPaginaUnica(): false`, `TelaLoginUnificada::ehAPaginaUnica(): true` — e o redirect dentro do `mount()` via `HttpResponseException(new RedirectResponse(...))`, que é o único que interrompe o Livewire. Ver `app/Filament/Pages/Auth/TelaLogin.php` e `TelaLoginUnificada.php` (v0.31.0).

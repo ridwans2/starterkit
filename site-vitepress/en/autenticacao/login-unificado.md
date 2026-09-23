@@ -94,7 +94,7 @@ that the sign-up refuses, and the link disappears instead of leading to the refu
   Both arrive through a signed link or already authenticated, so there is nothing to unify. The
   e-mail link opens in the person's **own** panel — someone who only has `/admin` gets an
   `/admin/...` link and signs in through it.
-- **2FA (Breezy) and the lock screen**: happen **inside** the chosen panel, as today. The choice
+- **2FA (Breezy)**: happens **inside** the chosen panel, as today. The choice
   screen shows up before the second-factor challenge — it only lists panels; entering one triggers
   the challenge as usual.
 - **Social login**: with the switch on, the button on the single page carries no panel of origin

@@ -288,7 +288,7 @@ disco privado e rota autorizada (ou URL assinada com validade) para tudo que nã
 
 | # | Pacote | O que faz | Nota |
 |---|--------|-----------|---|
-| **35** | `eightcedars/filament-inactivity-guard` | Logout por ociosidade | Confirme antes: o `lockscreen` instalado já tem `idle_timeout` — pode ser redundante |
+| **35** | `eightcedars/filament-inactivity-guard` | Logout por ociosidade | O kit não tem mais bloqueio de sessão por inatividade — este cobre o espaço que ficou |
 | **36** | `smony/user-sessions` | Lista sessões ativas e revoga | O `authentication-log` **registra**; isto **age** |
 | **37** | `smony/filament-login-attempts` | Bloqueio ativo de força bruta | Mesma lógica do 36: registrar não é bloquear |
 | **38** | `l3aro/filament-cloudflare-turnstile` ⚔️ | Anti-bot em login e registro | ⚔️ com Shield Captcha e Captcha (marcogermani). Só vale se o kit abrir registro público — hoje a porta é convite |

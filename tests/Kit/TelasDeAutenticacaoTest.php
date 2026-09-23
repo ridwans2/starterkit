@@ -138,8 +138,7 @@ it('não veste a página comum do painel com o layout de autenticação', functi
  * primeira renderização do 2FA passa a vestir o layout de login em toda página simples do
  * processo. CT-01 fica VERDE com esse defeito presente — só este caso o denuncia.
  *
- * É o par que `.ai/rules/auth.md` cobra, e o mesmo molde de
- * `tests/Kit/BloqueioDeSessaoTest.php:93-109`.
+ * É o par que `.ai/rules/auth.md` cobra, e este arquivo é o molde.
  */
 it('não vaza o layout de autenticação do 2FA para as outras páginas do painel', function (): void {
     $this->seed([ShieldPermissionsSeeder::class, PapeisSeeder::class]);

@@ -4,14 +4,11 @@ use App\Filament\Admin\Resources\Tenants\TenantResource;
 use App\Models\Tenant;
 use Database\Seeders\PapeisSeeder;
 use Database\Seeders\ShieldPermissionsSeeder;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Monolog\Handler\TestHandler;
-use Monolog\LogRecord;
 
 /**
  * A identidade visual da organização no que ela tem de INDEPENDENTE de tenancy: a persistência
- * dos dois campos, a URL da logo e o motivo registrado quando a logo não existe.
+ * dos dois campos e a URL da logo.
  *
  * O que fica de fora, e por quê: a cor aplicada ao painel e o tenant na sessão precisam de
  * `/app/{tenant}`, que só existe com `kit.tenancy.enabled` — e essa flag é decidida em
@@ -97,62 +94,3 @@ it('esconde a tela de view sem tenancy', function (): void {
         ->get("/admin/organizacoes/{$organizacao->getRouteKey()}")
         ->assertForbidden();
 });
-
-/**
- * CT-07 — o log que responde "por que apareceu a logo genérica?".
- *
- * Três motivos, três caminhos diferentes até a mesma mídia base, e nenhum deles é visível na
- * tela: quem olha a lock-screen vê a imagem padrão e não tem como distinguir "o painel não tem
- * organização" de "a organização não enviou logo". O log é a única diferença.
- *
- * O do caso neutro da COR não existe de propósito — "por que a cor é a default?" é auto-evidente.
- *
- * ## Handler no channel real, e não `Log::partialMock()`
- *
- * O desenho de `espiarAutenticacao()` (`tests/Pest.php`) não serve a este caso, e a falha é
- * traiçoeira: `partialMock()` monta um mock da CLASSE `LogManager` sem chamar o construtor, então
- * toda chamada que não casa com uma expectativa cai no método real com `$this->app` nulo e morre
- * em `Trying to access array offset on null` — dentro do LogManager, sem relação nenhuma com o que
- * se testa, e mascarando o erro original porque o próprio handler de exceções também loga. O
- * painel `/app` escreve no channel `ai` (o widget do assistente, no render hook BODY_END) em todo
- * request, então isso aconteceria sempre aqui.
- *
- * Trocar os handlers do channel real custa uma linha, não mascara nada e prova mais: que o
- * registro chega ao channel `tenancy`, e não apenas que alguém chamou `Log::channel()`.
- *
- * ## Dataset, e não três fases num caso só
- *
- * Um caso por motivo porque cada um precisa de um PAINEL, e visitar dois painéis no mesmo teste
- * estoura 500: o `SpotlightActionRegistry` do ⌘K é singleton de container
- * (`FilamentSearchSpotlightServiceProvider.php:25`), acumula as ações "Criar X" do primeiro painel
- * e, no segundo, resolve `getUrl('create')` contra a rota errada
- * (`filament.app.resources.agentes-ia.create`, que não existe). Em produção cada request tem
- * container próprio; num teste o container atravessa os `$this->get()`. Achado registrado — não é
- * desta feature.
- */
-it('registra o motivo de usar a midia base', function (string $painel, string $motivo, bool $comOrganizacao): void {
-    $registros = new TestHandler;
-    Log::channel('tenancy')->getLogger()->setHandlers([$registros]);
-
-    $this->actingAs(usuarioDoKit('master_global'));
-    session(['lockscreen' => true]);
-
-    if ($comOrganizacao) {
-        session(['tenant_corrente' => Tenant::factory()->create()->getKey()]);
-    }
-
-    $this->get(route("lockscreen.{$painel}.page"))->assertOk();
-
-    expect($registros->hasDebugThatPasses(
-        fn (LogRecord $registro): bool => str_starts_with($registro->message, '[TelaBloqueio@getAuthDesignerConfig]')
-            && ($registro->context['motivo'] ?? null) === $motivo,
-    ))->toBeTrue("Nenhum registro do channel `tenancy` explicou a mídia base com o motivo `{$motivo}`.");
-})->with([
-    // O painel do administrador da instalação: a guarda que o impede de ver a logo de um
-    // cliente vazada pela sessão — o risco nomeado em ADR-03.
-    'painel sem organização' => ['admin', 'painel_sem_tenancy', false],
-    // Painel de negócio, mas nenhum request de `/app/{tenant}` gravou a sessão ainda.
-    'sem organização na sessão' => ['app', 'sem_tenant', false],
-    // Organização resolvida e sem logo — o padrão, já que o campo é opcional.
-    'organização sem logo' => ['app', 'sem_logo', true],
-]);
