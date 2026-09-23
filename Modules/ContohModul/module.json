@@ -1,0 +1,11 @@
+{
+    "name": "ContohModul",
+    "alias": "contohmodul",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ContohModul\\Providers\\ContohModulServiceProvider"
+    ],
+    "files": []
+}
