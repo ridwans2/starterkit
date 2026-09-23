@@ -32,9 +32,11 @@
         "brimham/filament-backup-monitor": "^0.1",
         "caresome/filament-auth-designer": "^3.1",
         "cms-multi/filament-clear-cache": "^3.0",
+        "coolsam/modules": "*",
         "croustibat/filament-jobs-monitor": "^4.5",
         "ddr/filament-captcha": "^1.1",
         "dotswan/filament-laravel-pulse": "^2.2",
+        "dutchcodingcompany/filament-developer-logins": "^2.1",
         "filament/filament": "^5.8.1",
         "filament/spatie-laravel-media-library-plugin": "^5.7",
         "filament/spatie-laravel-settings-plugin": "^5.6",
@@ -212,6 +214,11 @@
     "extra": {
         "laravel": {
             "dont-discover": []
+        },
+        "merge-plugin": {
+            "include": [
+                "Modules/*/composer.json"
+            ]
         }
     },
     "config": {
@@ -220,7 +227,8 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "wikimedia/composer-merge-plugin": true
         }
     },
     "minimum-stability": "stable",
