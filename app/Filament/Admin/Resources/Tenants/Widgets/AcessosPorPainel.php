@@ -98,7 +98,7 @@ class AcessosPorPainel extends BreakdownWidget
     private function fatia(mixed $painel, int $acessos): BreakdownItem
     {
         if (! is_string($painel) || $painel === '') {
-            return BreakdownItem::make('Antes do registro por painel', $acessos)
+            return BreakdownItem::make(__('Before panel registration'), $acessos)
                 ->color('gray')
                 ->description(__('Sign-ins before the stamp — the panel cannot be inferred'));
         }

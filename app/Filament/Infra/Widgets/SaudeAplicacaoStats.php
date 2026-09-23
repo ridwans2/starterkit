@@ -74,13 +74,13 @@ class SaudeAplicacaoStats extends StatsOverviewWidget
                 ->accentColor('success')
                 ->description(__('Checks within expectations')),
 
-            StatPlus::make('Com aviso', $contagem['warning'])
+            StatPlus::make(__('With warning'), $contagem['warning'])
                 ->icon('heroicon-o-exclamation-triangle')
                 ->iconColor($contagem['warning'] > 0 ? 'warning' : 'gray')
                 ->accentColor($contagem['warning'] > 0 ? 'warning' : 'gray')
                 ->description(__('Still working, but at the limit')),
 
-            StatPlus::make('Falhando', $falhando)
+            StatPlus::make(__('Failing'), $falhando)
                 ->icon('heroicon-o-x-circle')
                 ->iconColor($falhando > 0 ? 'danger' : 'gray')
                 ->accentColor($falhando > 0 ? 'danger' : 'gray')
@@ -90,8 +90,8 @@ class SaudeAplicacaoStats extends StatsOverviewWidget
 
             // Stat NATIVO, não StatPlus: o valor é texto ("Tudo certo"). O
             // odômetro só anima número e transformaria qualquer texto em 0.
-            Stat::make('Situação geral', $this->resumo($contagem, $falhando))
-                ->description($contagem['skipped'] > 0 ? "{$contagem['skipped']} verificação(ões) pulada(s)" : __('No check skipped'))
+            Stat::make(__('Overall status'), $this->resumo($contagem, $falhando))
+                ->description($contagem['skipped'] > 0 ? (string) __(':count check(s) skipped', ['count' => $contagem['skipped']]) : __('No check skipped'))
                 ->color($this->corDoResumo($contagem, $falhando)),
         ];
     }
@@ -127,7 +127,7 @@ class SaudeAplicacaoStats extends StatsOverviewWidget
             array_sum($contagem) === 0 => __('No data'),
             $falhando > 0              => __('Immediate attention'),
             $contagem['warning'] > 0   => __('Under observation'),
-            default                    => 'Tudo certo',
+            default                    => __('All good'),
         };
     }
 

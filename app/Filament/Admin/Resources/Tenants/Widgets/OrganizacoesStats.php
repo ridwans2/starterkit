@@ -65,7 +65,7 @@ class OrganizacoesStats extends StatsOverviewWidget
                 ->accentColor('primary')
                 ->description($total === $ativas
                     ? __('All registered ones are active')
-                    : $total.' cadastradas, incluindo as inativas'),
+                    : (string) __(':total registered, including inactive ones', ['total' => $total])),
 
             StatPlus::make(__('Linked users'), $vinculados)
                 ->icon('heroicon-o-users')
@@ -73,7 +73,7 @@ class OrganizacoesStats extends StatsOverviewWidget
                 ->accentColor('info')
                 ->description(__('Distinct people linked to some organization')),
 
-            StatPlus::make('Ativos em '.TenantResource::DIAS_DE_INSIGHT.' dias', $ativos)
+            StatPlus::make(__('Active in :days days', ['days' => TenantResource::DIAS_DE_INSIGHT]), $ativos)
                 ->icon('heroicon-o-arrow-right-on-rectangle')
                 ->iconColor('success')
                 ->accentColor('success')

@@ -60,7 +60,7 @@ class OrganizacaoStats extends StatsOverviewWidget
                 ->accentColor('primary')
                 ->description(__('People with access to this organization')),
 
-            StatPlus::make('Ativos em '.TenantResource::DIAS_DE_INSIGHT.' dias', $ativos)
+            StatPlus::make(__('Active in :days days', ['days' => TenantResource::DIAS_DE_INSIGHT]), $ativos)
                 ->icon('heroicon-o-arrow-right-on-rectangle')
                 ->iconColor($ativos > 0 ? 'success' : 'warning')
                 ->accentColor($ativos > 0 ? 'success' : 'warning')

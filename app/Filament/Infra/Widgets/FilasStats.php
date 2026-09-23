@@ -70,7 +70,7 @@ class FilasStats extends StatsOverviewWidget
                 ->accentColor($falhados > 0 ? 'danger' : 'gray')
                 ->description($this->taxaDeFalha($falhados, $processados)),
 
-            StatPlus::make('Em andamento', $emAndamento)
+            StatPlus::make(__('In progress'), $emAndamento)
                 ->icon('heroicon-o-arrow-path')
                 ->iconColor($emAndamento > 0 ? 'info' : 'gray')
                 ->accentColor($emAndamento > 0 ? 'info' : 'gray')
@@ -89,9 +89,9 @@ class FilasStats extends StatsOverviewWidget
     private function taxaDeFalha(int $falhados, int $processados): string
     {
         if ($processados === 0) {
-            return 'Nenhum job processado ainda';
+            return (string) __('No jobs processed yet');
         }
 
-        return round(($falhados / $processados) * 100, 1).'% dos jobs processados';
+        return (string) __(':pct% of processed jobs', ['pct' => round(($falhados / $processados) * 100, 1)]);
     }
 }
