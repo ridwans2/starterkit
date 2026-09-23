@@ -8,7 +8,7 @@ use Database\Seeders\ShieldPermissionsSeeder;
  * O cabeçalho do menu do usuário: quem sou eu, aqui.
  *
  * O dropdown do canto superior direito respondia só "o que eu posso fazer" — Meu
- * perfil, Bloquear sessão, tema, sair. Numa instalação com três painéis, papéis por
+ * perfil, tema, sair. Numa instalação com três painéis, papéis por
  * painel e impersonação ligada, faltava a outra metade: com que identidade e com que
  * papel a sessão está aberta.
  *

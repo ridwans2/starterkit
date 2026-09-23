@@ -62,8 +62,7 @@ it('esconde o item quando não há nada a decidir', function (): void {
 /**
  * O item precisa chegar ao HTML do painel, não só ser construível.
  *
- * Ele é acrescentado num `bootUsing()`, e quem registra por último vence — a
- * mesma armadilha que o item "Bloquear sessão" já documenta. Por isso a
+ * Ele é acrescentado num `bootUsing()`, e quem registra por último vence. Por isso a
  * asserção é sobre a PÁGINA renderizada, num request de verdade: montar o painel
  * fora do HTTP não serve aqui (o BreezyCore resolve rota no boot e estoura
  * `Call to a member function parameter() on null`).

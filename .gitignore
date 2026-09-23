@@ -46,3 +46,5 @@ Thumbs.db
 # Phase scratch (migrations copied with `git archive HEAD` to simulate an old
 # production database, see the English-first plan): verification residue, never the project's.
 /.raja/
+starterkit_kit
+starterkit_kit-journal

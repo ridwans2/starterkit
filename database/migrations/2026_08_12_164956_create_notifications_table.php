@@ -15,7 +15,10 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('type');
             $table->morphs('notifiable');
-            $table->text('data');
+            // `json`, bukan `text`: Filament menyaring notifikasi dengan operator `data->>`,
+            // yang di PostgreSQL hanya ada untuk kolom json/jsonb. `text` lolos di SQLite/
+            // MySQL tapi memicu "operator does not exist: text ->>" di Postgres.
+            $table->json('data');
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });
