@@ -1025,15 +1025,14 @@ it('[CT-25] mantem a tabela por painel dos readmes sincronizada com os paineis r
     /*
      * O critério de "tela navegável", e ele é o que está escrito no README: rota GET do painel COM
      * NOME, descontadas autenticação, endpoint que devolve JSON e redirect. Sem nome é redirect;
-     * `.auth.` é login/registro/senha; `passkeys/` devolve JSON; `screen/lock` é overlay.
+     * `.auth.` é login/registro/senha; `passkeys/` devolve JSON.
      */
     $ehTela = static function (Route $rota): bool {
         $nome = $rota->getName();
 
         return $nome !== null
             && ! str_contains($nome, '.auth.')
-            && ! str_contains($rota->uri(), 'passkeys/')
-            && ! str_contains($rota->uri(), 'screen/lock');
+            && ! str_contains($rota->uri(), 'passkeys/');
     };
 
     $linhas = ['telas' => [], 'resources' => [], 'paginas' => [], 'widgets' => [], 'rotas' => []];
