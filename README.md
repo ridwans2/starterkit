@@ -2,13 +2,18 @@
 Starter kit **Laravel 13 + Filament 5** yang siap pakai. Satu perintah membuat project, menginstal semuanya, menjalankan migrasi, mengisi seed database, dan menyerahkan tiga panel yang langsung berfungsi: **bisnis**, **administrasi** dan **infrastruktur**.
 
 ```powershell
-composer create-project ridwans2/filament-starterkit my-project `
-  --repository='{"type":"vcs","url":"https://github.com/ridwans2/starterkit.git"}'
+composer --% create-project ridwans2/filament-starterkit my-project --repository="{\"type\":\"vcs\",\"url\":\"https://github.com/ridwans2/starterkit.git\"}"
 cd my-project
 composer dev
 ```
 
 Flag `--repository` wajib: kit ini didistribusikan langsung dari GitHub, bukan dari Packagist.
+
+> **Kenapa bentuknya `--%` dan `\"` di PowerShell:** Windows PowerShell 5.1 menghapus tanda kutip
+> ganda saat meneruskan argumen ke program eksternal, sehingga JSON tiba sebagai `{type:vcs,...}`
+> dan Composer gagal dengan `The input does not contain valid JSON`. Token stop-parsing `--%`
+> melewatkan sisa baris apa adanya. Tanpa `--%` (Git Bash, cmd, PowerShell 7.3+):
+> `composer create-project ridwans2/filament-starterkit my-project --repository='{"type":"vcs","url":"https://github.com/ridwans2/starterkit.git"}'`
 
 Tidak ada langkah manual: `create-project` sudah membuat `.env`, membangkitkan `APP_KEY`, membuat database, menjalankan migrasi, melakukan seed role/permission/user, memublikasikan aset Filament, dan membangun frontend. Di akhir proses dicetak URL dan login awal.
 

@@ -124,37 +124,37 @@ final class CustomizadorDaInstalacao
         }
 
         note(
-            'O kit pode nascer com o seu nome, o seu banco e a sua cor. '
-            .'São 5 perguntas, todas com resposta padrão — Enter em tudo instala como sempre.'
+            'Kit dapat lahir dengan nama Anda, database Anda, dan warna Anda. '
+            .'Ada 5 pertanyaan, semuanya punya jawaban default — Enter di semua menginstal seperti biasa.'
         );
 
-        if (! confirm('Personalizar o projeto agora?', default: true)) {
+        if (! confirm('Kustomisasi proyek sekarang?', default: true)) {
             return $this->pulou('usuario');
         }
 
         $respostas = [
             'nome'  => text(
-                label: 'Nome do projeto',
+                label: 'Nama proyek',
                 default: Str::headline(basename($this->base)),
                 required: true,
-                hint: 'Vai para APP_NAME, e é o que aparece no topo dos painéis.',
+                hint: 'Masuk ke APP_NAME, dan itulah yang tampil di bagian atas panel.',
             ),
             'banco' => $this->perguntarBanco(),
             'email' => text(
-                label: 'E-mail do administrador',
+                label: 'E-mail administrator',
                 default: (string) config('kit.admin.email'),
                 required: true,
                 validate: fn (string $valor): ?string => filter_var($valor, FILTER_VALIDATE_EMAIL)
                     ? null
-                    : 'Informe um e-mail válido.',
+                    : 'Masukkan e-mail yang valid.',
             ),
             'senha' => password(
-                label: 'Senha do administrador',
-                hint: 'Enter mantém a senha padrão do kit. Troque antes de expor o ambiente.',
+                label: 'Password administrator',
+                hint: 'Enter mempertahankan password default kit. Ganti sebelum membuka lingkungan ke luar.',
             ),
             'cor'   => select(
-                label: 'Cor primária dos painéis',
-                options: ['' => __('Filament default (amber)'), ...array_combine(self::CORES, self::CORES)],
+                label: 'Warna primer panel',
+                options: ['' => __('Default Filament (amber)'), ...array_combine(self::CORES, self::CORES)],
                 default: '',
             ),
         ];
@@ -198,11 +198,11 @@ final class CustomizadorDaInstalacao
     public function perguntarSemBanco(): ?array
     {
         note(
-            'Refazendo só o que não toca o banco: nome e cor. '
-            .'Banco, multi-organização e credenciais exigem recriar — veja o aviso no fim.'
+            'Hanya mengulang yang tidak menyentuh database: nama dan warna. '
+            .'Database, multi-organisasi, dan kredensial membutuhkan pembuatan ulang — lihat peringatan di akhir.'
         );
 
-        if (! confirm('Personalizar nome e cor agora?', default: true)) {
+        if (! confirm('Kustomisasi nama dan warna sekarang?', default: true)) {
             $this->pulou('usuario');
 
             return null;
@@ -210,10 +210,10 @@ final class CustomizadorDaInstalacao
 
         return [
             'nome' => text(
-                label: 'Nome do projeto',
+                label: 'Nama proyek',
                 default: (string) config('app.name'),
                 required: true,
-                hint: 'Vai para APP_NAME, e é o que aparece no topo dos painéis.',
+                hint: 'Masuk ke APP_NAME, dan itulah yang tampil di bagian atas panel.',
             ),
             /*
              * O `(string)` não é para calar o analisador: o `select()` do Prompts devolve
@@ -223,8 +223,8 @@ final class CustomizadorDaInstalacao
              * o que torna o tipo declarado verdadeiro em vez de suposto.
              */
             'cor' => (string) select(
-                label: 'Cor primária dos painéis',
-                options: ['' => __('Filament default (amber)'), ...array_combine(self::CORES, self::CORES)],
+                label: 'Warna primer panel',
+                options: ['' => __('Default Filament (amber)'), ...array_combine(self::CORES, self::CORES)],
                 default: (string) config('kit.cor_primaria', ''),
             ),
         ];
@@ -255,8 +255,8 @@ final class CustomizadorDaInstalacao
         );
 
         return [
-            ['Nome do projeto', $respostas['nome']],
-            ['Cor primária', $respostas['cor'] === '' ? 'Padrão do Filament' : $respostas['cor']],
+            ['Nama proyek', $respostas['nome']],
+            ['Warna primer', $respostas['cor'] === '' ? 'Default Filament' : $respostas['cor']],
         ];
     }
 
@@ -280,22 +280,22 @@ final class CustomizadorDaInstalacao
 
         SubstituicaoEmArquivo::definirNoEnv($env, 'APP_NAME', $nome);
         SubstituicaoEmArquivo::definirNoEnv($env, 'COMPOSE_PROJECT_NAME', $projeto);
-        $resumo[] = ['Nome do projeto', $nome];
+        $resumo[] = ['Nama proyek', $nome];
 
         $this->aplicarBanco($env, $banco, $nome);
-        $resumo[] = ['Banco de dados', $this->rotuloDoBanco($banco)];
+        $resumo[] = ['Database', $this->rotuloDoBanco($banco)];
 
         SubstituicaoEmArquivo::definirNoEnv($env, 'KIT_ADMIN_EMAIL', $email);
-        $resumo[] = ['E-mail do administrador', $email];
+        $resumo[] = ['E-mail administrator', $email];
 
         if ($senha !== '') {
             SubstituicaoEmArquivo::definirNoEnv($env, 'KIT_ADMIN_PASSWORD', $senha);
         }
 
-        $resumo[] = ['Senha do administrador', $senha !== '' ? '•••••••• (a que você digitou)' : 'password (padrão do kit)'];
+        $resumo[] = ['Password administrator', $senha !== '' ? '•••••••• (yang Anda ketik)' : 'password (default kit)'];
 
         SubstituicaoEmArquivo::definirNoEnv($env, 'KIT_COR_PRIMARIA', $cor);
-        $resumo[] = ['Cor primária', $cor !== '' ? $cor : 'padrão do Filament'];
+        $resumo[] = ['Warna primer', $cor !== '' ? $cor : 'default Filament'];
 
         if ($respostas['tenancy'] ?? false) {
             AtivadorDeTenancy::escreverEnv(
@@ -306,7 +306,7 @@ final class CustomizadorDaInstalacao
             );
             AtivadorDeTenancy::ligarPapeisPorTenant($this->base.DIRECTORY_SEPARATOR.'config');
 
-            $resumo[] = ['Multi-organização', 'ligada — '.$respostas['tenancy_label_plural']];
+            $resumo[] = ['Multi-organisasi', 'menyala — '.$respostas['tenancy_label_plural']];
         }
 
         $this->alinharConfigEmMemoria($respostas);
@@ -385,13 +385,13 @@ final class CustomizadorDaInstalacao
     public static function itensManuais(): array
     {
         return [
-            'Identidade e e-mail ........ /admin → Configurações da aplicação (logo, favicon, arte do login, SMTP)',
-            'Acesso aos painéis ......... /admin → Funções (o campo Painel de cada papel)',
-            'Matriz de permissões ....... database/seeders/PapeisSeeder.php',
+            'Identitas dan e-mail ....... /admin → Pengaturan aplikasi (logo, favicon, artwork login, SMTP)',
+            'Akses panel ................ /admin → Peran (field Panel tiap peran)',
+            'Matriks permission ......... database/seeders/PapeisSeeder.php',
             'Health checks .............. KitServiceProvider::configureHealthChecks()',
-            'Comandos da UI ............. config/command-center.php',
-            'Backups .................... config/backup.php',
-            'Agente de IA ............... /admin → Agentes de IA',
+            'Perintah di UI ............. config/command-center.php',
+            'Backup ..................... config/backup.php',
+            'Agen AI .................... /admin → Agen AI',
         ];
     }
 
@@ -406,19 +406,19 @@ final class CustomizadorDaInstalacao
         // pode ser inteira. As três chaves declaradas logo abaixo são strings não numéricas,
         // então o retorno é sempre uma delas.
         $banco = (string) select(
-            label: 'Banco de dados',
+            label: 'Database',
             options: [
-                'sqlite' => __('SQLite — default, depends on no external service'),
-                'pgsql'  => __('PostgreSQL — recommended: the only one with pgvector, required by the local AI features'),
-                'mysql'  => __('MySQL / MariaDB — own container: docker compose up -d mysql redis'),
+                'sqlite' => __('SQLite — default, tidak bergantung layanan eksternal'),
+                'pgsql'  => __('PostgreSQL — direkomendasikan: satu-satunya dengan pgvector, dibutuhkan fitur AI lokal'),
+                'mysql'  => __('MySQL / MariaDB — container sendiri: docker compose up -d mysql redis'),
             ],
             default: 'sqlite',
         );
 
         if ($banco !== 'pgsql') {
             note(
-                'Escolha registrada. Lembre que as funções de IA local que usam busca semântica '
-                .'(embeddings/pgvector) só funcionam no PostgreSQL — o resto do kit roda igual.'
+                'Pilihan dicatat. Ingat: fitur AI lokal yang memakai pencarian semantik '
+                .'(embeddings/pgvector) hanya jalan di PostgreSQL — sisanya berjalan sama.'
             );
         }
 
@@ -431,20 +431,20 @@ final class CustomizadorDaInstalacao
         $padrao = (string) config('kit.tenancy.label', 'Organização');
 
         if (! confirm(
-            label: 'Ligar o modo multi-organização (multi-tenancy)?',
+            label: 'Nyalakan mode multi-organisasi (multi-tenancy)?',
             default: false,
-            hint: 'O painel /app passa a ser /app/{organização}. Ligar depois exige recriar o banco.',
+            hint: 'Panel /app menjadi /app/{organisasi}. Menyalakannya belakangan membutuhkan pembuatan ulang database.',
         )) {
             return ['tenancy' => false];
         }
 
-        $label = text(label: 'Como chamar cada organização?', default: $padrao, required: true);
+        $label = text(label: 'Sebut setiap organisasi apa?', default: $padrao, required: true);
 
         return [
             'tenancy'              => true,
             'tenancy_label'        => $label,
             'tenancy_label_plural' => text(
-                label: 'E no plural?',
+                label: 'Dan dalam bentuk jamak?',
                 default: $this->pluralSugerido($label, $padrao),
                 required: true,
             ),
@@ -549,7 +549,7 @@ final class CustomizadorDaInstalacao
     private function rotuloDoBanco(string $banco): string
     {
         return match ($banco) {
-            'pgsql' => 'PostgreSQL (com pgvector, para IA local)',
+            'pgsql' => 'PostgreSQL (dengan pgvector, untuk AI lokal)',
             'mysql' => 'MySQL / MariaDB',
             default => 'SQLite',
         };

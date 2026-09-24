@@ -324,7 +324,7 @@ it('aponta os sete itens que continuam manuais, cada um com o seu arquivo', func
 
     // `login.svg` saiu da lista: a arte do login virou campo em
     // /admin/configuracoes-da-aplicacao, e a linha que a substituiu aponta para lá.
-    foreach (['Configurações da aplicação', 'Funções', 'PapeisSeeder', 'configureHealthChecks', 'command-center', 'backup.php', 'Agentes de IA'] as $referencia) {
+    foreach (['Pengaturan aplikasi', 'Peran', 'PapeisSeeder', 'configureHealthChecks', 'command-center', 'backup.php', 'Agen AI'] as $referencia) {
         expect(implode(' ', $itens))->toContain($referencia);
     }
 })->group('kit');
@@ -427,7 +427,7 @@ it('descreve a cor vazia como padrao do filament', function (): void {
 
     $resumo = customizadorNoTemp()->aplicarSemBanco(['nome' => 'x', 'cor' => '']);
 
-    expect($resumo[1])->toBe(['Cor primária', 'Padrão do Filament']);
+    expect($resumo[1])->toBe(['Warna primer', 'Default Filament']);
 });
 
 /**

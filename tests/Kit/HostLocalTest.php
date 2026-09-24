@@ -470,7 +470,7 @@ it('[CT-09] exibe o motivo da recusa e pergunta o dominio de novo', function ():
 
     expect($erros)->toHaveCount(1, 'a entrada recusada precisa produzir uma mensagem visivel')
         ->and($erros[0]['erro'])->toContain($recusado)
-        ->and($erros[0]['erro'])->toContain('só o nome, sem http://')
+        ->and($erros[0]['erro'])->toContain('cukup namanya, tanpa http://')
         ->and($feitas)->toHaveCount(4, 'depois do erro a pergunta do dominio precisa voltar')
         ->and($feitas[3]['label'])->toBe($feitas[1]['label'])
         ->and(valorNoEnv('APP_URL'))->toBe('http://loja-do-ferro.test')
@@ -722,7 +722,7 @@ it('[CT-15] fora do Windows instrui em vez de executar, e ajusta a URL', functio
         expect($aviso)
             ->toContain('loja-do-ferro.test')
             ->toContain("sudo tee -a {$this->hosts}")
-            ->toContain('a APP_URL já tinha sido ajustada');
+            ->toContain('APP_URL sudah terlanjur disesuaikan');
 
         return;
     }
@@ -1013,7 +1013,7 @@ it('[CT-39] no aviso de falha, so afirma sobre a APP_URL o que e verdade', funct
     // O complementar, na mesma medida: quem falhou sem ter escrito nada continua sabendo disso.
     $semEscrita = hostLocalNoTemp(registradorDeComandos($comandos))->processar('loja-do-ferro.test');
 
-    expect($semEscrita)->toContain('continua como estava');
+    expect($semEscrita)->toContain('tetap seperti semula');
 })->group('kit');
 
 /*
@@ -1259,10 +1259,10 @@ it('[CT-37] pede uma confirmacao a mais para dominio publico, dizendo o que vai 
     $extra = $feitas[2];
 
     expect($extra['label'])->toContain($dominio)
-        ->and($extra['label'])->toContain('domínio público')
+        ->and($extra['label'])->toContain('domain publik')
         ->and($extra['default'])->toBeFalse('o Enter da confirmacao extra precisa recusar')
-        ->and($extra['hint'])->toContain('impedir o acesso ao site real')
-        ->and($extra['hint'])->toContain('até ser removida à mão');
+        ->and($extra['hint'])->toContain('memblokir akses ke situs asli')
+        ->and($extra['hint'])->toContain('sampai dihapus manual');
 })->with([
     'domínio real, o typo do achado A5'        => ['fiotec.fiocruz.br'],
     'contém ".test" e não termina nele'        => ['loja.test.br'],

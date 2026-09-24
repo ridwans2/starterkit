@@ -38,15 +38,15 @@ use function Laravel\Prompts\note;
 class KitInstall extends Command
 {
     protected $signature = 'kit:install
-        {--no-npm : Pula a instalação e o build dos assets front-end}
-        {--no-seed : Não popula o banco (papéis, usuário inicial, agentes de IA)}
-        {--force : Recria o banco SQLite do zero (APAGA os dados existentes) e refaz as cinco perguntas}
-        {--custom : Refaz só o que não toca o banco — nome e cor — e sai. Não apaga nada}
-        {--no-custom : Pula as perguntas de customização e instala com os padrões}
-        {--no-support : Pula o convite para dar uma estrela ao kit no GitHub}
-        {--create-project : Uso interno do post-create-project-cmd: apaga o que so serve ao repositorio do kit}';
+        {--no-npm : Lewati instalasi dan build aset front-end}
+        {--no-seed : Jangan isi database (role, user awal, agen AI)}
+        {--force : Membuat ulang database SQLite dari nol (MENGHAPUS data yang ada) dan mengulang lima pertanyaan}
+        {--custom : Hanya mengulang yang tidak menyentuh database — nama dan warna — lalu keluar. Tidak menghapus apa pun}
+        {--no-custom : Lewati pertanyaan kustomisasi dan instal dengan default}
+        {--no-support : Lewati ajakan memberi bintang pada kit di GitHub}
+        {--create-project : Penggunaan internal post-create-project-cmd: menghapus yang hanya berguna untuk repositori kit}';
 
-    protected $description = 'Instala o starter-kit: banco, migrations, seeders, permissões e assets';
+    protected $description = 'Instal starter-kit: database, migrasi, seeder, permission, dan aset';
 
     /** Endereço do kit, para o convite da estrela. */
     private const REPOSITORIO = 'https://github.com/ridwans2/starterkit';
@@ -66,7 +66,7 @@ class KitInstall extends Command
 
     public function handle(): int
     {
-        $this->components->info('Instalando o starter-kit-easy...');
+        $this->components->info('Menginstal starter-kit-easy...');
 
         $this->prepararEnv();
 
@@ -165,26 +165,26 @@ class KitInstall extends Command
         $respostas    = $customizador->perguntarSemBanco();
 
         if ($respostas === null) {
-            $this->components->info('Nada alterado.');
+            $this->components->info('Tidak ada yang diubah.');
 
             return self::SUCCESS;
         }
 
-        $this->components->twoColumnDetail('<fg=gray>O que mudou</>', '');
+        $this->components->twoColumnDetail('<fg=gray>Yang berubah</>', '');
 
         foreach ($customizador->aplicarSemBanco($respostas) as [$rotulo, $valor]) {
             $this->components->twoColumnDetail($rotulo, $valor);
         }
 
         $this->newLine();
-        $this->components->warn('O que este comando NÃO faz, e por onde vai cada um:');
+        $this->components->warn('Yang TIDAK dilakukan perintah ini, dan ke mana masing-masing:');
         $this->components->bulletList([
-            'Banco de dados — trocar depois do migrate é outra instalação: `php artisan kit:install --force` (APAGA os dados).',
-            'Multi-organização — as tabelas de permissão só nascem com a coluna de contexto antes do migrate: rode `php artisan kit:tenancy` (recria o banco).',
-            'Credenciais do administrador — `php artisan kit:admin` (ou a tela de perfil do painel). Semear de novo NÃO aplica: o seeder garante que exista administrador, não que ele espelhe o .env.',
+            'Database — mengganti setelah migrate adalah instalasi lain: `php artisan kit:install --force` (MENGHAPUS data).',
+            'Multi-organisasi — tabel permission hanya lahir dengan kolom konteks sebelum migrate: jalankan `php artisan kit:tenancy` (membuat ulang database).',
+            'Kredensial administrator — `php artisan kit:admin` (atau layar profil panel). Menanam ulang TIDAK berlaku: seeder menjamin administrator ada, bukan bahwa ia mencerminkan .env.',
         ]);
 
-        $this->components->info('Rode `php artisan config:clear` se estiver com config em cache.');
+        $this->components->info('Jalankan `php artisan config:clear` jika config Anda di-cache.');
 
         return self::SUCCESS;
     }
@@ -225,11 +225,11 @@ class KitInstall extends Command
             return;
         }
 
-        $this->avisos[] = 'Instalado com os padrões: este terminal não aceitou perguntas '
-            .'(no Windows o Composer nunca repassa o terminal ao script). Para escolher as cinco '
-            .'AGORA, com o banco ainda vazio: php artisan kit:install --force (recria o banco — '
-            .'inócuo neste instante, destrutivo depois). Só nome e cor, sem tocar no banco, a '
-            .'qualquer momento: php artisan kit:install --custom';
+        $this->avisos[] = 'Terinstal dengan default: terminal ini tidak menerima pertanyaan '
+            .'(di Windows Composer tidak pernah meneruskan terminal ke skrip). Untuk memilih lima '
+            .'SEKARANG, saat database masih kosong: php artisan kit:install --force (membuat ulang database — '
+            .'tidak berbahaya saat ini, destruktif setelahnya). Hanya nama dan warna, tanpa menyentuh database, kapan '
+            .'saja: php artisan kit:install --custom';
     }
 
     /**
@@ -255,8 +255,8 @@ class KitInstall extends Command
             $this->bancoAcessivel = false;
 
             $this->avisos[] = $driver === 'pgsql'
-                ? 'O PostgreSQL não respondeu — pulei migrations e seeders. Suba o serviço e rode: docker compose up -d && php artisan migrate --seed'
-                : 'O MySQL não respondeu — pulei migrations e seeders. Confira as credenciais no .env, crie o banco `'.config('database.connections.'.$driver.'.database').'` e rode: php artisan migrate --seed';
+                ? 'PostgreSQL tidak merespons — melewati migrasi dan seeder. Jalankan servisnya lalu: docker compose up -d && php artisan migrate --seed'
+                : 'MySQL tidak merespons — melewati migrasi dan seeder. Periksa kredensial di .env, buat database `'.config('database.connections.'.$driver.'.database').'` dan jalankan: php artisan migrate --seed';
 
             Log::warning(
                 '[KitInstall@conferirConexao] Banco inacessível, migrations puladas | driver: '.$driver,
@@ -272,7 +272,7 @@ class KitInstall extends Command
         }
 
         File::copy(base_path('.env.example'), base_path('.env'));
-        $this->components->task('Criando .env', fn (): bool => true);
+        $this->components->task('Membuat .env', fn (): bool => true);
     }
 
     protected function gerarAppKey(): void
@@ -282,7 +282,7 @@ class KitInstall extends Command
         }
 
         $this->callSilently('key:generate', ['--force' => true]);
-        $this->components->task('Gerando APP_KEY', fn (): bool => true);
+        $this->components->task('Membangkitkan APP_KEY', fn (): bool => true);
     }
 
     /**
@@ -314,20 +314,20 @@ class KitInstall extends Command
         }
 
         if ($criado) {
-            $this->components->task('Criando banco SQLite', fn (): bool => true);
+            $this->components->task('Membuat database SQLite', fn (): bool => true);
         }
     }
 
     protected function migrar(): void
     {
-        $this->components->task('Rodando migrations', function (): bool {
+        $this->components->task('Menjalankan migrasi', function (): bool {
             $codigo = $this->callSilently('migrate', [
                 '--graceful' => true,
                 '--force'    => true,
             ]);
 
             if ($codigo !== self::SUCCESS) {
-                $this->avisos[] = 'As migrations não completaram. Rode: php artisan migrate';
+                $this->avisos[] = 'Migrasi tidak selesai. Jalankan: php artisan migrate';
             }
 
             return $codigo === self::SUCCESS;
@@ -336,11 +336,11 @@ class KitInstall extends Command
 
     protected function semear(): void
     {
-        $this->components->task('Populando papéis, permissões e usuário inicial', function (): bool {
+        $this->components->task('Mengisi role, permission, dan user awal', function (): bool {
             $codigo = $this->callSilently('db:seed', ['--force' => true]);
 
             if ($codigo !== self::SUCCESS) {
-                $this->avisos[] = 'Os seeders não completaram. Rode: php artisan db:seed';
+                $this->avisos[] = 'Seeder tidak selesai. Jalankan: php artisan db:seed';
             }
 
             return $codigo === self::SUCCESS;
@@ -365,7 +365,7 @@ class KitInstall extends Command
             return;
         }
 
-        $this->components->task('Formatando o código gerado', function () use ($pint): bool {
+        $this->components->task('Memformat kode yang dibuat', function () use ($pint): bool {
             $processo = new Process([PHP_BINARY, $pint, '--quiet', 'app/Policies'], base_path(), timeout: 300);
             $processo->run();
 
@@ -375,7 +375,7 @@ class KitInstall extends Command
 
     protected function publicarAssets(): void
     {
-        $this->components->task('Publicando assets do Filament', function (): bool {
+        $this->components->task('Menerbitkan aset Filament', function (): bool {
             $this->callSilently('filament:assets');
             $this->callSilently('storage:link');
 
@@ -393,7 +393,7 @@ class KitInstall extends Command
         $npm = (new ExecutableFinder)->find('npm');
 
         if ($npm === null) {
-            $this->avisos[] = 'npm não encontrado — pulei os assets. Depois rode: npm install && npm run build';
+            $this->avisos[] = 'npm tidak ditemukan — melewati aset. Jalankan nanti: npm install && npm run build';
 
             return;
         }
@@ -406,7 +406,7 @@ class KitInstall extends Command
                 $processo->run();
 
                 if (! $processo->isSuccessful()) {
-                    $this->avisos[] = "`{$rotulo}` falhou — rode manualmente para ver o erro.";
+                    $this->avisos[] = "`{$rotulo}` gagal — jalankan manual untuk melihat error.";
                 }
 
                 return $processo->isSuccessful();
@@ -442,23 +442,23 @@ class KitInstall extends Command
         $url = rtrim((string) config('app.url'), '/');
 
         $this->newLine();
-        $this->components->info('Pronto! O projeto está instalado.');
+        $this->components->info('Selesai! Proyek telah diinstal.');
 
         $this->components->bulletList([
-            "Negócio:        {$url}/app",
-            "Administração:  {$url}/admin",
-            "Infraestrutura: {$url}/infra",
+            "Bisnis:          {$url}/app",
+            "Administrasi:    {$url}/admin",
+            "Infrastruktur:   {$url}/infra",
         ]);
 
         note(
-            'Login inicial: '.config('kit.admin.email')
+            'Login awal: '.config('kit.admin.email')
             .' / '.config('kit.admin.password')
-            ."\nTroque a senha antes de expor o ambiente."
+            ."\nGanti password sebelum lingkungan ini dibuka ke luar."
         );
 
         $this->components->bulletList([
-            'Suba o servidor com: composer dev',
-            'Serviços opcionais (Postgres, Redis, IA local): docker compose up -d',
+            'Jalankan server dengan: composer dev',
+            'Layanan opsional (Postgres, Redis, AI lokal): docker compose up -d',
         ]);
 
         foreach ($this->avisos as $aviso) {
@@ -506,7 +506,7 @@ class KitInstall extends Command
         }
 
         $this->components->task(
-            'Removendo o vínculo com o Snyk do kit ('.count($apagados).' arquivo(s))',
+            'Menghapus tautan Snyk kit ('.count($apagados).' berkas)',
             fn (): bool => true,
         );
     }
@@ -517,14 +517,14 @@ class KitInstall extends Command
             return;
         }
 
-        $this->components->info('O que foi customizado nesta instalação:');
+        $this->components->info('Yang dikustomisasi pada instalasi ini:');
 
         foreach ($this->resumo as [$item, $valor]) {
             $this->components->twoColumnDetail("<fg=gray>{$item}</>", $valor);
         }
 
         $this->newLine();
-        $this->components->info('O que continua sendo ajustado à mão:');
+        $this->components->info('Yang masih harus disesuaikan manual:');
         $this->components->bulletList(CustomizadorDaInstalacao::itensManuais());
         $this->newLine();
     }
@@ -542,8 +542,8 @@ class KitInstall extends Command
             return;
         }
 
-        if (! confirm('Rodar os testes do kit agora?', default: false)) {
-            note('Quando quiser conferir a fundação: composer test:kit');
+        if (! confirm('Jalankan test kit sekarang?', default: false)) {
+            note('Kapan pun Anda ingin memeriksa fondasi: composer test:kit');
 
             return;
         }
@@ -576,13 +576,13 @@ class KitInstall extends Command
      */
     private function oferecerEstrela(): void
     {
-        $this->components->twoColumnDetail('<fg=gray>Repositório do kit</>', self::REPOSITORIO);
+        $this->components->twoColumnDetail('<fg=gray>Repositori kit</>', self::REPOSITORIO);
 
         if ($this->option('no-support') || ! $this->temTerminal()) {
             return;
         }
 
-        if (! confirm('Gostou? Dar uma estrela ao starter-kit no GitHub?', default: false)) {
+        if (! confirm('Suka? Beri bintang pada starter-kit di GitHub?', default: false)) {
             return;
         }
 

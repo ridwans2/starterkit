@@ -160,18 +160,18 @@ final class HostLocal
              * e o exemplo — que é a cláusula do requisito — mora no fim dele.
              */
             if (! confirm(
-                label: "Cadastrar um domínio local (ex.: {$this->urlSugerida()})?",
+                label: "Daftarkan domain lokal (mis.: {$this->urlSugerida()})?",
                 default: false,
-                hint: 'Escreve uma linha no hosts da máquina e ajusta a APP_URL.',
+                hint: 'Menulis satu baris ke file hosts mesin dan menyesuaikan APP_URL.',
             )) {
                 return null;
             }
 
             $dominio = text(
-                label: 'Qual domínio?',
+                label: 'Domain apa?',
                 default: $this->dominioSugerido(),
                 validate: fn (string $valor): ?string => $this->erroDoDominio($valor),
-                hint: 'Só o nome, sem http:// e sem barra. O sufixo .test é reservado pela RFC 6761 para isto.',
+                hint: 'Cukup namanya, tanpa http:// dan tanpa garis miring. Sufiks .test dicadangkan RFC 6761 untuk ini.',
             );
 
             if (! $this->confirmarDominioPublico($dominio)) {
@@ -179,9 +179,9 @@ final class HostLocal
             }
 
             note(
-                "A APP_URL passa a ser http://{$dominio}. Dois efeitos conhecidos:\n"
-                .'- login social: a URI de callback registrada no provedor muda junto;'."\n"
-                .'- npm run dev: o Vite serve de localhost:5173 e restringe CORS — com npm run build não aparece.'
+                "APP_URL menjadi http://{$dominio}. Dua efek yang diketahui:\n"
+                .'- login sosial: URI callback yang terdaftar di provider ikut berubah;'."\n"
+                .'- npm run dev: Vite menyajikan dari localhost:5173 dan membatasi CORS — tidak muncul dengan npm run build.'
             );
 
             return $this->processar($dominio);
@@ -319,7 +319,7 @@ final class HostLocal
     /** A linha pronta para quem está no Linux ou no macOS, onde a etapa instrui em vez de executar. */
     public function instrucaoManual(string $dominio): string
     {
-        return "Falta uma linha no {$this->caminhoDoHosts()} (precisa de sudo):\n"
+        return "Kurang satu baris di {$this->caminhoDoHosts()} (butuh sudo):\n"
             ."    echo '127.0.0.1\t{$dominio}' | sudo tee -a {$this->caminhoDoHosts()}";
     }
 
@@ -386,20 +386,20 @@ final class HostLocal
     public function erroDoDominio(string $dominio): ?string
     {
         if (Str::endsWith(Str::lower($dominio), '.local')) {
-            return "{$dominio}: use .test, e nunca .local (RFC 6762, mDNS)";
+            return "{$dominio}: gunakan .test, jangan .local (RFC 6762, mDNS)";
         }
 
         if (preg_match('/\A[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+\z/i', $dominio) !== 1) {
-            return "{$dominio}: só o nome, sem http:// nem barra nem espaço";
+            return "{$dominio}: cukup namanya, tanpa http://, tanpa garis miring, tanpa spasi";
         }
 
         if (strlen($dominio) > self::MAX_NOME) {
-            return "{$dominio}: o nome inteiro passa de ".self::MAX_NOME.' octetos (RFC 1035)';
+            return "{$dominio}: seluruh nama melebihi ".self::MAX_NOME.' oktet (RFC 1035)';
         }
 
         foreach (explode('.', $dominio) as $rotulo) {
             if (strlen($rotulo) > self::MAX_ROTULO) {
-                return "{$dominio}: cada parte do nome cabe em ".self::MAX_ROTULO.' octetos (RFC 1035)';
+                return "{$dominio}: tiap bagian nama muat dalam ".self::MAX_ROTULO.' oktet (RFC 1035)';
             }
         }
 
@@ -423,10 +423,10 @@ final class HostLocal
         }
 
         return confirm(
-            label: "{$dominio} é um domínio público. Apontar mesmo assim para 127.0.0.1?",
+            label: "{$dominio} adalah domain publik. Tetap arahkan ke 127.0.0.1?",
             default: false,
-            hint: 'Apontá-lo para 127.0.0.1 nesta máquina vai impedir o acesso ao site real, '
-                .'e a linha fica no hosts até ser removida à mão.',
+            hint: 'Mengahenkannya ke 127.0.0.1 di mesin ini akan memblokir akses ke situs asli, '
+                .'dan barisnya tetap ada di hosts sampai dihapus manual.',
         );
     }
 
@@ -462,9 +462,9 @@ final class HostLocal
     /** O domínio já respondia — mas por um endereço que não é desta máquina. */
     private function avisoDeEnderecoDeTerceiro(string $dominio, string $endereco): string
     {
-        return "Atenção: {$dominio} já responde como {$endereco}, que não é um endereço desta máquina "
-            .'(DNS da rede, ou curinga do provedor). A linha nova no hosts passa a valer sobre ele aqui — '
-            .'e só aqui.';
+        return "Perhatian: {$dominio} sudah merespons sebagai {$endereco}, yang bukan alamat mesin ini "
+            .'(DNS jaringan, atau wildcard provider). Baris hosts baru mengalahkannya di sini — '
+            .'dan hanya di sini.';
     }
 
     /**
@@ -588,12 +588,12 @@ final class HostLocal
     private function avisoDeFalha(string $dominio): string
     {
         $url = $this->envEscrito
-            ? "a APP_URL já tinha sido ajustada para http://{$dominio}"
-            : 'a APP_URL continua como estava';
+            ? "APP_URL sudah terlanjur disesuaikan ke http://{$dominio}"
+            : 'APP_URL tetap seperti semula';
 
-        return "Não consegui cadastrar {$dominio} no arquivo hosts — {$url}. "
+        return "Tidak bisa mendaftarkan {$dominio} di file hosts — {$url}. "
             .match ($this->so) {
-                'Windows' => 'Num PowerShell como administrador: '.$this->comandoDeElevacao($dominio),
+                'Windows' => 'Di PowerShell sebagai administrator: '.$this->comandoDeElevacao($dominio),
                 default   => $this->instrucaoManual($dominio),
             };
     }
